@@ -73,7 +73,7 @@
 
         <EditText
 
-
+            android:inputType="textPhonetic"
             android:id="@+id/searchdishname1"
             android:layout_weight="1"
             android:layout_width="match_parent"
@@ -91,7 +91,7 @@
             android:layout_height="wrap_content"
             android:paddingTop="10dp"
             android:paddingBottom="10dp"
-            android:background="@drawable/gulu_green_button_selector" />
+            android:background="@drawable/gulu_blue_button_selector" />
     </LinearLayout>
     <ListView
         android:id="@+id/searchlistview"
@@ -105,7 +105,41 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal">
         <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+            android:id="@+id/bt_add"
+            android:text="+"
+            android:textSize="20sp"
+            android:layout_marginLeft="2dp"
+            android:layout_marginRight="7dp"
+            android:textColor="@color/white"
+            android:layout_width="80dp"
+            android:layout_height="wrap_content"
+            android:paddingTop="10dp"
+            android:paddingBottom="10dp"
+            android:background="@drawable/gulu_blue_button_selector" />
+        <Button
+            android:id="@+id/bt_group"
+            android:text="♀♂"
+            android:textSize="20sp"
+            android:layout_marginLeft="2dp"
+            android:layout_marginRight="7dp"
+            android:textColor="@color/white"
+            android:layout_width="80dp"
+            android:layout_height="wrap_content"
+            android:paddingTop="10dp"
+            android:paddingBottom="10dp"
+            android:background="@drawable/gulu_blue_button_selector" />
+        <Button
+            android:id="@+id/bt_me"
+            android:text="me"
+            android:textSize="20sp"
+            android:layout_marginLeft="2dp"
+            android:layout_marginRight="7dp"
+            android:textColor="@color/white"
+            android:layout_width="80dp"
+            android:layout_height="wrap_content"
+            android:paddingTop="10dp"
+            android:paddingBottom="10dp"
+            android:background="@drawable/gulu_blue_button_selector" />
         </LinearLayout>
+
 </LinearLayout>
