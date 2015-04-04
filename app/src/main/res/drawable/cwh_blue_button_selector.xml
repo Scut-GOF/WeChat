@@ -3,7 +3,7 @@
     <!-- 按下的状态 -->
     <item android:state_enabled="true" android:state_pressed="true">
     	<shape>
-    	    <gradient android:startColor="@color/gulu_orange_on" android:endColor="@color/gulu_orange_on" android:angle="270"/>
+    	    <gradient android:startColor="@color/cwh_orange_on" android:endColor="@color/cwh_orange_on" android:angle="270"/>
     	    <corners android:topLeftRadius="6dp"
 				android:topRightRadius="6dp"
 				android:bottomLeftRadius="6dp"
@@ -13,7 +13,7 @@
     </item>
     <item android:state_enabled="true" android:state_checked="true">
     	<shape>
-    	    <gradient android:startColor="@color/gulu_orange_on" android:endColor="@color/gulu_orange_on" android:angle="270" />
+    	    <gradient android:startColor="@color/cwh_orange_on" android:endColor="@color/cwh_orange_on" android:angle="270" />
     	    <corners android:topLeftRadius="6dp"
 				android:topRightRadius="6dp"
 				android:bottomLeftRadius="6dp"
@@ -24,7 +24,7 @@
     <!-- 没操作的状态 -->
     <item>
         <shape>
-            <gradient android:startColor="@color/gulu_green" android:endColor="@color/gulu_green" android:angle="270" />
+            <gradient android:startColor="@color/light_blue" android:endColor="@color/light_blue" android:angle="270" />
             <corners android:topLeftRadius="6dp"
 				android:topRightRadius="6dp"
 				android:bottomLeftRadius="6dp"

@@ -32,6 +32,18 @@
     <style name="layout_vertical" parent="layout_full">
         <item name="android:layout_height">0px</item>
     </style>
+    <style name="bottom_buttons">
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:textSize">20sp</item>
+        <item name="android:layout_marginLeft">2dp</item>
+        <item name="android:layout_marginRight">2dp</item>
+        <item name="android:layout_marginTop">5dp</item>
+        <item name="android:textColor">@color/white</item>
+        <item name="android:padding">10dp</item>
+        <item name="android:layout_weight">1</item>
+        <item name="android:textStyle">bold</item>
+    </style>
     <style name="simple_textbox">
         <item name="android:textSize">22sp</item>
         <item name="android:background">@color/part_transparent</item>
@@ -101,7 +113,7 @@
         <item name="android:layout_alignParentRight">true</item>
         <item name="android:layout_centerVertical">true</item>
         <item name="android:gravity">center</item>
-        <item name="android:background">@drawable/gulu_head_button_selector</item>
+        <item name="android:background">@drawable/cwh_head_button_selector</item>
     </style>
     <style name="btn_back_selector">
         <item name="android:textSize">18sp</item>
@@ -190,23 +202,15 @@
         <item name="android:layout_centerVertical">true</item>
         <item name="android:gravity">center</item>
     </style>
-    <style name="light_head_button">
+
+    <style name="cwh_head_button">
         <item name="android:textSize">18sp</item>
-        <item name="android:textColor">@drawable/light_head_button_text_selector</item>
+        <item name="android:textColor">@drawable/cwh_head_button_text_selector</item>
         <item name="android:layout_width">100dp</item>
         <item name="android:layout_height">match_parent</item>
         <item name="android:layout_centerVertical">true</item>
         <item name="android:gravity">center</item>
-        <item name="android:background">@drawable/light_head_button_selector</item>
-    </style>
-    <style name="gulu_head_button">
-        <item name="android:textSize">18sp</item>
-        <item name="android:textColor">@drawable/gulu_head_button_text_selector</item>
-        <item name="android:layout_width">100dp</item>
-        <item name="android:layout_height">match_parent</item>
-        <item name="android:layout_centerVertical">true</item>
-        <item name="android:gravity">center</item>
-        <item name="android:background">@drawable/gulu_head_button_selector</item>
+        <item name="android:background">@drawable/cwh_head_button_selector</item>
     </style>
     <style name="light_point">
         <item name="android:textSize">16sp</item>
@@ -219,25 +223,25 @@
         <item name="android:paddingRight">8dp</item>
 
     </style>
-    <style name="gulu_orange_button">
+    <style name="cwh_orange_button">
         <item name="android:textSize">20sp</item>
-        <item name="android:textColor">@drawable/gulu_orange_button_text_selector</item>
+        <item name="android:textColor">@drawable/cwh_orange_button_text_selector</item>
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:padding">10dp</item>
         <item name="android:layout_centerVertical">true</item>
         <item name="android:gravity">center</item>
-        <item name="android:background">@drawable/gulu_orange_button_selector</item>
+        <item name="android:background">@drawable/cwh_orange_button_selector</item>
     </style>
-    <style name="gulu_orange_button2">
+    <style name="cwh_orange_button2">
         <item name="android:textSize">20sp</item>
-        <item name="android:textColor">@drawable/gulu_orange_button_text_selector2</item>
+        <item name="android:textColor">@drawable/cwh_orange_button_text_selector2</item>
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:padding">10dp</item>
         <item name="android:layout_centerVertical">true</item>
         <item name="android:gravity">center</item>
-        <item name="android:background">@drawable/gulu_orange_button_selector2</item>
+        <item name="android:background">@drawable/cwh_orange_button_selector2</item>
     </style>
     <style name="light_orange_button">
         <item name="android:textSize">20sp</item>
@@ -249,25 +253,25 @@
         <item name="android:gravity">center</item>
         <item name="android:background">@drawable/light_orange_button_selector</item>
     </style>
-    <style name="gulu_green_button">
+    <style name="cwh_green_button">
         <item name="android:textSize">20sp</item>
-        <item name="android:textColor">@drawable/gulu_green_button_text_selector</item>
+        <item name="android:textColor">@drawable/cwh_green_button_text_selector</item>
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:padding">10dp</item>
         <item name="android:layout_centerVertical">true</item>
         <item name="android:gravity">center</item>
-        <item name="android:background">@drawable/gulu_green_button_selector</item>
+        <item name="android:background">@drawable/cwh_green_button_selector</item>
     </style>
-    <style name="gulu_blue_button">
+    <style name="cwh_blue_button">
         <item name="android:textSize">20sp</item>
-        <item name="android:textColor">@drawable/gulu_blue_button_selector</item>
+        <item name="android:textColor">@drawable/cwh_blue_button_selector</item>
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:padding">10dp</item>
         <item name="android:layout_centerVertical">true</item>
         <item name="android:gravity">center</item>
-        <item name="android:background">@drawable/gulu_blue_button_selector</item>
+        <item name="android:background">@drawable/cwh_blue_button_selector</item>
     </style>
     <style name="my_light_orange_button">
         <item name="android:textSize">20sp</item>

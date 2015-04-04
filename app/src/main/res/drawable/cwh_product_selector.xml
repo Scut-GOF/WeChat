@@ -3,12 +3,12 @@
     <!-- 按下的状态 -->
     <item android:state_enabled="true" android:state_pressed="true">
     	<shape>
-    	    <gradient android:startColor="@color/gulu_white_orange" android:endColor="@color/gulu_white_orange" android:angle="270" />
+    	    <gradient android:startColor="@color/cwh_white_orange" android:endColor="@color/cwh_white_orange" android:angle="270" />
         </shape>
     </item>
     <item android:state_enabled="true" android:state_checked="true">
     	<shape>
-    	    <gradient android:startColor="@color/gulu_white_orange" android:endColor="@color/gulu_white_orange" android:angle="270" />
+    	    <gradient android:startColor="@color/cwh_white_orange" android:endColor="@color/cwh_white_orange" android:angle="270" />
         </shape>
     </item>
     <!-- 没操作的状态 -->

@@ -5,5 +5,5 @@
     <!-- 选中的状态 -->
     <item android:state_enabled="true" android:state_focused="true"  android:color="@color/white"/>
     <!-- 没操作的状态 -->
-    <item  android:color="@color/gulu_orange_button"/>
+    <item  android:color="@color/cwh_green"/>
 </selector>  

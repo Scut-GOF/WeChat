@@ -84,14 +84,14 @@
 
     <color name="pad_bg">#eaeaea</color>
     <color name="pad_right_bg">#d8d8d8</color>
-    <color name="gulu_white_orange">#fff0b5</color>
-    <color name="gulu_rice">#fffcfb</color>
-    <color name="gulu_orange_button">#ffa627</color>
-    <color name="gulu_green">#8dc131</color>
-    <color name="gulu_orange_on">#f2dc24</color>
-    <color name="gulu_orange">#f29724</color>
-    <color name="gulu_alp_white">#D5FFFFFF</color>
-    <color name="gulu_alp_grey">#5F000000</color>
+    <color name="cwh_white_orange">#fff0b5</color>
+    <color name="cwh_rice">#fffcfb</color>
+    <color name="cwh_orange_button">#ffa627</color>
+    <color name="cwh_green">#8dc131</color>
+    <color name="cwh_orange_on">#f2dc24</color>
+    <color name="cwh_orange">#f29724</color>
+    <color name="cwh_alp_white">#D5FFFFFF</color>
+    <color name="cwh_alp_grey">#5F000000</color>
     <color name="main_btn_text">#b33a1b</color>
     <color name="main_market_name">#d10b0c</color>
     <color name="bg_grey">#e2e2e2</color>
