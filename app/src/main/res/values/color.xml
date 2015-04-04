@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="white">#ffffff</color>
+
+    <color name="radio_black">#515151</color>
+    <color name="transparent">#00000000</color>
+    <color name="part_transparent">#EEffffff</color>
+    <color name="half_transparent">#a0000000</color>
+    <!-- 灰色系 -->
+    <color name="dark_grey">#636362</color>
+    <color name="grey">#a1a1a1</color>
+    <color name="grey2">#dedede</color>
+    <color name="light_grey">#999999</color>
+    <color name="bright_grey">#929292</color>
+
+    <!-- 褐色系 -->
+    <color name="dark_brown">#70530c</color>
+    <color name="brown">#814e18</color>
+
+    <!-- 绿色系 -->
+    <color name="dark_green">#206d00</color>
+    <color name="green">#365c10</color>
+    <color name="light_green">#5e9400</color>
+    <color name="bright_green">#328e00</color>
+
+    <!-- 橙色系 -->
+    <color name="orange">#de7300</color>
+    <color name="bright_orange">#ff7c00</color>
+
+    <color name="red_letter">#b0373b</color>
+    <color name="red_divider">#d0464a</color>
+    <!-- 粉色系 -->
+    <color name="pink">#fa4d76</color>
+    <color name="bright_pink">#ff2964</color>
+
+    <!-- 黄色系 -->
+    <color name="yellow">#ffd9b1</color>
+    <color name="light_yellow">#f9c388</color>
+    <color name="dark_yellow">#ffc689</color>
+    <color name="light_yellow2">#ffa902</color>
+
+    <!-- 其他色系 -->
+    <color name="light_black">#53370a</color>
+    <color name="black">#000000</color>
+    <color name="golden">#a97012</color>
+    <color name="red">#ff0000</color>
+    <color name="glass">#9a9a9a</color>
+    <color name="blue">#2999f9</color>
+    <color name="light_white2">#e4e4e4</color>
+    <color name="light_white">#f4f4f4</color>
+
+    <color name="content_divider">#cecece</color>
+    <color name="content_frame">#adb9d6</color>
+    <color name="content_frame_2">#d7e4f1</color>
+    <color name="content_divider_2">#cccccc</color>
+    <color name="content_button_letter">#5779a7</color>
+    <color name="content_letter">#666666</color>
+    <color name="content_describe_letter">#414957</color>
+    <color name="content_number">#7d8f9d</color>
+    <color name="content_click_on">#226fbb</color>
+    <color name="image_frame">#bcc4cd</color>
+    <color name="content_number_2">#a4b7d6</color>
+    <color name="list_click_on">#dbdede</color>
+    <color name="content_time">#ffa200</color>
+    <color name="header_title">#4b657f</color>
+    <color name="header_button_letter">#242e38</color>
+    <color name="header_radio">#eef4f9</color>
+    <color name="tag_title">#ed8b33</color>
+    <color name="footer_frame">#79889a</color>
+    <color name="at_somebody">#1a5798</color>
+    <color name="list_nick_name">#0099cc</color>
+    <color name="pop_header">#ef35485a</color>
+    <color name="pop_header_button">#ef496076</color>
+    <color name="pop_header_divider_1">#ef3c3e4f</color>
+    <color name="pop_header_divider_2">#ef394e62</color>
+
+    <color name="ks_list_main_letter">#74818b</color>
+    <color name="ks_list_sub_letter">#ababab</color>
+    <color name="ks_pay">#f3372c</color>
+    <color name="ks_detail_main_letter">#74818b</color>
+    <color name="ks_detail_sub_letter">#bfbfbf</color>
+    <color name="ks_green">#329d19</color>
+    <color name="list_divider">#d5d7da</color>
+
+    <color name="pad_bg">#eaeaea</color>
+    <color name="pad_right_bg">#d8d8d8</color>
+    <color name="gulu_white_orange">#fff0b5</color>
+    <color name="gulu_rice">#fffcfb</color>
+    <color name="gulu_orange_button">#ffa627</color>
+    <color name="gulu_green">#8dc131</color>
+    <color name="gulu_orange_on">#f2dc24</color>
+    <color name="gulu_orange">#f29724</color>
+    <color name="gulu_alp_white">#D5FFFFFF</color>
+    <color name="gulu_alp_grey">#5F000000</color>
+    <color name="main_btn_text">#b33a1b</color>
+    <color name="main_market_name">#d10b0c</color>
+    <color name="bg_grey">#e2e2e2</color>
+    <color name="btn_text_grown">#4a2205</color>
+    <color name="btn_text_black">#555555</color>
+    <color name="text_orange">#ff4b01</color>
+    <color name="text_grey">#aaaaaa</color>
+    <color name="tag_text_grown">#a6894f</color>
+    <color name="tag_text_green">#74992f</color>
+    <color name="tag_text_blue">#3c7fa9</color>
+    <color name="text_red">#fe1212</color>
+    <color name="text_dark_black">#262626</color>
+
+    <color name="light_orange">#ff6e25</color>
+    <color name="light_red">#ee5252</color>
+    <color name="light_red_on">#dd4343</color>
+    <color name="light_dark_red">#de4242</color>
+    <color name="light_text_grey">#9c9c9c</color>
+    <color name="light_blue">#5eadf0</color>
+    <color name="light_list_divider">#cecece</color>
+    <color name="light_list_divider2">#dfdfdd</color>
+    <color name="light_price">#b2b2b2</color>
+    <color name="light_dark_grey">#aeaeae</color>
+    <color name="light_pink">#ffa171</color>
+    <color name="light_main_text">#707f84</color>
+</resources>
