@@ -74,15 +74,28 @@
         <EditText
 
             android:inputType="textPhonetic"
-            android:id="@+id/searchdishname1"
+            android:id="@+id/condition"
             android:layout_weight="1"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textSize="18sp" />
 
         <Button
-            android:id="@+id/btsearchgo"
+            android:id="@+id/search_go"
             android:text="√"
+            android:textSize="20sp"
+            android:layout_marginLeft="2dp"
+            android:layout_marginRight="7dp"
+            android:textColor="@color/white"
+            android:layout_width="80dp"
+            android:layout_height="wrap_content"
+            android:paddingTop="10dp"
+            android:paddingBottom="10dp"
+            android:background="@drawable/cwh_blue_button_selector" />
+
+        <Button
+            android:id="@+id/bt_hide"
+            android:text="^"
             android:textSize="20sp"
             android:layout_marginLeft="2dp"
             android:layout_marginRight="7dp"

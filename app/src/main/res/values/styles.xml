@@ -5,32 +5,40 @@
         <!-- Customize your theme here. -->
 
     </style>
-    <!-- 全屏幕拉伸-->
+    <!--base-->
     <style name="AudioFileInfoOverlayText">
         <item name="android:shadowColor">#4d4d4d</item>
         <item name="android:shadowDx">0</item>
         <item name="android:shadowDy">-3</item>
         <item name="android:shadowRadius">4</item>
     </style>
-    <style name="layout_full">
-        <item name="android:layout_width">fill_parent</item>
-        <item name="android:layout_height">fill_parent</item>
-    </style>
 
-    <!-- 固定自身大小-->
-    <style name="layout_wrap">
-        <item name="android:layout_width">wrap_content</item>
+    <style name="HorizonFull">
         <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_width">match_parent</item>
     </style>
 
-    <!-- 横向分布-->
-    <style name="layout_horizontal" parent="layout_full">
-        <item name="android:layout_width">0px</item>
+    <style name="verticalFull">
+        <item name="android:layout_height">match_parent</item>
+        <item name="android:layout_width">wrap_content</item>
     </style>
 
-    <!-- 纵向分布-->
-    <style name="layout_vertical" parent="layout_full">
-        <item name="android:layout_height">0px</item>
+    <style name="paddingAll">
+        <item name="android:padding">5dp</item>
+    </style>
+
+    <style name="marginAll">
+        <item name="android:layout_margin">5dp</item>
+    </style>
+
+    <style name="marginHorizon">
+        <item name="android:layout_marginLeft">5dp</item>
+        <item name="android:layout_marginRight">5dp</item>
+    </style>
+
+    <style name="marginVertical">
+        <item name="android:layout_marginTop">5dp</item>
+        <item name="android:layout_marginBottom">5dp</item>
     </style>
     <style name="bottom_buttons">
         <item name="android:layout_height">wrap_content</item>
@@ -49,10 +57,7 @@
         <item name="android:background">@color/part_transparent</item>
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">wrap_content</item>
-        <item name="android:paddingRight">5dp</item>
-        <item name="android:paddingTop">5dp</item>
-        <item name="android:paddingLeft">5dp</item>
-        <item name="android:paddingBottom">5dp</item>
+        <item name="android:padding">5dp</item>
         <item name="android:gravity">center</item>
     </style>
     <style name="medium_title">
@@ -60,10 +65,8 @@
         <item name="android:textColor">@color/brown</item>
         <item name="android:layout_width">120dp</item>
         <item name="android:layout_height">wrap_content</item>
-        <item name="android:paddingRight">5dp</item>
-        <item name="android:paddingTop">5dp</item>
-        <item name="android:paddingLeft">5dp</item>
-        <item name="android:paddingBottom">5dp</item>
+        <item name="android:padding">5dp</item>
+
         <item name="android:layout_centerVertical">true</item>
         <item name="android:gravity">center</item>
     </style>
@@ -72,112 +75,16 @@
         <item name="android:textColor">@color/white</item>
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">match_parent</item>
-        <item name="android:layout_marginTop">5dp</item>
-        <item name="android:layout_marginRight">5dp</item>
-        <item name="android:layout_marginBottom">5dp</item>
-        <item name="android:layout_marginLeft">5dp</item>
-        <item name="android:paddingLeft">5dp</item>
-        <item name="android:paddingRight">5dp</item>
-        <item name="android:paddingTop">5dp</item>
-        <item name="android:paddingBottom">5dp</item>
+        <item name="android:layout_margin">5dp</item>
+        <item name="android:padding">5dp</item>
         <item name="android:layout_alignParentLeft">true</item>
         <item name="android:layout_centerVertical">true</item>
         <item name="android:gravity">center</item>
 
 
     </style>
-    <style name="back_button_hd">
-        <item name="android:textSize">22sp</item>
-        <item name="android:textColor">@color/white</item>
-        <item name="android:layout_width">wrap_content</item>
-        <item name="android:layout_height">match_parent</item>
-        <item name="android:layout_marginTop">5dp</item>
-        <item name="android:layout_marginRight">5dp</item>
-        <item name="android:layout_marginBottom">5dp</item>
-        <item name="android:layout_marginLeft">5dp</item>
-        <item name="android:paddingLeft">5dp</item>
-        <item name="android:paddingRight">5dp</item>
-        <item name="android:paddingTop">5dp</item>
-        <item name="android:paddingBottom">5dp</item>
-        <item name="android:layout_alignParentLeft">true</item>
-        <item name="android:layout_centerVertical">true</item>
-        <item name="android:gravity">center</item>
 
 
-    </style>
-    <style name="banner_button_hd">
-        <item name="android:textSize">15sp</item>
-        <item name="android:textColor">@color/white</item>
-        <item name="android:layout_width">wrap_content</item>
-        <item name="android:layout_height">wrap_content</item>
-        <item name="android:layout_alignParentRight">true</item>
-        <item name="android:layout_centerVertical">true</item>
-        <item name="android:gravity">center</item>
-        <item name="android:background">@drawable/cwh_head_button_selector</item>
-    </style>
-    <style name="btn_back_selector">
-        <item name="android:textSize">18sp</item>
-        <item name="android:textColor">@color/white</item>
-        <item name="android:layout_width">80dp</item>
-        <item name="android:layout_height">wrap_content</item>
-        <item name="android:paddingLeft">12dp</item>
-        <item name="android:layout_alignParentLeft">true</item>
-        <item name="android:layout_centerVertical">true</item>
-        <item name="android:gravity">center</item>
-        <item name="android:layout_marginLeft">16dp</item>
-        <item name="android:layout_marginTop">12dp</item>
-
-    </style>
-    <style name="btn_yellow_selector">
-        <item name="android:textSize">18sp</item>
-        <item name="android:textColor">@color/btn_text_grown</item>
-        <item name="android:layout_width">wrap_content</item>
-        <item name="android:layout_height">wrap_content</item>
-        <item name="android:padding">8dp</item>
-        <item name="android:layout_centerVertical">true</item>
-        <item name="android:gravity">center</item>
-
-    </style>
-    <style name="btn_grey_selector">
-        <item name="android:textSize">18sp</item>
-        <item name="android:textColor">@color/btn_text_grown</item>
-        <item name="android:layout_width">wrap_content</item>
-        <item name="android:layout_height">wrap_content</item>
-        <item name="android:padding">8dp</item>
-        <item name="android:layout_centerVertical">true</item>
-        <item name="android:gravity">center</item>
-
-    </style>
-    <style name="btn_red_selector">
-        <item name="android:textSize">18sp</item>
-        <item name="android:textColor">@color/white</item>
-        <item name="android:layout_width">wrap_content</item>
-        <item name="android:layout_height">wrap_content</item>
-        <item name="android:padding">8dp</item>
-        <item name="android:layout_centerVertical">true</item>
-        <item name="android:gravity">center</item>
-
-    </style>
-    <style name="btn_yellow_small_selector">
-        <item name="android:textSize">18sp</item>
-        <item name="android:textColor">@color/btn_text_grown</item>
-        <item name="android:layout_width">wrap_content</item>
-        <item name="android:layout_height">wrap_content</item>
-        <item name="android:padding">6dp</item>
-        <item name="android:layout_centerVertical">true</item>
-        <item name="android:gravity">center</item>
-
-    </style>
-    <style name="head_title">
-        <item name="android:textSize">24sp</item>
-        <item name="android:textColor">@color/white</item>
-        <item name="android:layout_width">wrap_content</item>
-        <item name="android:layout_height">wrap_content</item>
-        <item name="android:paddingTop">12dp</item>
-        <item name="android:layout_centerVertical">true</item>
-        <item name="android:gravity">center</item>
-        <item name="android:textStyle">bold</item>
-    </style>
     <style name="simple_radio_button">
         <item name="android:textSize">18sp</item>
         <item name="android:textColor">@color/brown</item>
@@ -194,75 +101,7 @@
     </style>
 
 
-    <style name="light_title">
-        <item name="android:textSize">26sp</item>
-        <item name="android:textColor">@color/white</item>
-        <item name="android:layout_width">wrap_content</item>
-        <item name="android:layout_height">wrap_content</item>
-        <item name="android:layout_centerVertical">true</item>
-        <item name="android:gravity">center</item>
-    </style>
 
-    <style name="cwh_head_button">
-        <item name="android:textSize">18sp</item>
-        <item name="android:textColor">@drawable/cwh_head_button_text_selector</item>
-        <item name="android:layout_width">100dp</item>
-        <item name="android:layout_height">match_parent</item>
-        <item name="android:layout_centerVertical">true</item>
-        <item name="android:gravity">center</item>
-        <item name="android:background">@drawable/cwh_head_button_selector</item>
-    </style>
-    <style name="light_point">
-        <item name="android:textSize">16sp</item>
-        <item name="android:textColor">@color/white</item>
-        <item name="android:layout_width">wrap_content</item>
-        <item name="android:minWidth">24dp</item>
-        <item name="android:layout_height">24dp</item>
-        <item name="android:background">@drawable/light_point_selector</item>
-        <item name="android:paddingLeft">8dp</item>
-        <item name="android:paddingRight">8dp</item>
-
-    </style>
-    <style name="cwh_orange_button">
-        <item name="android:textSize">20sp</item>
-        <item name="android:textColor">@drawable/cwh_orange_button_text_selector</item>
-        <item name="android:layout_width">wrap_content</item>
-        <item name="android:layout_height">wrap_content</item>
-        <item name="android:padding">10dp</item>
-        <item name="android:layout_centerVertical">true</item>
-        <item name="android:gravity">center</item>
-        <item name="android:background">@drawable/cwh_orange_button_selector</item>
-    </style>
-    <style name="cwh_orange_button2">
-        <item name="android:textSize">20sp</item>
-        <item name="android:textColor">@drawable/cwh_orange_button_text_selector2</item>
-        <item name="android:layout_width">wrap_content</item>
-        <item name="android:layout_height">wrap_content</item>
-        <item name="android:padding">10dp</item>
-        <item name="android:layout_centerVertical">true</item>
-        <item name="android:gravity">center</item>
-        <item name="android:background">@drawable/cwh_orange_button_selector2</item>
-    </style>
-    <style name="light_orange_button">
-        <item name="android:textSize">20sp</item>
-        <item name="android:textColor">@drawable/light_orange_button_text_selector</item>
-        <item name="android:layout_width">wrap_content</item>
-        <item name="android:layout_height">wrap_content</item>
-        <item name="android:padding">10dp</item>
-        <item name="android:layout_centerVertical">true</item>
-        <item name="android:gravity">center</item>
-        <item name="android:background">@drawable/light_orange_button_selector</item>
-    </style>
-    <style name="cwh_green_button">
-        <item name="android:textSize">20sp</item>
-        <item name="android:textColor">@drawable/cwh_green_button_text_selector</item>
-        <item name="android:layout_width">wrap_content</item>
-        <item name="android:layout_height">wrap_content</item>
-        <item name="android:padding">10dp</item>
-        <item name="android:layout_centerVertical">true</item>
-        <item name="android:gravity">center</item>
-        <item name="android:background">@drawable/cwh_green_button_selector</item>
-    </style>
     <style name="cwh_blue_button">
         <item name="android:textSize">20sp</item>
         <item name="android:textColor">@drawable/cwh_blue_button_selector</item>
