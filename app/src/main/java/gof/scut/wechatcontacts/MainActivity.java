@@ -10,7 +10,7 @@ import android.widget.ListView;
 
 import gof.scut.common.utils.ActivityUtils;
 import gof.scut.common.utils.DataBaseUtils;
-import gof.scut.cwh.models.ContactsAdapter;
+import gof.scut.cwh.models.adapter.ContactsAdapter;
 
 
 public class MainActivity extends Activity implements View.OnClickListener {
@@ -93,6 +93,7 @@ public class MainActivity extends Activity implements View.OnClickListener {
                 break;
             case R.id.bt_menu:
                 //A MENU WITH SETTING IN IT
+                ActivityUtils.ActivitySkip(this, SettingActivity.class);
                 break;
             case R.id.search_go:
                 //QUERY
@@ -106,11 +107,11 @@ public class MainActivity extends Activity implements View.OnClickListener {
                 break;
             case R.id.bt_group:
                 //TO GROUP VIEW
-                ActivityUtils.ActivitySkip(this, AddContactActivity.class);
+                ActivityUtils.ActivitySkip(this, LabelsActivity.class);
                 break;
             case R.id.bt_me:
                 //TO SELF ACTIVITY
-                ActivityUtils.ActivitySkip(this, AddContactActivity.class);
+                ActivityUtils.ActivitySkip(this, SelfInfoActivity.class);
                 break;
         }
     }

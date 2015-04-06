@@ -1,4 +1,4 @@
-package gof.scut.cwh.models;
+package gof.scut.cwh.models.adapter;
 
 import android.content.Context;
 import android.database.Cursor;
@@ -11,9 +11,12 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import gof.scut.common.utils.ActivityUtils;
 import gof.scut.common.utils.DBConstants;
 import gof.scut.common.utils.DataBaseHelper;
 import gof.scut.common.utils.UseSystemUtils;
+import gof.scut.cwh.models.object.IdObj;
+import gof.scut.wechatcontacts.ContactInfoActivity;
 import gof.scut.wechatcontacts.R;
 
 
@@ -76,6 +79,26 @@ public class ContactsAdapter extends BaseAdapter {
                 UseSystemUtils.sysCall(context, cTel);
             }
         });
+        name.setClickable(true);
+        name.setFocusable(true);
+        name.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onItemClick(cTel);
+            }
+        });
+        tel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onItemClick(cTel);
+            }
+        });
         return layout;
     }
+
+    private void onItemClick(String tel) {
+        IdObj obj = new IdObj(tel);
+        ActivityUtils.ActivitySkipWithObject(context, ContactInfoActivity.class, obj);
+    }
+
 }
