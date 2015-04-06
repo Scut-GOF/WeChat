@@ -30,6 +30,7 @@
             android:layout_alignParentTop="true"
             android:layout_alignParentRight="true"
             android:layout_alignParentEnd="true"
+
             android:layout_marginRight="10dp">
 
             <Button
@@ -61,14 +62,15 @@
 
     </RelativeLayout>
     <LinearLayout
-        android:id="@+id/linearLayout2"
+        android:id="@+id/search_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
 
-        android:layout_marginLeft="5dp"
-        android:layout_marginTop="5dp"
+        android:layout_margin="2dp"
         android:orientation="horizontal"
-
+        android:padding="5dp"
+        android:background="@drawable/layout_stroke"
+        android:visibility="gone"
         >
 
         <EditText
@@ -83,39 +85,28 @@
         <Button
             android:id="@+id/search_go"
             android:text="√"
-            android:textSize="20sp"
-            android:layout_marginLeft="2dp"
-            android:layout_marginRight="7dp"
-            android:textColor="@color/white"
-            android:layout_width="80dp"
-            android:layout_height="wrap_content"
-            android:paddingTop="10dp"
-            android:paddingBottom="10dp"
-            android:background="@drawable/cwh_blue_button_selector" />
+            style="@style/simple_blue_button" />
 
         <Button
             android:id="@+id/bt_hide"
             android:text="^"
-            android:textSize="20sp"
-            android:layout_marginLeft="2dp"
-            android:layout_marginRight="7dp"
-            android:textColor="@color/white"
-            android:layout_width="80dp"
-            android:layout_height="wrap_content"
-            android:paddingTop="10dp"
-            android:paddingBottom="10dp"
-            android:background="@drawable/cwh_blue_button_selector" />
+            style="@style/simple_white_button" />
     </LinearLayout>
     <ListView
-        android:id="@+id/searchlistview"
+        android:id="@+id/search_list"
         android:layout_width="fill_parent"
         android:layout_height="match_parent"
+
         android:layout_weight="1"
+        android:scrollbars="none"
+        android:divider="@null"
+        android:dividerHeight="1dp"
         android:layout_centerVertical="true"
         />
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:padding="5dp"
         android:orientation="horizontal">
         <Button
             android:id="@+id/bt_add"

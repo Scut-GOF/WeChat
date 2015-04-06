@@ -40,6 +40,32 @@
         <item name="android:layout_marginTop">5dp</item>
         <item name="android:layout_marginBottom">5dp</item>
     </style>
+
+    <style name="simple_white_button">
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_width">66dp</item>
+        <item name="android:textSize">20sp</item>
+        <item name="android:layout_margin">2dp</item>
+
+        <item name="android:textColor">@drawable/cwh_white_button_text_selector</item>
+        <item name="android:background">@drawable/cwh_white_button_selector</item>
+        <item name="android:padding">10dp</item>
+
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="simple_blue_button">
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_width">66dp</item>
+        <item name="android:textSize">20sp</item>
+        <item name="android:layout_margin">2dp</item>
+
+        <item name="android:textColor">@drawable/cwh_blue_button_text_selector</item>
+        <item name="android:background">@drawable/cwh_blue_button_selector</item>
+        <item name="android:padding">10dp</item>
+
+        <item name="android:textStyle">bold</item>
+    </style>
     <style name="bottom_buttons">
         <item name="android:layout_height">wrap_content</item>
         <item name="android:layout_width">match_parent</item>
@@ -129,6 +155,6 @@
         <item name="android:layout_height">match_parent</item>
         <item name="android:layout_centerVertical">true</item>
         <item name="android:gravity">center</item>
-        <item name="android:background">@drawable/light_white_button_selector</item>
+        <item name="android:background">@drawable/cwh_white_button_selector</item>
     </style>
 </resources>
