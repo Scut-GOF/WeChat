@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- 按下的状态 -->
+    <item android:state_enabled="true" android:state_pressed="true" android:drawable="@color/blue">
+		<shape>
+            <gradient android:startColor="@color/blue" android:endColor="@color/blue"
+                android:angle="90"/>
+            <corners android:topLeftRadius="0dp" android:topRightRadius="0dp" android:bottomLeftRadius="0dp"
+				android:bottomRightRadius="0dp" />
+        </shape>
+    </item>
+    <!-- 选中的状态 -->
+    <item android:state_enabled="true" android:state_focused="true" android:drawable="@color/blue">
+
+    </item>
+    <!-- 没操作的状态 -->
+    <item >
+        <shape>
+            <gradient android:startColor="@null" android:endColor="@null"
+                android:angle="90"/>
+            <corners android:topLeftRadius="0dp" android:topRightRadius="0dp" android:bottomLeftRadius="0dp"
+				android:bottomRightRadius="0dp" />
+        </shape>
+    </item>
+</selector>
