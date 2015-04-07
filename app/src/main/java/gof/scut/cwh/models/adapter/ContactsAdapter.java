@@ -12,8 +12,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import gof.scut.common.utils.ActivityUtils;
-import gof.scut.common.utils.DBConstants;
-import gof.scut.common.utils.DataBaseHelper;
+import gof.scut.common.utils.TBMainConstants;
 import gof.scut.common.utils.UseSystemUtils;
 import gof.scut.cwh.models.object.IdObj;
 import gof.scut.wechatcontacts.ContactInfoActivity;
@@ -56,16 +55,21 @@ public class ContactsAdapter extends BaseAdapter {
         Button call = (Button) layout.findViewById(R.id.call);
 
         cursor.moveToPosition(position);
-        final int cLabel = cursor.getInt(cursor.getColumnIndex(DBConstants.LABEL));
-        final String cName = cursor.getString(cursor.getColumnIndex(DBConstants.NAME));
-        final String cTel = cursor.getString(cursor.getColumnIndex(DBConstants.TEL));
+        //TODO LABEL
+        //final int cLabel = cursor.getInt(cursor.getColumnIndex(TBMainConstants.LABEL));
+        final String cName = cursor.getString(cursor.getColumnIndex(TBMainConstants.NAME));
+        final String id = cursor.getString(cursor.getColumnIndex(TBMainConstants.ID));
+        //TODO TEL
+        //final String cTel = cursor.getString(cursor.getColumnIndex(TBMainConstants.TEL));
         //more details got when view
         //....
         //set label icon
         labelIcon.setImageResource(R.drawable.chart_1_2);
         name.setText(cName);
-        tel.setText(cTel);
-        msg.setOnClickListener(new View.OnClickListener() {
+        //TODO TEL
+        //tel.setText(cTel);
+        //TODO MOVE TO CONTACTS DETAIL
+       /* msg.setOnClickListener(new View.OnClickListener() {
 
             @Override
             public void onClick(View v) {
@@ -78,19 +82,19 @@ public class ContactsAdapter extends BaseAdapter {
             public void onClick(View v) {
                 UseSystemUtils.sysCall(context, cTel);
             }
-        });
+        });*/
         name.setClickable(true);
         name.setFocusable(true);
         name.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                onItemClick(cTel);
+                onItemClick(id);
             }
         });
         tel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                onItemClick(cTel);
+                onItemClick(id);
             }
         });
         return layout;
