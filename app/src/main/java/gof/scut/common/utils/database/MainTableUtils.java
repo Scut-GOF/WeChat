@@ -1,4 +1,4 @@
-package gof.scut.common.utils;
+package gof.scut.common.utils.database;
 
 import android.content.ContentValues;
 import android.content.Context;
@@ -77,7 +77,14 @@ public class MainTableUtils {
         return c;
     }
 
-    //需要连接表才能按标签和电话搜索
+
+    public Cursor selectAllName() {
+        SQLiteDatabase db = dataBaseHelper.getReadableDatabase();
+        Cursor c = db.query(TBMainConstants.TABLE_NAME, new String[]{TBMainConstants.NAME},
+                null, null, null, null, TBMainConstants.NAME);
+        //db.close();
+        return c;
+    }
 
     public Cursor selectWithCondition(String[] columns, String selection, String[] selectionArgs,
                                       String groupBy, String having, String orderBy) {

@@ -1,4 +1,4 @@
-package gof.scut.common.utils;
+package gof.scut.common.utils.database;
 
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;

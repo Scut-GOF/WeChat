@@ -9,7 +9,7 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 
 import gof.scut.common.utils.ActivityUtils;
-import gof.scut.common.utils.MainTableUtils;
+import gof.scut.common.utils.database.MainTableUtils;
 import gof.scut.cwh.models.adapter.ContactsAdapter;
 
 
@@ -79,7 +79,7 @@ public class MainActivity extends Activity implements View.OnClickListener {
         //When clickOnNameAndTel, view
         //When click on image, view label group
         //edit when view
-        Cursor cursor = mainTableUtils.selectAll();
+        Cursor cursor = mainTableUtils.selectAllName();
         ContactsAdapter adapter = new ContactsAdapter(this, cursor);
         contacts.setAdapter(adapter);
     }

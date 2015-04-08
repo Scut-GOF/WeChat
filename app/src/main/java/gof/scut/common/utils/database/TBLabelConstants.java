@@ -1,4 +1,4 @@
-package gof.scut.common.utils;
+package gof.scut.common.utils.database;
 
 /**
  * Created by Administrator on 2015/4/7.
