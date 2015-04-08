@@ -23,6 +23,11 @@
         <item name="android:layout_width">wrap_content</item>
     </style>
 
+    <style name="wrap">
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_width">wrap_content</item>
+    </style>
+
     <style name="paddingAll">
         <item name="android:padding">5dp</item>
     </style>
@@ -66,6 +71,7 @@
 
         <item name="android:textStyle">bold</item>
     </style>
+
     <style name="bottom_buttons">
         <item name="android:layout_height">wrap_content</item>
         <item name="android:layout_width">match_parent</item>
@@ -78,6 +84,7 @@
         <item name="android:layout_weight">1</item>
         <item name="android:textStyle">bold</item>
     </style>
+
     <style name="simple_textbox">
         <item name="android:textSize">22sp</item>
         <item name="android:background">@color/part_transparent</item>
@@ -86,6 +93,7 @@
         <item name="android:padding">5dp</item>
         <item name="android:gravity">center</item>
     </style>
+
     <style name="medium_title">
         <item name="android:textSize">22sp</item>
         <item name="android:textColor">@color/brown</item>
@@ -96,6 +104,7 @@
         <item name="android:layout_centerVertical">true</item>
         <item name="android:gravity">center</item>
     </style>
+
     <style name="simple_back_button">
         <item name="android:textSize">22sp</item>
         <item name="android:textColor">@color/white</item>
@@ -127,7 +136,6 @@
     </style>
 
 
-
     <style name="cwh_blue_button">
         <item name="android:textSize">20sp</item>
         <item name="android:textColor">@drawable/cwh_blue_button_selector</item>
@@ -138,6 +146,7 @@
         <item name="android:gravity">center</item>
         <item name="android:background">@drawable/cwh_blue_button_selector</item>
     </style>
+
     <style name="my_light_orange_button">
         <item name="android:textSize">20sp</item>
         <item name="android:textColor">@drawable/my_light_orange_button_text_selector</item>
@@ -148,6 +157,7 @@
         <item name="android:gravity">center</item>
         <item name="android:background">@drawable/my_light_orange_button_selector</item>
     </style>
+
     <style name="light_white_button">
         <item name="android:textSize">18sp</item>
         <item name="android:textColor">@drawable/light_orange_button_text_selector</item>

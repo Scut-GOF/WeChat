@@ -1,14 +1,12 @@
-package gof.scut.common.utils;
+package gof.scut.common.utils.database;
 
 
-public interface DBConstants {
+public interface TBMainConstants {
     String TABLE_NAME = "contacts";
     String ID = "_id";
     String NAME = "name";
     String L_PINYIN = "l_pinyin";
     String S_PINYIN = "s_pinyin";
-    String TEL = "tel";
-    String LABEL = "label";
     String ADDRESS = "address";
     String NOTES = "notes";
 }
