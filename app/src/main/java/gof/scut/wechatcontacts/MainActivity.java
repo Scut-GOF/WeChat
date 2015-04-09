@@ -9,7 +9,7 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 
 import gof.scut.common.utils.ActivityUtils;
-import gof.scut.common.utils.DataBaseUtils;
+import gof.scut.common.utils.database.MainTableUtils;
 import gof.scut.cwh.models.adapter.ContactsAdapter;
 
 
@@ -26,7 +26,7 @@ public class MainActivity extends Activity implements View.OnClickListener {
     //Constants
 
     //Models
-    DataBaseUtils dataBaseUtils;
+    MainTableUtils mainTableUtils;
 
     //Controllers
 
@@ -48,7 +48,8 @@ public class MainActivity extends Activity implements View.OnClickListener {
     }
 
     private void initDatabase() {
-        dataBaseUtils = new DataBaseUtils(this);
+        mainTableUtils = new MainTableUtils(this);
+
     }
 
     private void findViews() {
@@ -79,7 +80,7 @@ public class MainActivity extends Activity implements View.OnClickListener {
         //When clickOnNameAndTel, view
         //When click on image, view label group
         //edit when view
-        Cursor cursor = dataBaseUtils.selectAllOrderByLabel();
+        Cursor cursor = mainTableUtils.selectAllIDName();
         ContactsAdapter adapter = new ContactsAdapter(this, cursor);
         contacts.setAdapter(adapter);
     }
