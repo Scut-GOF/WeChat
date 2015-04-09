@@ -11,14 +11,11 @@ public class TelTableUtils {
 
     public TelTableUtils(Context context) {
         dataBaseHelper = new DataBaseHelper(context, TBTelConstants.TABLE_NAME);
-        //insert several data
-        /*for (int i=0;i<10;i++){
-            insertAll("Friend"+i,""+i,""+i,"10086",i%3,"","");
-        }*/
+
     }
 
     //insert
-    public long insertAll(String id, int tel) {
+    public long insertAll(String id, String tel) {
         ContentValues value = new ContentValues();
         value.put(TBTelConstants.ID, id);
         value.put(TBTelConstants.TEL, tel);

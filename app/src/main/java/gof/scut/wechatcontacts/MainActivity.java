@@ -49,6 +49,7 @@ public class MainActivity extends Activity implements View.OnClickListener {
 
     private void initDatabase() {
         mainTableUtils = new MainTableUtils(this);
+
     }
 
     private void findViews() {
@@ -79,7 +80,7 @@ public class MainActivity extends Activity implements View.OnClickListener {
         //When clickOnNameAndTel, view
         //When click on image, view label group
         //edit when view
-        Cursor cursor = mainTableUtils.selectAllName();
+        Cursor cursor = mainTableUtils.selectAllIDName();
         ContactsAdapter adapter = new ContactsAdapter(this, cursor);
         contacts.setAdapter(adapter);
     }

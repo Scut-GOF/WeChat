@@ -11,10 +11,11 @@ public class MainTableUtils {
 
     public MainTableUtils(Context context) {
         dataBaseHelper = new DataBaseHelper(context, TBMainConstants.TABLE_NAME);
-        //insert several data
-        /*for (int i=0;i<10;i++){
-            insertAll("Friend"+i,""+i,""+i,"10086",i%3,"","");
-        }*/
+        //TODO insert several data
+        for (int i = 0; i < 10; i++) {
+            insertAll("Friend" + i, "" + i, "" + i, "", "");
+        }
+
     }
 
     //insert
@@ -77,6 +78,13 @@ public class MainTableUtils {
         return c;
     }
 
+    public Cursor selectAllIDName() {
+        SQLiteDatabase db = dataBaseHelper.getReadableDatabase();
+        Cursor c = db.query(TBMainConstants.TABLE_NAME, new String[]{TBMainConstants.ID, TBMainConstants.NAME},
+                null, null, null, null, TBMainConstants.NAME);
+        //db.close();
+        return c;
+    }
 
     public Cursor selectAllName() {
         SQLiteDatabase db = dataBaseHelper.getReadableDatabase();
