@@ -1,11 +1,16 @@
 package gof.scut.cwh.models.adapter;
 
+import android.app.Activity;
 import android.content.Context;
 import android.database.Cursor;
 import android.graphics.drawable.ColorDrawable;
+import android.view.Gravity;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.LinearLayout;
@@ -16,6 +21,7 @@ import android.widget.TextView;
 import java.util.ArrayList;
 
 import gof.scut.common.utils.ActivityUtils;
+import gof.scut.common.utils.HardwareUtil;
 import gof.scut.common.utils.database.CursorUtils;
 import gof.scut.common.utils.database.TBMainConstants;
 import gof.scut.common.utils.database.TBTelConstants;
@@ -55,7 +61,7 @@ public class ContactsAdapter extends BaseAdapter {
     }
 
     @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
+    public View getView(int position, View convertView, final ViewGroup parent) {
         LayoutInflater inflater = LayoutInflater.from(context);
         layout = (LinearLayout) inflater.inflate(R.layout.main_list_cell, null);
 
@@ -68,8 +74,6 @@ public class ContactsAdapter extends BaseAdapter {
 
         final String cName = cursor.getString(cursor.getColumnIndex(TBMainConstants.NAME));
         final String id = cursor.getString(cursor.getColumnIndex(TBMainConstants.ID));
-        TelTableUtils telTableUtil = new TelTableUtils(context);
-        final Cursor cTel = telTableUtil.selectTelWithID(id);
 
         //more details got when view
         //....
@@ -81,9 +85,17 @@ public class ContactsAdapter extends BaseAdapter {
 
             @Override
             public void onClick(View v) {
-                if (cTel.getCount() > 1)
+                TelTableUtils telTableUtil = new TelTableUtils(context);
+                //TODO TEST insert several data
+                telTableUtil.insertAll("" + id, "10086");
+                telTableUtil.insertAll("" + id, "10086" + id);
+
+                final Cursor cTel = telTableUtil.selectTelWithID(id);
+
+                if (cTel.getCount() > 1) {
                     initPopChoice(TelsAdapter.CHOICE_MSG, cTel);
-                else if (cTel.getCount() == 1) {
+                    popPhoneSelector();
+                } else if (cTel.getCount() == 1) {
                     ArrayList<String> phoneList = new ArrayList<String>();
                     CursorUtils.cursorToStringArray(cTel, phoneList, TBTelConstants.TEL);
                     UseSystemUtils.sendMsg(context, phoneList.get(0));
@@ -94,12 +106,20 @@ public class ContactsAdapter extends BaseAdapter {
 
             @Override
             public void onClick(View v) {
-                if (cTel.getCount() > 1)
+                TelTableUtils telTableUtil = new TelTableUtils(context);
+                //TODO TEST insert several data
+                telTableUtil.insertAll("" + id, "10086");
+                telTableUtil.insertAll("" + id, "10086" + id);
+
+                final Cursor cTel = telTableUtil.selectTelWithID(id);
+
+                if (cTel.getCount() > 1) {
                     initPopChoice(TelsAdapter.CHOICE_CALL, cTel);
-                else if (cTel.getCount() == 1) {
+                    popPhoneSelector();
+                } else if (cTel.getCount() == 1) {
                     ArrayList<String> phoneList = new ArrayList<String>();
                     CursorUtils.cursorToStringArray(cTel, phoneList, TBTelConstants.TEL);
-                    UseSystemUtils.sendMsg(context, phoneList.get(0));
+                    UseSystemUtils.sysCall(context, phoneList.get(0));
                 }
             }
         });
@@ -119,19 +139,51 @@ public class ContactsAdapter extends BaseAdapter {
         ActivityUtils.ActivitySkipWithObject(context, ContactInfoActivity.class, obj);
     }
 
+    public void popPhoneSelector() {
+        telChoiceWindow.update();
+        telChoiceWindow.showAtLocation(layout, Gravity.CENTER, 0, 0);
+        Animation anim1 = AnimationUtils.loadAnimation(context, R.anim.scale_center_enter);
+        telChoiceView.findViewById(R.id.phone_choices).startAnimation(anim1);
+    }
+
     private void initPopChoice(int telOrMsg, Cursor cursor) {
         telChoiceView = LayoutInflater.from(context).inflate(
                 R.layout.pop_phone_choice, null, false);
         telChoiceWindow = new PopupWindow(telChoiceView,
-                ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.FILL_PARENT, true);
+                ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT, true);
+
         ColorDrawable dw = new ColorDrawable(-00000);
         telChoiceView.setBackgroundDrawable(dw);
+
         TextView telsTitle = (TextView) telChoiceView.findViewById(R.id.list_title);
         if (TelsAdapter.CHOICE_MSG == telOrMsg) telsTitle.setText("Message");
         else if (TelsAdapter.CHOICE_CALL == telOrMsg) telsTitle.setText("Call");
+
         ListView telList = (ListView) telChoiceView.findViewById(R.id.phone_list);
-        TelsAdapter telsAdapter = new TelsAdapter(context, cursor, telOrMsg);
+        TelsAdapter telsAdapter = new TelsAdapter(context, cursor, telOrMsg, telChoiceWindow);
         telList.setAdapter(telsAdapter);
+
+        telChoiceView.setFocusable(true);
+        telChoiceView.setFocusableInTouchMode(true);
+        telChoiceView.setOnKeyListener(new View.OnKeyListener() {
+            @Override
+            public boolean onKey(View arg0, int arg1, KeyEvent arg2) {
+                if (arg1 == KeyEvent.KEYCODE_BACK) {
+                    telChoiceWindow.dismiss();
+                    return true;
+                }
+                return false;
+            }
+        });
+        telChoiceView.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                telChoiceWindow.dismiss();
+            }
+
+        });
+
         telChoiceWindow.setOnDismissListener(new PopupWindow.OnDismissListener() {
             @Override
             public void onDismiss() {
