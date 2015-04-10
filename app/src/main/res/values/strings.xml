@@ -11,4 +11,8 @@
     <string name="title_activity_scan">ScanActivity</string>
     <string name="title_activity_add_contact">AddContactActivity</string>
     <string name="title_activity_setting">SettingActivity</string>
+    <string name="search">搜索联系人</string>
+    <string name="label_name">标签名</string>
+    <string name="cn_ok">确定</string>
+    <string name="add_label">添加标签</string>
 </resources>

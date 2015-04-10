@@ -1,5 +1,6 @@
 package gof.scut.common.utils;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -23,4 +24,9 @@ public class ActivityUtils {
         context.startActivity(intent);
     }
 
+    public static void sysGallery(Context context, int resultCode) {
+        Intent i = new Intent(
+                Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+        ((Activity) context).startActivityForResult(i, resultCode);
+    }
 }
