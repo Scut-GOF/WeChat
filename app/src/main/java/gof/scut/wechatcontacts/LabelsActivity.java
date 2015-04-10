@@ -35,7 +35,7 @@ public class LabelsActivity extends Activity {
     LabelTableUtils labelTableUtils;
 
     final int RESULT_LOAD_IMAGE = 1;
-    String pathSelectedToAdd;
+    String pathSelectedToAdd = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -113,6 +113,7 @@ public class LabelsActivity extends Activity {
                 long state = labelTableUtils.insertAll(addLabelName, addLabelIcon);
                 if (state < 0) Log.e("LabelsActivity", "add label failed");
                 addLabelWindow.dismiss();
+                initGrids();
             }
         });
         addLabelView.setFocusable(true);

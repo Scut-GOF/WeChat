@@ -52,7 +52,9 @@ public class LabelsAdapter extends BaseAdapter {
         TextView labelName = (TextView) layout.findViewById(R.id.label_name);
         labelName.setText(cursor.getString(cursor.getColumnIndex(TBLabelConstants.LABEL)));
         String iconPath = cursor.getString(cursor.getColumnIndex(TBLabelConstants.LABEL_ICON));
-        labelIcon.setImageBitmap(BitmapUtils.decodeBitmapFromPath(iconPath));
+        labelIcon.setBackground(null);
+        if (iconPath.equals("")) labelIcon.setBackgroundResource(R.drawable.chart_1_2);
+        else labelIcon.setImageBitmap(BitmapUtils.decodeBitmapFromPath(iconPath));
         labelIcon.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
