@@ -1,19 +1,58 @@
 package gof.scut.wechatcontacts;
 
+import android.database.Cursor;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.ListView;
+import android.widget.TextView;
+
+import gof.scut.common.utils.database.MainTableUtils;
+import gof.scut.common.utils.database.TBMainConstants;
+import gof.scut.common.utils.database.TelTableUtils;
+import gof.scut.cwh.models.object.IdObj;
+import gof.scut.fental.models.adapter.PhonesAdapter;
 
 
 public class ContactInfoActivity extends ActionBarActivity {
+
+    private TextView tvName;
+    private TextView tvAddress;
+    private TextView tvNotes;
+    private ListView lvTels;
+    private int id;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_contact_info);
-    }
+        tvName=(TextView)findViewById(R.id.tv_name);
+        tvAddress=(TextView)findViewById(R.id.tv_address);
+        tvNotes=(TextView)findViewById(R.id.tv_notes);
+        lvTels=(ListView)findViewById(R.id.lv_tels);
+        Bundle bundle=new Bundle();
+        bundle =this.getIntent().getExtras();
+        id =((IdObj)bundle.getSerializable("IdObj")).getId();
 
+        MainTableUtils mainTableUtils=new MainTableUtils(this);
+        Cursor allInfoCursor=mainTableUtils.selectAllWithID("" + id);
+        allInfoCursor.moveToNext();
+        String name = allInfoCursor.getString(allInfoCursor.getColumnIndex(TBMainConstants.NAME));
+        String address = allInfoCursor.getString(allInfoCursor.getColumnIndex(TBMainConstants.ADDRESS));
+        String notes = allInfoCursor.getString(allInfoCursor.getColumnIndex(TBMainConstants.NOTES));
+
+
+        tvName.setText(name);
+        tvAddress.setText(address);
+        tvNotes.setText(notes);
+    }
+    private void initList() {
+        TelTableUtils telTableUtils=new TelTableUtils(this);
+        Cursor cursorTels= telTableUtils.selectTelWithID("" + id);
+        PhonesAdapter phonesAdapter=new PhonesAdapter(this,cursorTels);
+        lvTels.setAdapter(phonesAdapter);
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -35,5 +74,9 @@ public class ContactInfoActivity extends ActionBarActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+    protected void onResume() {
+        super.onResume();
+        initList();
     }
 }
