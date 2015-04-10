@@ -6,7 +6,7 @@ import android.util.DisplayMetrics;
 /**
  * Created by Administrator on 2015/4/9.
  */
-public class HardwareUtil {
+public class HardwareUtils {
 
     public static double getScreenWidthPhysicalSize(Activity ctx) {
         DisplayMetrics dm = new DisplayMetrics();

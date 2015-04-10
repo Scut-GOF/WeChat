@@ -8,9 +8,11 @@ import android.database.sqlite.SQLiteOpenHelper;
 public class DataBaseHelper extends SQLiteOpenHelper {
     public final static int DBVersion = 1;
     public final static int MAIN_TABLE = 0;
-    public final static int LABEL_TABLE = 1;
+    public final static int ID_LABEL_TABLE = 1;
+
     public final static int TEL_TABLE = 2;
-    public final static int ALL_TABLE = 3;
+    public final static int LABEL_TABLE = 3;
+    public final static int ALL_TABLE = 4;
 
     private int handleTable;
 
@@ -26,21 +28,24 @@ public class DataBaseHelper extends SQLiteOpenHelper {
             // + TBMainConstants.LABEL + " INT,"
             + TBMainConstants.ADDRESS + " TEXT,"
             + TBMainConstants.NOTES + " TEXT)";
-    private final static String SQL_LABEL_TABLE_CREATE = "CREATE TABLE IF NOT EXISTS "
-            + TBLabelConstants.TABLE_NAME + " ("
-            + TBLabelConstants.ID
+    private final static String SQL_ID_LABEL_TABLE_CREATE = "CREATE TABLE IF NOT EXISTS "
+            + TBIDLabelConstants.TABLE_NAME + " ("
+            + TBIDLabelConstants.ID
             + " INTEGER NOT NULL, "
-            + TBLabelConstants.LABEL + " INTEGER NOT NULL,constraint pk_t1 primary key ("
-            + TBLabelConstants.ID + "," + TBLabelConstants.LABEL
+            + TBIDLabelConstants.LABEL + " VARCHAR(30) NOT NULL,constraint pk_t1 primary key ("
+            + TBIDLabelConstants.ID + "," + TBIDLabelConstants.LABEL
             + "))";
     private final static String SQL_TEL_TABLE_CREATE = "CREATE TABLE IF NOT EXISTS "
             + TBTelConstants.TABLE_NAME + " ("
             + TBTelConstants.ID
             + " INTEGER NOT NULL, "
             + TBTelConstants.TEL + " INTEGER NOT NULL,constraint pk_t2 primary key ("
-            + TBLabelConstants.ID + "," + TBTelConstants.TEL
+            + TBIDLabelConstants.ID + "," + TBTelConstants.TEL
             + "))";
-
+    private final static String SQL_LABEL_TABLE_CREATE = "CREATE TABLE IF NOT EXISTS "
+            + TBLabelConstants.TABLE_NAME + " ("
+            + TBLabelConstants.LABEL + " VARCHAR(30) NOT NULL primary key,"
+            + TBLabelConstants.LABEL_ICON + " TEXT NOT NULL)";
     public DataBaseHelper(Context context) {
         super(context, TBMainConstants.TABLE_NAME, null, DBVersion);
         handleTable = ALL_TABLE;
@@ -52,6 +57,8 @@ public class DataBaseHelper extends SQLiteOpenHelper {
             handleTable = MAIN_TABLE;
         else if (tableName.equals(TBTelConstants.TABLE_NAME))
             handleTable = TEL_TABLE;
+        else if (tableName.equals(TBIDLabelConstants.TABLE_NAME))
+            handleTable = ID_LABEL_TABLE;
         else if (tableName.equals(TBLabelConstants.TABLE_NAME))
             handleTable = LABEL_TABLE;
         else handleTable = ALL_TABLE;
@@ -61,7 +68,7 @@ public class DataBaseHelper extends SQLiteOpenHelper {
     public void onCreate(SQLiteDatabase db) {
 //        db.execSQL("drop table "+TBMainConstants.TABLE_NAME);
 //        db.execSQL("drop table "+TBTelConstants.TABLE_NAME);
-//        db.execSQL("drop table "+TBLabelConstants.TABLE_NAME);
+//        db.execSQL("drop table "+TBIDLabelConstants.TABLE_NAME);
 
         switch (handleTable) {
             //TODO TEST DELETE REMOTE TABLE
@@ -71,6 +78,9 @@ public class DataBaseHelper extends SQLiteOpenHelper {
             case TEL_TABLE:
                 db.execSQL(SQL_TEL_TABLE_CREATE);
                 break;
+            case ID_LABEL_TABLE:
+                db.execSQL(SQL_ID_LABEL_TABLE_CREATE);
+                break;
             case LABEL_TABLE:
                 db.execSQL(SQL_LABEL_TABLE_CREATE);
                 break;
@@ -78,6 +88,7 @@ public class DataBaseHelper extends SQLiteOpenHelper {
                 db.execSQL(SQL_MAIN_TABLE_CREATE);
                 db.execSQL(SQL_TEL_TABLE_CREATE);
                 db.execSQL(SQL_LABEL_TABLE_CREATE);
+                db.execSQL(SQL_ID_LABEL_TABLE_CREATE);
                 break;
         }
 

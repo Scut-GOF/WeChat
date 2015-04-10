@@ -61,37 +61,7 @@
 
 
     </RelativeLayout>
-    <LinearLayout
-        android:id="@+id/search_layout"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
 
-        android:layout_margin="2dp"
-        android:orientation="horizontal"
-        android:padding="5dp"
-        android:background="@drawable/layout_stroke"
-        android:visibility="gone"
-        >
-
-        <EditText
-
-            android:inputType="textPhonetic"
-            android:id="@+id/condition"
-            android:layout_weight="1"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textSize="18sp" />
-
-        <Button
-            android:id="@+id/search_go"
-            android:text="√"
-            style="@style/simple_blue_button" />
-
-        <Button
-            android:id="@+id/bt_hide"
-            android:text="^"
-            style="@style/simple_white_button" />
-    </LinearLayout>
     <ListView
         android:id="@+id/search_list"
         android:layout_width="fill_parent"
