@@ -1,39 +1,60 @@
 package gof.scut.wechatcontacts;
 
-import android.support.v7.app.ActionBarActivity;
+import android.app.Activity;
 import android.os.Bundle;
+import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.ListView;
+import android.widget.TextView;
 
 
-public class SearchActivity extends ActionBarActivity {
+public class SearchActivity extends Activity {
 
+    TextView searchKey;
+    ListView searchResult;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search);
-    }
+        init();
 
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_search, menu);
-        return true;
     }
 
     @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
-
-        return super.onOptionsItemSelected(item);
+    protected void onResume() {
+        super.onResume();
+        fullTextSearch(searchKey.getText().toString());
     }
+
+    void init() {
+        initDataBase();
+        findView();
+        setListener();
+    }
+
+    void initDataBase() {
+
+    }
+
+    void findView() {
+        searchKey = (TextView) findViewById(R.id.search_key);
+        searchResult = (ListView) findViewById(R.id.search_result);
+    }
+
+    void setListener() {
+        searchKey.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                //TODO call when change text
+                fullTextSearch(v.getText().toString());
+                return false;
+            }
+        });
+    }
+
+    void fullTextSearch(String condition) {
+
+    }
+
 }

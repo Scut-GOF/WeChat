@@ -20,24 +20,24 @@ import android.widget.TextView;
 import java.util.ArrayList;
 
 import gof.scut.common.utils.ActivityUtils;
+import gof.scut.common.utils.UseSystemUtils;
 import gof.scut.common.utils.database.CursorUtils;
 import gof.scut.common.utils.database.TBMainConstants;
 import gof.scut.common.utils.database.TBTelConstants;
 import gof.scut.common.utils.database.TelTableUtils;
-import gof.scut.common.utils.UseSystemUtils;
 import gof.scut.cwh.models.object.IdObj;
 import gof.scut.wechatcontacts.ContactInfoActivity;
 import gof.scut.wechatcontacts.R;
 
 
-public class ContactsAdapter extends BaseAdapter {
+public class BigContactsAdapter extends BaseAdapter {
     private Context context;
     private Cursor cursor;
     private LinearLayout layout;
     PopupWindow telChoiceWindow = null;
     View telChoiceView = null;
 
-    public ContactsAdapter(Context context, Cursor cursor) {
+    public BigContactsAdapter(Context context, Cursor cursor) {
         this.context = context;
         this.cursor = cursor;
 
@@ -61,12 +61,10 @@ public class ContactsAdapter extends BaseAdapter {
     @Override
     public View getView(int position, View convertView, final ViewGroup parent) {
         LayoutInflater inflater = LayoutInflater.from(context);
-        layout = (LinearLayout) inflater.inflate(R.layout.main_list_cell, null);
+        layout = (LinearLayout) inflater.inflate(R.layout.search_list_cell, null);
 
         TextView name = (TextView) layout.findViewById(R.id.name);
 
-        Button msg = (Button) layout.findViewById(R.id.send_msg);
-        Button call = (Button) layout.findViewById(R.id.call);
 
         cursor.moveToPosition(position);
 
@@ -78,49 +76,7 @@ public class ContactsAdapter extends BaseAdapter {
 
         name.setText(cName);
 
-        //TODO MOVE TO CONTACTS DETAIL
-        msg.setOnClickListener(new View.OnClickListener() {
 
-            @Override
-            public void onClick(View v) {
-                TelTableUtils telTableUtil = new TelTableUtils(context);
-                //TODO TEST insert several data
-                telTableUtil.insertAll("" + id, "10086");
-                telTableUtil.insertAll("" + id, "10086" + id);
-
-                final Cursor cTel = telTableUtil.selectTelWithID(id);
-
-                if (cTel.getCount() > 1) {
-                    initPopChoice(TelsAdapter.CHOICE_MSG, cTel);
-                    popPhoneSelector();
-                } else if (cTel.getCount() == 1) {
-                    ArrayList<String> phoneList = new ArrayList<String>();
-                    CursorUtils.cursorToStringArray(cTel, phoneList, TBTelConstants.TEL);
-                    UseSystemUtils.sendMsg(context, phoneList.get(0));
-                }
-            }
-        });
-        call.setOnClickListener(new View.OnClickListener() {
-
-            @Override
-            public void onClick(View v) {
-                TelTableUtils telTableUtil = new TelTableUtils(context);
-                //TODO TEST insert several data
-                telTableUtil.insertAll("" + id, "10086");
-                telTableUtil.insertAll("" + id, "10086" + id);
-
-                final Cursor cTel = telTableUtil.selectTelWithID(id);
-
-                if (cTel.getCount() > 1) {
-                    initPopChoice(TelsAdapter.CHOICE_CALL, cTel);
-                    popPhoneSelector();
-                } else if (cTel.getCount() == 1) {
-                    ArrayList<String> phoneList = new ArrayList<String>();
-                    CursorUtils.cursorToStringArray(cTel, phoneList, TBTelConstants.TEL);
-                    UseSystemUtils.sysCall(context, phoneList.get(0));
-                }
-            }
-        });
         name.setClickable(true);
         name.setFocusable(true);
         name.setOnClickListener(new View.OnClickListener() {

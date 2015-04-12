@@ -17,8 +17,7 @@ public class MainActivity extends Activity implements View.OnClickListener {
 
     //Views
     private Button btSearch, btMenu;
-    private LinearLayout searchLayout;
-    private Button searchGo, btHide;
+
     private ListView contacts;
     private Button btAdd, btGroup, btMe;
 
@@ -55,9 +54,7 @@ public class MainActivity extends Activity implements View.OnClickListener {
     private void findViews() {
         btSearch = (Button) findViewById(R.id.bt_search);
         btMenu = (Button) findViewById(R.id.bt_menu);
-        searchLayout = (LinearLayout) findViewById(R.id.search_layout);
-        searchGo = (Button) findViewById(R.id.search_go);
-        btHide = (Button) findViewById(R.id.bt_hide);
+
         contacts = (ListView) findViewById(R.id.search_list);
         btAdd = (Button) findViewById(R.id.bt_add);
         btGroup = (Button) findViewById(R.id.bt_group);
@@ -67,8 +64,7 @@ public class MainActivity extends Activity implements View.OnClickListener {
     private void eventHandler() {
         btSearch.setOnClickListener(this);
         btMenu.setOnClickListener(this);
-        searchGo.setOnClickListener(this);
-        btHide.setOnClickListener(this);
+
         btSearch.setOnClickListener(this);
         btAdd.setOnClickListener(this);
         btGroup.setOnClickListener(this);
@@ -90,17 +86,12 @@ public class MainActivity extends Activity implements View.OnClickListener {
 
         switch (v.getId()) {
             case R.id.bt_search:
-                searchLayout.setVisibility(View.VISIBLE);
+                ActivityUtils.ActivitySkip(this, SearchActivity.class);
+
                 break;
             case R.id.bt_menu:
                 //A MENU WITH SETTING IN IT
                 ActivityUtils.ActivitySkip(this, SettingActivity.class);
-                break;
-            case R.id.search_go:
-                //QUERY
-                break;
-            case R.id.bt_hide:
-                searchLayout.setVisibility(View.GONE);
                 break;
             case R.id.bt_add:
                 //TO ADD CONTACTS ACTIVITY

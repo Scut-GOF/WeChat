@@ -3,8 +3,8 @@ package gof.scut.common.utils.database;
 /**
  * Created by Administrator on 2015/4/7.
  */
-public interface TBLabelConstants {
-    String TABLE_NAME = "label";
+public interface TBIDLabelConstants {
+    String TABLE_NAME = "idLabel";
+    String ID = "_id";
     String LABEL = "label";
-    String LABEL_ICON = "labelIcon";
 }

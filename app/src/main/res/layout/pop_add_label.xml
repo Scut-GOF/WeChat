@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/half_transparent"
+    android:clickable="true"
+    android:gravity="center"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:id="@+id/add_info_layout"
+        android:layout_width="300dp"
+        android:layout_height="wrap_content"
+        android:background="@drawable/layout_stroke"
+        android:padding="15dp"
+
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            style="@style/medium_title"
+            android:textColor="@color/light_blue"
+            android:text="@string/add_label" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/light_blue"
+            android:layout_marginBottom="5dp" />
+
+        <LinearLayout
+
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+
+            android:orientation="horizontal">
+
+            <EditText
+                android:background="@drawable/layout_stroke"
+                android:hint="@string/label_name"
+                android:id="@+id/add_label_name"
+
+                android:layout_margin="2dp"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="45dp"
+                android:textSize="24sp" />
+
+            <Button
+                style="@style/simple_white_button"
+                android:id="@+id/add_label_icon"
+                android:text="I" />
+
+
+        </LinearLayout>
+
+        <Button
+            style="@style/bottom_buttons"
+            android:id="@+id/btn_confirm"
+            android:background="@drawable/cwh_blue_button_selector"
+            android:text="@string/cn_ok" />
+    </LinearLayout>
+
+
+</LinearLayout>
