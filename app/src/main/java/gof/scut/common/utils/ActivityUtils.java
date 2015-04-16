@@ -7,6 +7,8 @@ import android.os.Bundle;
 
 import java.io.Serializable;
 
+import gof.scut.cwh.models.object.IdObj;
+
 
 public class ActivityUtils {
     public static void ActivitySkip(Context context, Class<?> toClass) {
@@ -21,6 +23,7 @@ public class ActivityUtils {
         Bundle bundle = new Bundle();
         bundle.putSerializable("IdObj", obj);
         intent.putExtras(bundle);
+//        int id =((IdObj)bundle.getSerializable("  ")).getId();
         context.startActivity(intent);
     }
 
