@@ -6,8 +6,7 @@
             <gradient android:startColor="@color/blue" android:endColor="@color/blue"
                 android:angle="90"/>
             <stroke android:width="1px" android:color="@color/white" />
-            <corners android:topLeftRadius="16dp" android:topRightRadius="16dp" android:bottomLeftRadius="16dp"
-				android:bottomRightRadius="16dp" />
+            <corners android:radius="16dp" />
         </shape>
     </item>
     <!-- 选中的状态 -->
@@ -16,8 +15,7 @@
             <gradient android:startColor="@color/blue" android:endColor="@color/blue"
 		        android:angle="270" />
             <stroke android:width="1px" android:color="@color/white" />
-            <corners android:topLeftRadius="16dp" android:topRightRadius="16dp" android:bottomLeftRadius="16dp"
-				android:bottomRightRadius="16dp" />
+            <corners android:radius="16dp" />
         </shape>
     </item>
     <!-- 没操作的状态 -->
@@ -27,8 +25,7 @@
 				android:endColor="@color/white"
 		        android:angle="270" />
             <stroke android:width="1px" android:color="@color/white" />
-            <corners android:topLeftRadius="16dp" android:topRightRadius="16dp" android:bottomLeftRadius="16dp"
-				android:bottomRightRadius="16dp" />
+            <corners android:radius="16dp" />
         </shape>
     </item>
 </selector>

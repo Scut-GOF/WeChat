@@ -18,7 +18,9 @@ import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.GridView;
+import android.widget.ListView;
 import android.widget.PopupWindow;
+import android.widget.TextView;
 
 import gof.scut.common.utils.ActivityUtils;
 import gof.scut.common.utils.Log;
@@ -26,9 +28,11 @@ import gof.scut.common.utils.database.LabelTableUtils;
 import gof.scut.cwh.models.adapter.LabelsAdapter;
 
 
-public class LabelsActivity extends Activity {
+public class LabelsActivity extends Activity implements View.OnClickListener {
     Button addLabel;
-    GridView labels;
+    TextView labelsBack;
+    GridView labels;//grid is invisible
+    ListView labelList;
     PopupWindow addLabelWindow;
     View addLabelView;
 
@@ -49,6 +53,7 @@ public class LabelsActivity extends Activity {
     protected void onResume() {
         super.onResume();
         initGrids();
+        initList();
     }
 
     void initDatabase() {
@@ -65,18 +70,21 @@ public class LabelsActivity extends Activity {
     }
 
     void setListener() {
-        addLabel.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                //labelTableUtils.insertAll()
-                popPhoneSelector();
-            }
-        });
+        addLabel.setOnClickListener(this);
+        labelsBack.setOnClickListener(this);
     }
 
     void findView() {
         addLabel = (Button) findViewById(R.id.add_label);
         labels = (GridView) findViewById(R.id.labels);
+        labelList = (ListView) findViewById(R.id.label_list);
+        labelsBack = (TextView) findViewById(R.id.labels_back);
+    }
+
+    void initList() {
+        Cursor cursorLabels = labelTableUtils.selectAll();
+        LabelsAdapter labelsAdapter = new LabelsAdapter(this, cursorLabels);
+        labelList.setAdapter(labelsAdapter);
     }
 
     void initGrids() {
@@ -86,12 +94,13 @@ public class LabelsActivity extends Activity {
     }
 
     void initPopAddLabel() {
+        //TODO dismiss事件有问题
         addLabelView = LayoutInflater.from(this).inflate(
-                R.layout.pop_add_label, null, false);
+                R.layout.pop_add_label, (ViewGroup) ActivityUtils.getRootView(this), false);
         addLabelWindow = new PopupWindow(addLabelView,
                 ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT, true);
 
-        ColorDrawable dw = new ColorDrawable(-00000);
+        ColorDrawable dw = new ColorDrawable(0x00000000);
         addLabelView.setBackgroundDrawable(dw);
 
         final Context context = this;
@@ -114,6 +123,7 @@ public class LabelsActivity extends Activity {
                 if (state < 0) Log.e("LabelsActivity", "add label failed");
                 addLabelWindow.dismiss();
                 initGrids();
+                initList();
             }
         });
         addLabelView.setFocusable(true);
@@ -169,6 +179,18 @@ public class LabelsActivity extends Activity {
             int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
             pathSelectedToAdd = cursor.getString(columnIndex);
             cursor.close();
+        }
+    }
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.labels_back:
+                finish();
+                break;
+            case R.id.add_label:
+                popPhoneSelector();
+                break;
         }
     }
 }

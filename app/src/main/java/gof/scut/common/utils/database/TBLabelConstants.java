@@ -7,4 +7,5 @@ public interface TBLabelConstants {
     String TABLE_NAME = "label";
     String LABEL = "label";
     String LABEL_ICON = "labelIcon";
+    String MEMBER_COUNT = "memCount";
 }

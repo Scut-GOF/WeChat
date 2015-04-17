@@ -10,7 +10,7 @@ public class LabelTableUtils {
     private static DataBaseHelper dataBaseHelper;
 
     public LabelTableUtils(Context context) {
-        dataBaseHelper = new DataBaseHelper(context, TBLabelConstants.TABLE_NAME);
+        dataBaseHelper = new DataBaseHelper(context);
         //insert several data
         /*for (int i=0;i<10;i++){
             insertAll("Friend"+i,""+i,""+i,"10086",i%3,"","");
@@ -22,6 +22,7 @@ public class LabelTableUtils {
         ContentValues value = new ContentValues();
         value.put(TBLabelConstants.LABEL, label);
         value.put(TBLabelConstants.LABEL_ICON, iconPath);
+        value.put(TBLabelConstants.MEMBER_COUNT, 0 + "");
         SQLiteDatabase db = dataBaseHelper.getWritableDatabase();
         long status = db.insert(TBLabelConstants.TABLE_NAME, null, value);
         db.close();
@@ -40,12 +41,13 @@ public class LabelTableUtils {
 
 
     //update ALL
-    public long updateAllWithLabel(String label, String iconPath,
+    public long updateAllWithLabel(String label, String iconPath, String memCount,
                                    String onLabel) {
         SQLiteDatabase db = dataBaseHelper.getWritableDatabase();
         ContentValues value = new ContentValues();
         value.put(TBLabelConstants.LABEL, label);
         value.put(TBLabelConstants.LABEL_ICON, iconPath);
+        value.put(TBLabelConstants.MEMBER_COUNT, memCount);
         long status;
         status = db.update(TBLabelConstants.TABLE_NAME, value,
                 TBLabelConstants.LABEL + "=?", new String[]{onLabel});
@@ -53,6 +55,17 @@ public class LabelTableUtils {
         return status;
     }
 
+    public long updateMemCountWithLabel(String memCount,
+                                        String onLabel) {
+        SQLiteDatabase db = dataBaseHelper.getWritableDatabase();
+        ContentValues value = new ContentValues();
+        value.put(TBLabelConstants.LABEL, memCount);
+        long status;
+        status = db.update(TBLabelConstants.TABLE_NAME, value,
+                TBLabelConstants.LABEL + "=?", new String[]{onLabel});
+        db.close();
+        return status;
+    }
     public long updateIconWithLabel(String iconPath,
                                     String onLabel) {
         SQLiteDatabase db = dataBaseHelper.getWritableDatabase();
@@ -95,6 +108,14 @@ public class LabelTableUtils {
         //db.close();
         return c;
     }
+    //query
+    public Cursor selectMemCount(String label) {
+        SQLiteDatabase db = dataBaseHelper.getReadableDatabase();
+        Cursor c = db.query(TBLabelConstants.TABLE_NAME, new String[]{TBLabelConstants.MEMBER_COUNT},
+                TBLabelConstants.LABEL + " = ?", new String[]{label}, null, null, null);
+        //db.close();
+        return c;
+    }
 
     //query
     public Cursor selectAllOnLabel(String label) {
@@ -108,6 +129,7 @@ public class LabelTableUtils {
     //query
     public Cursor selectAll() {
         SQLiteDatabase db = dataBaseHelper.getReadableDatabase();
+        String name = dataBaseHelper.getDatabaseName();
         Cursor c = db.query(TBLabelConstants.TABLE_NAME, null,
                 null, null, null, null, null);
         //db.close();

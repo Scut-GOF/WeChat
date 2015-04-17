@@ -10,7 +10,7 @@ public class IDLabelTableUtils {
     private static DataBaseHelper dataBaseHelper;
 
     public IDLabelTableUtils(Context context) {
-        dataBaseHelper = new DataBaseHelper(context, TBIDLabelConstants.TABLE_NAME);
+        dataBaseHelper = new DataBaseHelper(context);
         //insert several data
         /*for (int i=0;i<10;i++){
             insertAll("Friend"+i,""+i,""+i,"10086",i%3,"","");

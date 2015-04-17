@@ -44,7 +44,8 @@
 
 
                 android:layout_marginRight="5dp"
-                android:gravity="right"
+                android:layout_marginEnd="5dp"
+                android:gravity="end"
                 android:text="查" />
             <Button
 
