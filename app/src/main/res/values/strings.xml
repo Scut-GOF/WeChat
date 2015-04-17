@@ -15,4 +15,13 @@
     <string name="label_name">标签名</string>
     <string name="cn_ok">确定</string>
     <string name="add_label">添加标签</string>
+    <string name="backToMain"><![CDATA[<AllContacts]]></string>
+    <string name="add">+</string>
+    <string name="save">save</string>
+    <string name="members">Members</string>
+    <string name="add_member">add member</string>
+    <string name="delete">delete</string>
+    <string name="edit">edit</string>
+    <string name="back_to_labels"><![CDATA[<All Label]]></string>
+    <string name="minus">-</string>
 </resources>

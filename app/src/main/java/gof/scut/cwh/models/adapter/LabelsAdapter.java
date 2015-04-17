@@ -10,8 +10,12 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import gof.scut.common.utils.ActivityUtils;
 import gof.scut.common.utils.BitmapUtils;
+import gof.scut.common.utils.BundleNames;
 import gof.scut.common.utils.database.TBLabelConstants;
+import gof.scut.cwh.models.object.LabelObj;
+import gof.scut.wechatcontacts.LabelDetailActivity;
 import gof.scut.wechatcontacts.R;
 
 
@@ -19,6 +23,11 @@ import gof.scut.wechatcontacts.R;
  * Created by Administrator on 2015/4/10.
  */
 public class LabelsAdapter extends BaseAdapter {
+    static class ViewHolder {
+        ImageView labelIcon;
+        TextView labelName;
+        TextView memberCount;
+    }
     private Context context;
     private Cursor cursor;
     private LinearLayout layout;
@@ -44,23 +53,31 @@ public class LabelsAdapter extends BaseAdapter {
     }
 
     @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
+    public View getView(int position, View layout, ViewGroup parent) {
         cursor.moveToPosition(position);
         LayoutInflater inflater = LayoutInflater.from(context);
-        layout = (LinearLayout) inflater.inflate(R.layout.label_grid_cell, null);
+        //layout = (LinearLayout) inflater.inflate(R.layout.label_grid_cell, null);
+        layout = (LinearLayout) inflater.inflate(R.layout.label_list_cell, parent, false);
         ImageView labelIcon = (ImageView) layout.findViewById(R.id.label_icon);
-        TextView labelName = (TextView) layout.findViewById(R.id.label_name);
+        final TextView labelName = (TextView) layout.findViewById(R.id.label_name);
+        final TextView memberCount = (TextView) layout.findViewById(R.id.member_count);
         labelName.setText(cursor.getString(cursor.getColumnIndex(TBLabelConstants.LABEL)));
-        String iconPath = cursor.getString(cursor.getColumnIndex(TBLabelConstants.LABEL_ICON));
-        labelIcon.setBackground(null);
+        final String iconPath = cursor.getString(cursor.getColumnIndex(TBLabelConstants.LABEL_ICON));
+        final String strMemberCount = cursor.getString(cursor.getColumnIndex(TBLabelConstants.MEMBER_COUNT));
+        memberCount.setText("(" + strMemberCount + ")");
+        labelIcon.setBackgroundDrawable(null);
         if (iconPath.equals("")) labelIcon.setBackgroundResource(R.drawable.chart_1_2);
         else labelIcon.setImageBitmap(BitmapUtils.decodeBitmapFromPath(iconPath));
-        labelIcon.setOnClickListener(new View.OnClickListener() {
+        layout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                LabelObj label = new LabelObj(labelName.getText().toString(), iconPath,
+                        Integer.parseInt(strMemberCount));
+                ActivityUtils.ActivitySkipWithObject(context, LabelDetailActivity.class, BundleNames.LABEL_OBJ, label);
             }
         });
+
         return layout;
     }
+
 }
