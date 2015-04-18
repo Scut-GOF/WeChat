@@ -51,7 +51,7 @@ public class DataBaseHelper extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-        //数据库创建时执行（所以在同一个数据库里，必须在一开始就建好所有的表，否则要在update里做额外的建表）
+//        create table at the first time
 //        db.execSQL("drop table "+TBMainConstants.TABLE_NAME);
 //        db.execSQL("drop table "+TBTelConstants.TABLE_NAME);
 //        db.execSQL("drop table "+TBIDLabelConstants.TABLE_NAME);

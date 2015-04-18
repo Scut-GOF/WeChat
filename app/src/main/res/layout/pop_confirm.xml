@@ -20,6 +20,7 @@
             android:layout_width="200dp"
             android:layout_height="wrap_content"
             style="@style/medium_title"
+            android:gravity="start"
             android:text="@string/confirm"
             android:textColor="@color/light_blue" />
 
@@ -33,6 +34,7 @@
             android:layout_height="wrap_content"
             style="@style/medium_title"
             android:text="@string/app_name"
+
             android:textColor="@color/light_blue"
             android:id="@+id/confirm_title" />
 
@@ -40,19 +42,19 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="5dp"
+            android:layout_margin="10dp"
             android:gravity="center_horizontal"
             android:orientation="horizontal">
 
             <Button
-                android:layout_width="wrap_content"
+                android:layout_width="80dp"
                 android:layout_height="wrap_content"
                 android:text="@string/YES"
                 android:id="@+id/bt_yes"
-                style="@style/light_white_button" />
+                style="@style/simple_blue_button" />
 
             <Button
-                android:layout_width="wrap_content"
+                android:layout_width="80dp"
                 android:layout_height="wrap_content"
                 android:text="@string/no"
                 android:layout_marginLeft="10dp"

@@ -18,10 +18,10 @@ public class IDLabelTableUtils {
     }
 
     //insert
-    public long insertAll(String id, int label) {
+    public long insertAll(String id, String labelName) {
         ContentValues value = new ContentValues();
         value.put(TBIDLabelConstants.ID, id);
-        value.put(TBIDLabelConstants.LABEL, label);
+        value.put(TBIDLabelConstants.LABEL, labelName);
         SQLiteDatabase db = dataBaseHelper.getWritableDatabase();
         long status = db.insert(TBIDLabelConstants.TABLE_NAME, null, value);
         db.close();
