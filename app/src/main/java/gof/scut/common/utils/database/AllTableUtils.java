@@ -20,14 +20,12 @@ public class AllTableUtils {
 
     public Cursor selectAllIDNameOnLabel(String labelName) {
         SQLiteDatabase db = dataBaseHelper.getReadableDatabase();
-        //SELECT ID,NAME FROM (SELECT ID FROM IDLABEL WHERE LABEL = THIS.LABEL) INNER JOIN MAIN WHERE IDLABEL.ID=MAIN.ID
-//        Cursor c = db.rawQuery("SELECT "+TBMainConstants.ID+","+TBMainConstants.NAME+" FROM "
-//                +TBIDLabelConstants.TABLE_NAME+" INNER JOIN "+TBMainConstants.TABLE_NAME
-//                +" ON "+TBMainConstants.TABLE_NAME+"."+TBMainConstants.ID
-//                +" = ",null);
-        //TODO
-        Cursor c = db.rawQuery("SELECT contacts._id,name FROM idLabel INNER JOIN contacts ON idLabel._id=contacts._id  WHERE label = '" + labelName + "'", null);
-        //db.close();
+        //SELECT  _id,name FROM contacts WHERE _id IN ( SELECT _id FROM idLabel WHERE label = '" + labelName + "')"
+        Cursor c = db.rawQuery("SELECT " + TBMainConstants.ID + "," + TBMainConstants.NAME
+                + " FROM " + TBMainConstants.TABLE_NAME + " WHERE " + TBMainConstants.ID
+                + " IN ( SELECT " + TBMainConstants.ID + " FROM " + TBIDLabelConstants.TABLE_NAME
+                + " WHERE " + TBIDLabelConstants.LABEL + " = '" + labelName + "')", null);
+
         return c;
     }
 }
