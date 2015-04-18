@@ -7,16 +7,16 @@
         android:id="@+id/title"
         android:layout_width="match_parent"
         android:layout_height="50dp"
-        android:background="@color/light_blue"
-        >
+        android:background="@color/light_blue">
+
         <TextView
             android:id="@+id/cancel"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/cancel"
             style="@style/simple_back_button"
-            android:clickable="true"
-            />
+            android:clickable="true" />
+
         <TextView
             android:id="@+id/save"
             android:layout_width="wrap_content"
@@ -27,7 +27,7 @@
             android:text="@string/save"
             android:textSize="22sp"
             android:textColor="@color/white"
-            android:clickable="true"/>
+            android:clickable="true" />
     </RelativeLayout>
 
     <RelativeLayout
@@ -43,8 +43,7 @@
             android:layout_height="40dp"
             android:layout_centerHorizontal="true"
             android:background="@drawable/scan"
-            android:layout_marginLeft="20dp"
-            />
+            android:layout_marginLeft="20dp" />
 
         <TextView
             android:layout_width="wrap_content"
@@ -54,7 +53,7 @@
             android:layout_centerHorizontal="true"
             android:text="Scan Binary Code"
             android:textSize="22sp"
-            android:textColor="@color/white"/>
+            android:textColor="@color/white" />
     </RelativeLayout>
 
     <LinearLayout
@@ -77,16 +76,14 @@
                 android:padding="10dp"
                 android:text="name"
                 android:textSize="22sp"
-                android:textColor="@color/gray"
-                />
+                android:textColor="@color/gray" />
 
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
                 android:padding="2dp"
                 android:textSize="22sp"
-                android:background="@color/gray"
-                />
+                android:background="@color/gray" />
 
         </LinearLayout>
 
@@ -103,16 +100,14 @@
                 android:text="Phone"
                 android:textSize="22sp"
                 android:textStyle="bold"
-                android:textColor="@color/blue"
-                />
+                android:textColor="@color/blue" />
 
             <ImageView
                 android:layout_below="@id/Phone_text"
                 android:layout_width="40dp"
                 android:layout_height="40dp"
                 android:layout_marginLeft="10dp"
-                android:background="@drawable/add"
-                />
+                android:background="@drawable/add" />
 
             <TextView
                 android:id="@+id/phone"
@@ -123,8 +118,7 @@
                 android:padding="10dp"
                 android:text="new phone"
                 android:textSize="22sp"
-                android:textColor="@color/gray"
-                />
+                android:textColor="@color/gray" />
 
             <TextView
                 android:layout_below="@id/phone"
@@ -132,8 +126,7 @@
                 android:layout_height="1dp"
                 android:padding="2dp"
                 android:textSize="22sp"
-                android:background="@color/gray"
-                />
+                android:background="@color/gray" />
 
         </RelativeLayout>
 
@@ -150,16 +143,14 @@
                 android:text="Label"
                 android:textSize="22sp"
                 android:textStyle="bold"
-                android:textColor="@color/blue"
-                />
+                android:textColor="@color/blue" />
 
             <ImageView
                 android:layout_below="@id/Label_text"
                 android:layout_width="40dp"
                 android:layout_height="40dp"
                 android:layout_marginLeft="10dp"
-                android:background="@drawable/add"
-                />
+                android:background="@drawable/add" />
 
             <TextView
                 android:id="@+id/label"
@@ -170,8 +161,7 @@
                 android:padding="10dp"
                 android:text="New Label>"
                 android:textSize="22sp"
-                android:textColor="@color/gray"
-                />
+                android:textColor="@color/gray" />
 
             <TextView
                 android:layout_below="@id/label"
@@ -179,8 +169,7 @@
                 android:layout_height="1dp"
                 android:padding="2dp"
                 android:textSize="22sp"
-                android:background="@color/gray"
-                />
+                android:background="@color/gray" />
 
         </RelativeLayout>
 
@@ -197,8 +186,7 @@
                 android:text="Address"
                 android:textSize="22sp"
                 android:textStyle="bold"
-                android:textColor="@color/blue"
-                />
+                android:textColor="@color/blue" />
 
             <TextView
                 android:id="@+id/address"
@@ -208,8 +196,8 @@
                 android:padding="10dp"
                 android:text="add address"
                 android:textSize="22sp"
-                android:textColor="@color/gray"
-                />
+                android:textColor="@color/gray" />
+
             <TextView
                 android:layout_toRightOf="@id/address_text"
                 android:layout_below="@id/address"
@@ -217,8 +205,7 @@
                 android:layout_height="1dp"
                 android:padding="2dp"
                 android:textSize="22sp"
-                android:background="@color/gray"
-                />
+                android:background="@color/gray" />
 
         </RelativeLayout>
 
@@ -235,8 +222,7 @@
                 android:text="Addition"
                 android:textSize="22sp"
                 android:textStyle="bold"
-                android:textColor="@color/blue"
-                />
+                android:textColor="@color/blue" />
 
             <TextView
                 android:id="@+id/addition"
@@ -246,8 +232,8 @@
                 android:padding="10dp"
                 android:text="add addition"
                 android:textSize="22sp"
-                android:textColor="@color/gray"
-                />
+                android:textColor="@color/gray" />
+
             <TextView
                 android:layout_toRightOf="@id/addition_text"
                 android:layout_below="@id/addition"
@@ -255,13 +241,11 @@
                 android:layout_height="1dp"
                 android:padding="2dp"
                 android:textSize="22sp"
-                android:background="@color/gray"
-                />
+                android:background="@color/gray" />
 
         </RelativeLayout>
 
     </LinearLayout>
-
 
 
 </RelativeLayout>

@@ -62,7 +62,7 @@ public class ContactsAdapter extends BaseAdapter {
     @Override
     public View getView(int position, View convertView, final ViewGroup parent) {
         LayoutInflater inflater = LayoutInflater.from(context);
-        layout = (LinearLayout) inflater.inflate(R.layout.main_list_cell, null);
+        layout = (LinearLayout) inflater.inflate(R.layout.cell_main_list, null);
 
         TextView name = (TextView) layout.findViewById(R.id.name);
 

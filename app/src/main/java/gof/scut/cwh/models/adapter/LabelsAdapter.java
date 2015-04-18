@@ -23,11 +23,6 @@ import gof.scut.wechatcontacts.R;
  * Created by Administrator on 2015/4/10.
  */
 public class LabelsAdapter extends BaseAdapter {
-    static class ViewHolder {
-        ImageView labelIcon;
-        TextView labelName;
-        TextView memberCount;
-    }
     private Context context;
     private Cursor cursor;
     private LinearLayout layout;
@@ -56,8 +51,8 @@ public class LabelsAdapter extends BaseAdapter {
     public View getView(int position, View layout, ViewGroup parent) {
         cursor.moveToPosition(position);
         LayoutInflater inflater = LayoutInflater.from(context);
-        //layout = (LinearLayout) inflater.inflate(R.layout.label_grid_cell, null);
-        layout = (LinearLayout) inflater.inflate(R.layout.label_list_cell, parent, false);
+        //layout = (LinearLayout) inflater.inflate(R.layout.cell_label_grid, null);
+        layout = (LinearLayout) inflater.inflate(R.layout.cell_label_list, parent, false);
         ImageView labelIcon = (ImageView) layout.findViewById(R.id.label_icon);
         final TextView labelName = (TextView) layout.findViewById(R.id.label_name);
         final TextView memberCount = (TextView) layout.findViewById(R.id.member_count);

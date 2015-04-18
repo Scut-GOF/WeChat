@@ -45,7 +45,7 @@ public class PhonesAdapter extends BaseAdapter {
     public View getView(int position, View convertView, final ViewGroup parent) {
         LinearLayout layout;
         LayoutInflater inflater = LayoutInflater.from(context);
-        layout = (LinearLayout) inflater.inflate(R.layout.contact_phone_list_cell, null);
+        layout = (LinearLayout) inflater.inflate(R.layout.cell_contact_phone_list, null);
 
         TextView tv_phone_title = (TextView) layout.findViewById(R.id.tv_phone_title);
         TextView tv_phone_content = (TextView) layout.findViewById(R.id.tv_phone_content);

@@ -17,13 +17,18 @@
     <string name="add_label">添加标签</string>
     <string name="backToMain"><![CDATA[<AllContacts]]></string>
     <string name="add">+</string>
+    <string name="cancel">退出</string>
+
     <string name="save">Save</string>
     <string name="members">Members</string>
     <string name="add_member">add member</string>
     <string name="delete">delete</string>
-    <string name="edit">edit</string>
+    <string name="edit">Edit</string>
     <string name="back_to_labels"><![CDATA[<All Label]]></string>
     <string name="minus">-</string>
-    <string name="cancel">Cancel</string>
-
+    <string name="title_activity_label_details">LabelDetailsActivity</string>
+    <string name="YES">YES</string>
+    <string name="no">NO</string>
+    <string name="confirm">confirm</string>
+    <string name="Member">Member</string>
 </resources>
