@@ -18,16 +18,14 @@ import gof.scut.cwh.models.object.LabelObj;
 import gof.scut.wechatcontacts.LabelDetailActivity;
 import gof.scut.wechatcontacts.R;
 
-
 /**
- * Created by Administrator on 2015/4/10.
+ * Created by Administrator on 2015/4/18.
  */
-public class LabelsAdapter extends BaseAdapter {
+public class MemEditAdapter extends BaseAdapter {
     private Context context;
     private Cursor cursor;
-    private LinearLayout layout;
 
-    public LabelsAdapter(Context context, Cursor cursor) {
+    public MemEditAdapter(Context context, Cursor cursor) {
         this.context = context;
         this.cursor = cursor;
     }
@@ -74,5 +72,4 @@ public class LabelsAdapter extends BaseAdapter {
 
         return layout;
     }
-
 }
