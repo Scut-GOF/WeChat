@@ -6,16 +6,14 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
+import android.widget.Button;
 import android.widget.TextView;
 
-import gof.scut.common.utils.ActivityUtils;
-import gof.scut.common.utils.BitmapUtils;
-import gof.scut.common.utils.BundleNames;
-import gof.scut.common.utils.database.TBLabelConstants;
-import gof.scut.cwh.models.object.LabelObj;
-import gof.scut.wechatcontacts.LabelDetailActivity;
+import gof.scut.common.utils.database.AllTableUtils;
+import gof.scut.common.utils.database.IDLabelTableUtils;
+import gof.scut.common.utils.database.TBMainConstants;
+import gof.scut.common.utils.popup.PopConfirmUtils;
+import gof.scut.common.utils.popup.TodoOnResult;
 import gof.scut.wechatcontacts.R;
 
 /**
@@ -24,10 +22,12 @@ import gof.scut.wechatcontacts.R;
 public class MemEditAdapter extends BaseAdapter {
     private Context context;
     private Cursor cursor;
+    private String labelName;
 
-    public MemEditAdapter(Context context, Cursor cursor) {
+    public MemEditAdapter(Context context, Cursor cursor, String labelName) {
         this.context = context;
         this.cursor = cursor;
+        this.labelName = labelName;
     }
 
     @Override
@@ -50,26 +50,41 @@ public class MemEditAdapter extends BaseAdapter {
         cursor.moveToPosition(position);
         LayoutInflater inflater = LayoutInflater.from(context);
         //layout = (LinearLayout) inflater.inflate(R.layout.cell_label_grid, null);
-        layout = (LinearLayout) inflater.inflate(R.layout.cell_label_list, parent, false);
-        ImageView labelIcon = (ImageView) layout.findViewById(R.id.label_icon);
-        final TextView labelName = (TextView) layout.findViewById(R.id.label_name);
-        final TextView memberCount = (TextView) layout.findViewById(R.id.member_count);
-        labelName.setText(cursor.getString(cursor.getColumnIndex(TBLabelConstants.LABEL)));
-        final String iconPath = cursor.getString(cursor.getColumnIndex(TBLabelConstants.LABEL_ICON));
-        final String strMemberCount = cursor.getString(cursor.getColumnIndex(TBLabelConstants.MEMBER_COUNT));
-        memberCount.setText("(" + strMemberCount + ")");
-        labelIcon.setBackgroundDrawable(null);
-        if (iconPath.equals("")) labelIcon.setBackgroundResource(R.drawable.chart_1_2);
-        else labelIcon.setImageBitmap(BitmapUtils.decodeBitmapFromPath(iconPath));
-        layout.setOnClickListener(new View.OnClickListener() {
+        layout = inflater.inflate(R.layout.cell_edit_member_list, parent, false);
+        Button removeMember;
+        TextView memberName;
+        removeMember = (Button) layout.findViewById(R.id.remove_member);
+        memberName = (TextView) layout.findViewById(R.id.name);
+        final String strMemberName = cursor.getString(cursor.getColumnIndex(TBMainConstants.NAME));
+        final String strMemberID = cursor.getString(cursor.getColumnIndex(TBMainConstants.ID));
+        memberName.setText(strMemberName);
+        removeMember.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                LabelObj label = new LabelObj(labelName.getText().toString(), iconPath,
-                        Integer.parseInt(strMemberCount));
-                ActivityUtils.ActivitySkipWithObject(context, LabelDetailActivity.class, BundleNames.LABEL_OBJ, label);
+                PopConfirmUtils popConfirmUtils = new PopConfirmUtils();
+                popConfirmUtils.prepare(context, R.layout.pop_confirm);
+                popConfirmUtils.initPopupWindow();
+                popConfirmUtils.setTitle("Sure to delete?");
+                popConfirmUtils.initTodo(new TodoOnResult() {
+                    @Override
+                    public void doOnPosResult() {
+                        IDLabelTableUtils idLabelTableUtils = new IDLabelTableUtils(context);
+                        idLabelTableUtils.deleteWithID_Label(strMemberID, labelName);
+                        AllTableUtils allTableUtils = new AllTableUtils(context);
+                        cursor = allTableUtils.selectAllIDNameOnLabel(labelName);
+                        MemEditAdapter.this.notifyDataSetChanged();
+                    }
+
+                    @Override
+                    public void doOnNegResult() {
+
+                    }
+                });
+                popConfirmUtils.popWindowAtCenter(R.id.member_list, R.id.confirm_title);
+
             }
         });
-
         return layout;
     }
+
 }

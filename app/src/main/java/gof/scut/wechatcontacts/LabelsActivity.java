@@ -94,7 +94,7 @@ public class LabelsActivity extends Activity implements View.OnClickListener {
     }
 
     void initPopAddLabel() {
-        //TODO dismiss事件有问题
+
         addLabelView = LayoutInflater.from(this).inflate(
                 R.layout.pop_add_label, (ViewGroup) ActivityUtils.getRootView(this), false);
         addLabelWindow = new PopupWindow(addLabelView,

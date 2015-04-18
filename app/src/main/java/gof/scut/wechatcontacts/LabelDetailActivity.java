@@ -25,6 +25,7 @@ import gof.scut.common.utils.database.TBIDLabelConstants;
 import gof.scut.common.utils.popup.PopConfirmUtils;
 import gof.scut.common.utils.popup.TodoOnResult;
 import gof.scut.cwh.models.adapter.ContactsAdapter;
+import gof.scut.cwh.models.adapter.MemEditAdapter;
 import gof.scut.cwh.models.object.LabelObj;
 
 
@@ -148,9 +149,11 @@ public class LabelDetailActivity extends Activity implements View.OnClickListene
     }
 
     void initEditList() {
-        //TODO select id from label where label = bundleLabel
-        //TODO select * from main where id = id;
+
         //cursor,contactsAdapter,labelMembers
+        Cursor cursor = allTableUtils.selectAllIDNameOnLabel(labelObj.getLabelName());
+        MemEditAdapter adapter = new MemEditAdapter(this, cursor, labelObj.getLabelName());
+        labelMembers.setAdapter(adapter);
     }
 
 
@@ -166,7 +169,9 @@ public class LabelDetailActivity extends Activity implements View.OnClickListene
                 checkState();
                 break;
             case R.id.add_member:
-
+                //TODO it's a test
+                idLabelTableUtils.insertAll("1", labelObj.getLabelName());
+                initEditList();
                 break;
             case R.id.delete_label:
                 PopConfirmUtils popConfirmUtils = new PopConfirmUtils();
@@ -177,6 +182,7 @@ public class LabelDetailActivity extends Activity implements View.OnClickListene
                     @Override
                     public void doOnPosResult() {
                         labelTableUtils.deleteWithLabel(labelObj.getLabelName());
+                        //TODO add trigger to delete id-label relation
                         finish();
                     }
 
