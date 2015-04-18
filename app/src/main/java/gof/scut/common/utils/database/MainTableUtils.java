@@ -10,7 +10,7 @@ public class MainTableUtils {
     private static DataBaseHelper dataBaseHelper;
 
     public MainTableUtils(Context context) {
-        dataBaseHelper = new DataBaseHelper(context, TBMainConstants.TABLE_NAME);
+        dataBaseHelper = new DataBaseHelper(context);
         //TODO insert several data
         for (int i = 0; i < 10; i++) {
             insertAll("Friend" + i, "" + i, "" + i, "", "");
@@ -85,6 +85,7 @@ public class MainTableUtils {
         //db.close();
         return c;
     }
+
 
     public Cursor selectAllName() {
         SQLiteDatabase db = dataBaseHelper.getReadableDatabase();

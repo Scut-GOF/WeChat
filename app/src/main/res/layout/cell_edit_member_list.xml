@@ -10,24 +10,26 @@
         android:layout_height="wrap_content"
         android:layout_margin="5dp">
 
+        <Button
+            android:layout_width="25dp"
+            android:layout_height="25dp"
+            android:layout_marginStart="15dp"
+            android:layout_marginLeft="15dp"
+            android:background="@drawable/cwh_white_button_selector"
+            android:textColor="@drawable/light_orange_button_text_selector"
+            android:textSize="18sp"
+            android:text="@string/minus" />
+
         <TextView
             android:layout_width="match_parent"
             android:layout_weight="1"
             android:layout_height="wrap_content"
             android:textSize="22sp"
+            android:layout_margin="5dp"
+
             android:text="New Text"
             android:id="@+id/name" />
-        <Button
-            android:layout_width="wrap_content"
-            android:layout_height="48dp"
-            android:text="MSG"
-            android:id="@+id/send_msg" />
 
-        <Button
-            android:layout_width="wrap_content"
-            android:layout_height="48dp"
-            android:text="TEL"
-            android:id="@+id/call" />
     </LinearLayout>
 
     <View

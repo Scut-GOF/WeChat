@@ -20,6 +20,7 @@ import android.widget.TextView;
 import java.util.ArrayList;
 
 import gof.scut.common.utils.ActivityUtils;
+import gof.scut.common.utils.BundleNames;
 import gof.scut.common.utils.database.CursorUtils;
 import gof.scut.common.utils.database.TBMainConstants;
 import gof.scut.common.utils.database.TBTelConstants;
@@ -61,7 +62,7 @@ public class ContactsAdapter extends BaseAdapter {
     @Override
     public View getView(int position, View convertView, final ViewGroup parent) {
         LayoutInflater inflater = LayoutInflater.from(context);
-        layout = (LinearLayout) inflater.inflate(R.layout.main_list_cell, null);
+        layout = (LinearLayout) inflater.inflate(R.layout.cell_main_list, null);
 
         TextView name = (TextView) layout.findViewById(R.id.name);
 
@@ -134,7 +135,7 @@ public class ContactsAdapter extends BaseAdapter {
 
     private void onItemClick(int id) {
         IdObj obj = new IdObj(id);
-        ActivityUtils.ActivitySkipWithObject(context, ContactInfoActivity.class, obj);
+        ActivityUtils.ActivitySkipWithObject(context, ContactInfoActivity.class, BundleNames.ID_OBJ, obj);
     }
 
     public void popPhoneSelector() {
@@ -150,7 +151,7 @@ public class ContactsAdapter extends BaseAdapter {
         telChoiceWindow = new PopupWindow(telChoiceView,
                 ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT, true);
 
-        ColorDrawable dw = new ColorDrawable(-00000);
+        ColorDrawable dw = new ColorDrawable(0x00000000);
         telChoiceView.setBackgroundDrawable(dw);
 
         TextView telsTitle = (TextView) telChoiceView.findViewById(R.id.list_title);

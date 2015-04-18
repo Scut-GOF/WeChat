@@ -11,20 +11,14 @@ import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.BaseAdapter;
-import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.PopupWindow;
 import android.widget.TextView;
 
-import java.util.ArrayList;
-
 import gof.scut.common.utils.ActivityUtils;
-import gof.scut.common.utils.UseSystemUtils;
-import gof.scut.common.utils.database.CursorUtils;
+import gof.scut.common.utils.BundleNames;
 import gof.scut.common.utils.database.TBMainConstants;
-import gof.scut.common.utils.database.TBTelConstants;
-import gof.scut.common.utils.database.TelTableUtils;
 import gof.scut.cwh.models.object.IdObj;
 import gof.scut.wechatcontacts.ContactInfoActivity;
 import gof.scut.wechatcontacts.R;
@@ -61,7 +55,7 @@ public class BigContactsAdapter extends BaseAdapter {
     @Override
     public View getView(int position, View convertView, final ViewGroup parent) {
         LayoutInflater inflater = LayoutInflater.from(context);
-        layout = (LinearLayout) inflater.inflate(R.layout.search_list_cell, null);
+        layout = (LinearLayout) inflater.inflate(R.layout.cell_search_list, null);
 
         TextView name = (TextView) layout.findViewById(R.id.name);
 
@@ -90,7 +84,7 @@ public class BigContactsAdapter extends BaseAdapter {
 
     private void onItemClick(int id) {
         IdObj obj = new IdObj(id);
-        ActivityUtils.ActivitySkipWithObject(context, ContactInfoActivity.class, obj);
+        ActivityUtils.ActivitySkipWithObject(context, ContactInfoActivity.class, BundleNames.ID_OBJ, obj);
     }
 
     public void popPhoneSelector() {

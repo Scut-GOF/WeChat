@@ -22,6 +22,7 @@
             android:text="@string/app_name"
             style="@style/simple_back_button"
             android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
             android:id="@+id/title"
             android:layout_centerHorizontal="true" />
         <LinearLayout
@@ -31,7 +32,8 @@
             android:layout_alignParentRight="true"
             android:layout_alignParentEnd="true"
 
-            android:layout_marginRight="10dp">
+            android:layout_marginRight="10dp"
+            android:layout_marginEnd="10dp">
 
             <Button
 
@@ -44,7 +46,8 @@
 
 
                 android:layout_marginRight="5dp"
-                android:gravity="right"
+                android:layout_marginEnd="5dp"
+                android:gravity="end"
                 android:text="查" />
             <Button
 

@@ -10,7 +10,7 @@ public class TelTableUtils {
     private static DataBaseHelper dataBaseHelper;
 
     public TelTableUtils(Context context) {
-        dataBaseHelper = new DataBaseHelper(context, TBTelConstants.TABLE_NAME);
+        dataBaseHelper = new DataBaseHelper(context);
 
     }
 
