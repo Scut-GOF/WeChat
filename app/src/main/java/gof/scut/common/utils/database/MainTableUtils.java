@@ -12,7 +12,7 @@ public class MainTableUtils {
     public MainTableUtils(Context context) {
         dataBaseHelper = new DataBaseHelper(context);
         //TODO insert several data
-        for (int i = 0; i < 10; i++) {
+        for (int i = 0; i < 100; i++) {
             insertAll("Friend" + i, "" + i, "" + i, "", "");
         }
 

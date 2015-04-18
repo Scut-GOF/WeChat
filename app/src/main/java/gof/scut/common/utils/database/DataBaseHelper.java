@@ -59,6 +59,7 @@ public class DataBaseHelper extends SQLiteOpenHelper {
         db.execSQL(SQL_TEL_TABLE_CREATE);
         db.execSQL(SQL_LABEL_TABLE_CREATE);
         db.execSQL(SQL_ID_LABEL_TABLE_CREATE);
+
     }
 
     @Override
