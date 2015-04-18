@@ -17,7 +17,9 @@
     <string name="add_label">添加标签</string>
     <string name="backToMain"><![CDATA[<AllContacts]]></string>
     <string name="add">+</string>
-    <string name="save">save</string>
+    <string name="cancel">退出</string>
+
+    <string name="save">Save</string>
     <string name="members">Members</string>
     <string name="add_member">add member</string>
     <string name="delete">delete</string>
