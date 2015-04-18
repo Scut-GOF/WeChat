@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/half_transparent"
+    android:clickable="true"
+    android:gravity="center"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:id="@+id/add_info_layout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/layout_stroke"
+        android:padding="15dp"
+
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="200dp"
+            android:layout_height="wrap_content"
+            style="@style/medium_title"
+            android:gravity="start"
+            android:text="@string/confirm"
+            android:textColor="@color/light_blue" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/light_blue" />
+
+        <TextView
+            android:layout_width="200dp"
+            android:layout_height="wrap_content"
+            style="@style/medium_title"
+            android:text="@string/app_name"
+
+            android:textColor="@color/light_blue"
+            android:id="@+id/confirm_title" />
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:gravity="center_horizontal"
+            android:orientation="horizontal">
+
+            <Button
+                android:layout_width="80dp"
+                android:layout_height="wrap_content"
+                android:text="@string/YES"
+                android:id="@+id/bt_yes"
+                style="@style/simple_blue_button" />
+
+            <Button
+                android:layout_width="80dp"
+                android:layout_height="wrap_content"
+                android:text="@string/no"
+                android:layout_marginLeft="10dp"
+                android:layout_marginStart="10dp"
+                android:id="@+id/bt_no"
+                style="@style/light_white_button" />
+
+        </LinearLayout>
+    </LinearLayout>
+
+</LinearLayout>
