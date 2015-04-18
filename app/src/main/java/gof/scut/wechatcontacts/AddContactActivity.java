@@ -5,9 +5,6 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.Button;
-import android.widget.ImageView;
-import android.widget.TextView;
 
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.EncodeHintType;
@@ -19,27 +16,19 @@ import java.util.Hashtable;
 
 public class AddContactActivity extends Activity {
     private final static int SCANNIN_GREQUEST_CODE = 1;
-    /**
-     * 显示扫描结果
-     */
-    private TextView mTextView ;
-    /**
-     * 显示扫描拍的图片
-     */
-    private ImageView mImageView;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_contact);
 
-        mTextView = (TextView) findViewById(R.id.result);
-        mImageView = (ImageView) findViewById(R.id.qrcode_bitmap);
+        initView();
+    }
 
+    private void initView() {
         //点击按钮跳转到二维码扫描界面，这里用的是startActivityForResult跳转
         //扫描完了之后调到该界面
-        Button mButton = (Button) findViewById(R.id.button1);
-        mButton.setOnClickListener(new View.OnClickListener() {
-
+        findViewById(R.id.scan).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent();
@@ -48,15 +37,6 @@ public class AddContactActivity extends Activity {
                 startActivityForResult(intent, SCANNIN_GREQUEST_CODE);
             }
         });
-
-        Button button2 = (Button)findViewById(R.id.button2);
-        button2.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View arg0) {
-                createQRImage("周萌");
-            }
-        });
-
     }
 
     public void createQRImage(String url)
@@ -95,7 +75,7 @@ public class AddContactActivity extends Activity {
             Bitmap bitmap = Bitmap.createBitmap(QR_WIDTH, QR_HEIGHT, Bitmap.Config.ARGB_8888);
             bitmap.setPixels(pixels, 0, QR_WIDTH, 0, 0, QR_WIDTH, QR_HEIGHT);
             //显示到一个ImageView上面
-            mImageView.setImageBitmap(bitmap);
+//            mImageView.setImageBitmap(bitmap);
         }
         catch (WriterException e)
         {
@@ -111,9 +91,9 @@ public class AddContactActivity extends Activity {
                 if(resultCode == RESULT_OK){
                     Bundle bundle = data.getExtras();
                     //显示扫描到的内容
-                    mTextView.setText(bundle.getString("result"));
+                    //mTextView.setText(bundle.getString("result"));
                     //显示
-                    mImageView.setImageBitmap((Bitmap) data.getParcelableExtra("bitmap"));
+//                    mImageView.setImageBitmap((Bitmap) data.getParcelableExtra("bitmap"));
                 }
                 break;
         }

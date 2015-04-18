@@ -25,7 +25,7 @@ public class AllTableUtils {
 //                +TBIDLabelConstants.TABLE_NAME+" INNER JOIN "+TBMainConstants.TABLE_NAME
 //                +" ON "+TBMainConstants.TABLE_NAME+"."+TBMainConstants.ID
 //                +" = ",null);
-        //TODO 可以先select再连接
+        //TODO
         Cursor c = db.rawQuery("SELECT contacts._id,name FROM idLabel INNER JOIN contacts ON idLabel._id=contacts._id  WHERE label = '" + labelName + "'", null);
         //db.close();
         return c;
