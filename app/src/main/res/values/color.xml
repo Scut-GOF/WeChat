@@ -311,5 +311,15 @@
     <color name="spring_green">#00FF7F</color>
     <!--春绿色-->
     <color name="lime">#00FF00</color>
-    <!--酸橙色 -->
+
+    <color name="my_blue">#0075a9</color>
+
+    <color name="my_green">#b3d465</color>
+    <color name="my_dark_green">#8fc31f</color>
+    <color name="my_purple">#A4005B</color>
+
+    <color name="my_light_grey">#eeeeee</color>
+
+    <color name="my_dark_grey">#bfbfbf</color>
+    8fc31f
 </resources>
