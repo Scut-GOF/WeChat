@@ -14,6 +14,8 @@ import com.google.zxing.qrcode.QRCodeWriter;
 
 import java.util.Hashtable;
 
+import gof.scut.cwh.models.object.IdObj;
+
 public class AddContactActivity extends Activity {
     private final static int SCANNIN_GREQUEST_CODE = 1;
 
@@ -37,6 +39,7 @@ public class AddContactActivity extends Activity {
                 startActivityForResult(intent, SCANNIN_GREQUEST_CODE);
             }
         });
+
     }
 
     public void createQRImage(String url)

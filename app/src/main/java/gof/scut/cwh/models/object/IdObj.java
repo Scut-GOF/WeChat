@@ -88,4 +88,17 @@ public class IdObj implements Serializable {
     public String getNotes() {
         return notes;
     }
+
+    @Override
+    public String toString() {
+        return "IdObj{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", lPinYin='" + lPinYin + '\'' +
+                ", sPinYin='" + sPinYin + '\'' +
+                ", tel='" + tel + '\'' +
+                ", address='" + address + '\'' +
+                ", notes='" + notes + '\'' +
+                '}';
+    }
 }
