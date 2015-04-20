@@ -37,11 +37,11 @@ public class PopConfirmUtils extends PopupWindowUtils implements View.OnClickLis
         switch (v.getId()) {
             case R.id.bt_yes:
                 popupWindow.dismiss();
-                todoOnResult.doOnPosResult();
+                todoOnResult.doOnPosResult(null);
                 break;
             case R.id.bt_no:
                 popupWindow.dismiss();
-                todoOnResult.doOnNegResult();
+                todoOnResult.doOnNegResult(null);
                 break;
         }
     }

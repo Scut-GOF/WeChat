@@ -67,7 +67,7 @@ public class MemEditAdapter extends BaseAdapter {
                 popConfirmUtils.setTitle("Sure to delete?");
                 popConfirmUtils.initTodo(new TodoOnResult() {
                     @Override
-                    public void doOnPosResult() {
+                    public void doOnPosResult(String[] params) {
                         IDLabelTableUtils idLabelTableUtils = new IDLabelTableUtils(context);
                         idLabelTableUtils.deleteWithID_Label(strMemberID, labelName);
                         AllTableUtils allTableUtils = new AllTableUtils(context);
@@ -76,7 +76,7 @@ public class MemEditAdapter extends BaseAdapter {
                     }
 
                     @Override
-                    public void doOnNegResult() {
+                    public void doOnNegResult(String[] params) {
 
                     }
                 });

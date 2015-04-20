@@ -2,6 +2,7 @@ package gof.scut.wechatcontacts;
 
 
 import android.app.Activity;
+import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.view.View;
@@ -10,7 +11,6 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import gof.scut.common.utils.ActivityUtils;
 import gof.scut.common.utils.BitmapUtils;
@@ -20,9 +20,8 @@ import gof.scut.common.utils.StringUtils;
 import gof.scut.common.utils.database.AllTableUtils;
 import gof.scut.common.utils.database.IDLabelTableUtils;
 import gof.scut.common.utils.database.LabelTableUtils;
-import gof.scut.common.utils.database.MainTableUtils;
-import gof.scut.common.utils.database.TBIDLabelConstants;
 import gof.scut.common.utils.popup.PopConfirmUtils;
+import gof.scut.common.utils.popup.PopEditLabelUtils;
 import gof.scut.common.utils.popup.TodoOnResult;
 import gof.scut.cwh.models.adapter.ContactsAdapter;
 import gof.scut.cwh.models.adapter.MemEditAdapter;
@@ -51,6 +50,8 @@ public class LabelDetailActivity extends Activity implements View.OnClickListene
     ListView labelMembers;
 
     Button deleteLabel;
+
+    PopEditLabelUtils popEditLabelUtils;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -94,6 +95,24 @@ public class LabelDetailActivity extends Activity implements View.OnClickListene
         labelIcon.setBackgroundDrawable(null);
         labelIcon.setImageBitmap(BitmapUtils.decodeBitmapFromPath(labelObj.getIconPath()));
         memberCount.setText(StringUtils.addBrackets(labelObj.getMemCount() + ""));
+        popEditLabelUtils = new PopEditLabelUtils();
+        popEditLabelUtils.initPopAddLabel(this, new TodoOnResult() {
+            @Override
+            public void doOnPosResult(String[] params) {
+                //add label id
+                labelObj.setLabelName(params[0]);
+                labelObj.setIconPath(params[1]);
+                long state = labelTableUtils.updateAllWithLabel(labelObj, labelName.getText().toString());
+                if (state < 0) Log.e("LabelsActivity", "update label failed");
+                labelIcon.setImageBitmap(BitmapUtils.decodeBitmapFromPath(labelObj.getIconPath()));
+                labelName.setText(labelObj.getLabelName());
+            }
+
+            @Override
+            public void doOnNegResult(String[] params) {
+
+            }
+        }, "编辑标签", R.id.label_detail_layout);
         findViewById(R.id.barRelativeLayout).setEnabled(true);
         setListener();
 
@@ -121,6 +140,7 @@ public class LabelDetailActivity extends Activity implements View.OnClickListene
         editLabel.setOnClickListener(this);
         deleteLabel.setOnClickListener(this);
         addMember.setOnClickListener(this);
+        labelIcon.setOnClickListener(this);
         addMemberLayout.setOnClickListener(this);
     }
 
@@ -180,14 +200,14 @@ public class LabelDetailActivity extends Activity implements View.OnClickListene
                 popConfirmUtils.setTitle("Sure to delete?");
                 popConfirmUtils.initTodo(new TodoOnResult() {
                     @Override
-                    public void doOnPosResult() {
+                    public void doOnPosResult(String[] params) {
                         labelTableUtils.deleteWithLabel(labelObj.getLabelName());
                         //TODO add trigger to delete id-label relation
                         finish();
                     }
 
                     @Override
-                    public void doOnNegResult() {
+                    public void doOnNegResult(String[] params) {
 
                     }
                 });
@@ -196,6 +216,16 @@ public class LabelDetailActivity extends Activity implements View.OnClickListene
             case R.id.add_member_layout:
                 ActivityUtils.ActivitySkip(this, SearchActivity.class);
                 break;
+            case R.id.label_icon:
+                popEditLabelUtils.popEditLabel();
+                break;
         }
     }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        popEditLabelUtils.handleResult(requestCode, resultCode, data);
+    }
+
 }
