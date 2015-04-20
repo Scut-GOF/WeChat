@@ -8,9 +8,6 @@ import android.database.sqlite.SQLiteOpenHelper;
 public class DataBaseHelper extends SQLiteOpenHelper {
     public final static int DBVersion = 1;
 
-    public final static int ALL_TABLE = 4;
-
-
     private final static String DATABASE_NAME = "gofContacts";
     private final static String SQL_MAIN_TABLE_CREATE = "CREATE TABLE IF NOT EXISTS "
             + TBMainConstants.TABLE_NAME + " ("

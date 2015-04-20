@@ -29,7 +29,7 @@ import gof.scut.cwh.models.adapter.LabelsAdapter;
 
 
 public class LabelsActivity extends Activity implements View.OnClickListener {
-    Button addLabel;
+    TextView addLabel;
     TextView labelsBack;
     GridView labels;//grid is invisible
     ListView labelList;
@@ -75,7 +75,7 @@ public class LabelsActivity extends Activity implements View.OnClickListener {
     }
 
     void findView() {
-        addLabel = (Button) findViewById(R.id.add_label);
+        addLabel = (TextView) findViewById(R.id.add_label);
         labels = (GridView) findViewById(R.id.labels);
         labelList = (ListView) findViewById(R.id.label_list);
         labelsBack = (TextView) findViewById(R.id.labels_back);
@@ -157,7 +157,7 @@ public class LabelsActivity extends Activity implements View.OnClickListener {
 
     }
 
-    public void popPhoneSelector() {
+    public void popEditLabelName() {
         addLabelWindow.update();
         addLabelWindow.showAtLocation(findViewById(R.id.label_layout), Gravity.CENTER, 0, 0);
         Animation anim1 = AnimationUtils.loadAnimation(this, R.anim.scale_center_enter);
@@ -189,7 +189,7 @@ public class LabelsActivity extends Activity implements View.OnClickListener {
                 finish();
                 break;
             case R.id.add_label:
-                popPhoneSelector();
+                popEditLabelName();
                 break;
         }
     }
