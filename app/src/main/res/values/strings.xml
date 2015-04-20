@@ -1,4 +1,4 @@
-<resources>
+﻿<resources>
     <string name="app_name">Connect</string>
 
     <string name="hello_world">Hello world!</string>
@@ -17,7 +17,7 @@
     <string name="add_label">添加标签</string>
     <string name="backToMain"><![CDATA[<AllContacts]]></string>
     <string name="add">+</string>
-    <string name="cancel">退出</string>
+    <string name="cancel">Cancel</string>
 
     <string name="save">Save</string>
     <string name="members">Members</string>
