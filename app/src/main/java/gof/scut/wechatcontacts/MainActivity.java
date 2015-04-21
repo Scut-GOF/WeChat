@@ -25,6 +25,7 @@ public class MainActivity extends Activity implements View.OnClickListener {
 	//Constants
 
 	//Models
+	Cursor cursor;
 	MainTableUtils mainTableUtils;
 
 	//Controllers
@@ -76,9 +77,10 @@ public class MainActivity extends Activity implements View.OnClickListener {
 		//When clickOnNameAndTel, view
 		//When click on image, view label group
 		//edit when view
-		Cursor cursor = mainTableUtils.selectAllIDName();
+		cursor = mainTableUtils.selectAllIDName();
 		ContactsAdapter adapter = new ContactsAdapter(this, cursor);
 		contacts.setAdapter(adapter);
+
 	}
 
 	@Override
@@ -112,5 +114,11 @@ public class MainActivity extends Activity implements View.OnClickListener {
 	protected void onResume() {
 		super.onResume();
 		initList();
+	}
+
+	@Override
+	protected void onDestroy() {
+		super.onDestroy();
+		if (cursor != null) cursor.close();
 	}
 }

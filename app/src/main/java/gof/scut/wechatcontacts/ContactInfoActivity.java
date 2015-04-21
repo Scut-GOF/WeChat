@@ -23,6 +23,8 @@ public class ContactInfoActivity extends ActionBarActivity {
 	private ListView lvTels;
 	private int id;
 
+	Cursor cursorTels;
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -41,7 +43,7 @@ public class ContactInfoActivity extends ActionBarActivity {
 		String name = allInfoCursor.getString(allInfoCursor.getColumnIndex(TBMainConstants.NAME));
 		String address = allInfoCursor.getString(allInfoCursor.getColumnIndex(TBMainConstants.ADDRESS));
 		String notes = allInfoCursor.getString(allInfoCursor.getColumnIndex(TBMainConstants.NOTES));
-
+		allInfoCursor.close();
 
 		tvName.setText(name);
 		tvAddress.setText(address);
@@ -50,9 +52,10 @@ public class ContactInfoActivity extends ActionBarActivity {
 
 	private void initList() {
 		TelTableUtils telTableUtils = new TelTableUtils(this);
-		Cursor cursorTels = telTableUtils.selectTelWithID("" + id);
+		cursorTels = telTableUtils.selectTelWithID("" + id);
 		PhonesAdapter phonesAdapter = new PhonesAdapter(this, cursorTels);
 		lvTels.setAdapter(phonesAdapter);
+
 	}
 
 	@Override
@@ -80,5 +83,10 @@ public class ContactInfoActivity extends ActionBarActivity {
 	protected void onResume() {
 		super.onResume();
 		initList();
+	}
+
+	protected void onDestroy() {
+		super.onDestroy();
+		if (cursorTels != null) cursorTels.close();
 	}
 }

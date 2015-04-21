@@ -41,21 +41,43 @@ public class DataBaseHelper extends SQLiteOpenHelper {
 			+ TBLabelConstants.MEMBER_COUNT + " INTEGER NOT NULL)";
 	//    CREATE TRIGGER addmembercount after insert on id_label begin update label set count = count+1 where label.label = new.label;
 	//    end;
-	private final static String SQL_TRIGGER_ADD_MEMBER = "CREATE TRIGGER addMemberCount AFTER INSERT ON" +
+
+	private final static String SQL_TRIGGER_ADD_MEMBER = "CREATE TRIGGER addMemberCount AFTER INSERT ON " +
 			TBIDLabelConstants.TABLE_NAME +
 			" BEGIN UPDATE " + TBLabelConstants.TABLE_NAME + " SET " + TBLabelConstants.MEMBER_COUNT + " = "
 			+ TBLabelConstants.MEMBER_COUNT + "+1 WHERE " + TBLabelConstants.TABLE_NAME + "."
 			+ TBLabelConstants.LABEL + " = NEW." + TBIDLabelConstants.LABEL + ";END";
+	//CREATE TRIGGER removeMemberCount after delete on id_label begin update label set count = count-1 where label.label = old.label;end;
+	private final static String SQL_TRIGGER_REMOVE_MEMBER = "CREATE TRIGGER removeMemberCount AFTER DELETE ON " +
+			TBIDLabelConstants.TABLE_NAME +
+			" BEGIN UPDATE " + TBLabelConstants.TABLE_NAME + " SET " + TBLabelConstants.MEMBER_COUNT + " = "
+			+ TBLabelConstants.MEMBER_COUNT + "-1 WHERE " + TBLabelConstants.TABLE_NAME + "."
+			+ TBLabelConstants.LABEL + " = OLD." + TBIDLabelConstants.LABEL + ";END";
+	//CREATE TRIGGER updateMemberCount after update on id_label begin update label set count = count-1 where label.label = old.label;
+	// update label set count=count+1 where label.label = new.label;end;
+	private final static String SQL_TRIGGER_UPDATE_MEMBER = "CREATE TRIGGER updateMemberCount AFTER UPDATE ON " +
+			TBIDLabelConstants.TABLE_NAME +
+			" BEGIN UPDATE " + TBLabelConstants.TABLE_NAME + " SET " + TBLabelConstants.MEMBER_COUNT + " = "
+			+ TBLabelConstants.MEMBER_COUNT + "-1 WHERE " + TBLabelConstants.TABLE_NAME + "."
+			+ TBLabelConstants.LABEL + " = OLD." + TBIDLabelConstants.LABEL
+			+ ";UPDATE "
+			+ TBLabelConstants.TABLE_NAME + " SET " + TBLabelConstants.MEMBER_COUNT + " = "
+			+ TBLabelConstants.MEMBER_COUNT + "+1 WHERE " + TBLabelConstants.TABLE_NAME + "."
+			+ TBLabelConstants.LABEL + " = NEW." + TBIDLabelConstants.LABEL + ";END";
 
 	//    CREATE TRIGGER updatelabelname after update of label on label begin update id_label set label = new.label where label = old.label;end;
-//    COMMIT;
 	private final static String SQL_TRIGGER_UPDATE_LABEL = "CREATE TRIGGER updateLabelName AFTER UPDATE of " +
 			TBLabelConstants.LABEL + " ON " +
 			TBLabelConstants.TABLE_NAME +
 			" BEGIN UPDATE " + TBIDLabelConstants.TABLE_NAME + " SET " + TBIDLabelConstants.LABEL + " = "
 			+ "NEW." + TBIDLabelConstants.LABEL + " WHERE " + TBIDLabelConstants.LABEL + " = OLD."
 			+ TBIDLabelConstants.LABEL + ";END";
-
+	//    CREATE TRIGGER deleteLabel after delete on label begin delete from id_label where label = old.label;end;
+	private final static String SQL_TRIGGER_REMOVE_LABEL = "CREATE TRIGGER deleteLabel AFTER delete on "
+			+ TBLabelConstants.TABLE_NAME +
+			" BEGIN delete from " + TBIDLabelConstants.TABLE_NAME
+			+ " WHERE " + TBIDLabelConstants.LABEL + " = OLD."
+			+ TBIDLabelConstants.LABEL + ";END";
 	public DataBaseHelper(Context context) {
 		super(context, DATABASE_NAME, null, DBVersion);
 	}
@@ -71,8 +93,12 @@ public class DataBaseHelper extends SQLiteOpenHelper {
 		db.execSQL(SQL_TEL_TABLE_CREATE);
 		db.execSQL(SQL_LABEL_TABLE_CREATE);
 		db.execSQL(SQL_ID_LABEL_TABLE_CREATE);
+
 		db.execSQL(SQL_TRIGGER_ADD_MEMBER);
+		db.execSQL(SQL_TRIGGER_REMOVE_MEMBER);
+		db.execSQL(SQL_TRIGGER_UPDATE_MEMBER);
 		db.execSQL(SQL_TRIGGER_UPDATE_LABEL);
+		db.execSQL(SQL_TRIGGER_REMOVE_LABEL);
 	}
 
 	@Override

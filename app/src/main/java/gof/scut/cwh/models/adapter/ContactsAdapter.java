@@ -79,7 +79,6 @@ public class ContactsAdapter extends BaseAdapter {
 
 		name.setText(cName);
 
-		//TODO MOVE TO CONTACTS DETAIL
 		msg.setOnClickListener(new View.OnClickListener() {
 
 			@Override
@@ -89,8 +88,8 @@ public class ContactsAdapter extends BaseAdapter {
 				telTableUtil.insertAll("" + id, "10086");
 				telTableUtil.insertAll("" + id, "10086" + id);
 
-				final Cursor cTel = telTableUtil.selectTelWithID(id);
-
+				Cursor cTel = telTableUtil.selectTelWithID(id);
+				//close when dismiss
 				if (cTel.getCount() > 1) {
 					initPopChoice(TelsAdapter.CHOICE_MSG, cTel);
 					popPhoneSelector();
@@ -99,6 +98,8 @@ public class ContactsAdapter extends BaseAdapter {
 					CursorUtils.cursorToStringArray(cTel, phoneList, TBTelConstants.TEL);
 					UseSystemUtils.sendMsg(context, phoneList.get(0));
 				}
+
+
 			}
 		});
 		call.setOnClickListener(new View.OnClickListener() {
@@ -110,8 +111,8 @@ public class ContactsAdapter extends BaseAdapter {
 				telTableUtil.insertAll("" + id, "10086");
 				telTableUtil.insertAll("" + id, "10086" + id);
 
-				final Cursor cTel = telTableUtil.selectTelWithID(id);
-
+				Cursor cTel = telTableUtil.selectTelWithID(id);
+				//close when dismiss
 				if (cTel.getCount() > 1) {
 					initPopChoice(TelsAdapter.CHOICE_CALL, cTel);
 					popPhoneSelector();
@@ -120,6 +121,8 @@ public class ContactsAdapter extends BaseAdapter {
 					CursorUtils.cursorToStringArray(cTel, phoneList, TBTelConstants.TEL);
 					UseSystemUtils.sysCall(context, phoneList.get(0));
 				}
+
+
 			}
 		});
 		name.setClickable(true);
@@ -145,7 +148,7 @@ public class ContactsAdapter extends BaseAdapter {
 		telChoiceView.findViewById(R.id.phone_choices).startAnimation(anim1);
 	}
 
-	private void initPopChoice(int telOrMsg, Cursor cursor) {
+	private void initPopChoice(int telOrMsg, final Cursor cursor) {
 		telChoiceView = LayoutInflater.from(context).inflate(
 				R.layout.pop_phone_choice, null, false);
 		telChoiceWindow = new PopupWindow(telChoiceView,
@@ -186,7 +189,7 @@ public class ContactsAdapter extends BaseAdapter {
 		telChoiceWindow.setOnDismissListener(new PopupWindow.OnDismissListener() {
 			@Override
 			public void onDismiss() {
-
+				cursor.close();
 			}
 
 		});

@@ -36,6 +36,8 @@ public class LabelDetailActivity extends Activity implements View.OnClickListene
 	AllTableUtils allTableUtils;
 	LabelTableUtils labelTableUtils;
 	IDLabelTableUtils idLabelTableUtils;
+	Cursor cursorEdit;
+	Cursor cursorView;
 
 	TextView labelsBack;
 	TextView editLabel;
@@ -93,7 +95,11 @@ public class LabelDetailActivity extends Activity implements View.OnClickListene
 	void initComponent() {
 		labelName.setText(labelObj.getLabelName());
 		labelIcon.setBackgroundDrawable(null);
-		labelIcon.setImageBitmap(BitmapUtils.decodeBitmapFromPath(labelObj.getIconPath()));
+		if (labelObj.getIconPath().equals("")) {
+			labelIcon.setBackgroundResource(R.drawable.chart_1_2);
+		} else {
+			labelIcon.setImageBitmap(BitmapUtils.decodeBitmapFromPath(labelObj.getIconPath()));
+		}
 		memberCount.setText(StringUtils.addBrackets(labelObj.getMemCount() + ""));
 		popEditLabelUtils = new PopEditLabelUtils();
 		popEditLabelUtils.initPopAddLabel(this, new TodoOnResult() {
@@ -142,6 +148,25 @@ public class LabelDetailActivity extends Activity implements View.OnClickListene
 		addMember.setOnClickListener(this);
 		labelIcon.setOnClickListener(this);
 		addMemberLayout.setOnClickListener(this);
+		findViewById(R.id.add_id_to_label).setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				idLabelTableUtils.insertAll("0", "好人");
+			}
+		});
+		findViewById(R.id.delete_id_label).setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				idLabelTableUtils.deleteWithID("0");
+			}
+		});
+		findViewById(R.id.update_id_label).setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				idLabelTableUtils.updateLabelWithID("坏人", "0");
+			}
+		});
+
 	}
 
 	void saveEditResult() {
@@ -163,17 +188,19 @@ public class LabelDetailActivity extends Activity implements View.OnClickListene
 
 	void initViewList() {
 		//cursor,contactsAdapter,labelMembers
-		Cursor cursor = allTableUtils.selectAllIDNameOnLabel(labelObj.getLabelName());
-		ContactsAdapter adapter = new ContactsAdapter(this, cursor);
+		cursorView = allTableUtils.selectAllIDNameOnLabel(labelObj.getLabelName());
+		ContactsAdapter adapter = new ContactsAdapter(this, cursorView);
 		labelMembers.setAdapter(adapter);
+
 	}
 
 	void initEditList() {
 
 		//cursor,contactsAdapter,labelMembers
-		Cursor cursor = allTableUtils.selectAllIDNameOnLabel(labelObj.getLabelName());
-		MemEditAdapter adapter = new MemEditAdapter(this, cursor, labelObj.getLabelName());
+		cursorEdit = allTableUtils.selectAllIDNameOnLabel(labelObj.getLabelName());
+		MemEditAdapter adapter = new MemEditAdapter(this, cursorEdit, labelObj.getLabelName());
 		labelMembers.setAdapter(adapter);
+
 	}
 
 
@@ -228,4 +255,9 @@ public class LabelDetailActivity extends Activity implements View.OnClickListene
 		popEditLabelUtils.handleResult(requestCode, resultCode, data);
 	}
 
+	protected void onDestroy() {
+		super.onDestroy();
+		if (cursorEdit != null) cursorEdit.close();
+		if (cursorView != null) cursorView.close();
+	}
 }
