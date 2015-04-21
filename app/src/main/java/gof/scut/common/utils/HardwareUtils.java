@@ -8,15 +8,15 @@ import android.util.DisplayMetrics;
  */
 public class HardwareUtils {
 
-    public static double getScreenWidthPhysicalSize(Activity ctx) {
-        DisplayMetrics dm = new DisplayMetrics();
-        ctx.getWindowManager().getDefaultDisplay().getMetrics(dm);
-        return dm.widthPixels / (160 * dm.density);
-    }
+	public static double getScreenWidthPhysicalSize(Activity ctx) {
+		DisplayMetrics dm = new DisplayMetrics();
+		ctx.getWindowManager().getDefaultDisplay().getMetrics(dm);
+		return dm.widthPixels / (160 * dm.density);
+	}
 
-    public static double getScreenHeightPhysicalSize(Activity ctx) {
-        DisplayMetrics dm = new DisplayMetrics();
-        ctx.getWindowManager().getDefaultDisplay().getMetrics(dm);
-        return dm.heightPixels / (160 * dm.density);
-    }
+	public static double getScreenHeightPhysicalSize(Activity ctx) {
+		DisplayMetrics dm = new DisplayMetrics();
+		ctx.getWindowManager().getDefaultDisplay().getMetrics(dm);
+		return dm.heightPixels / (160 * dm.density);
+	}
 }
