@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
-<selector xmlns:android="http://schemas.android.com/apk/res/android" >
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
 
     <!-- 选中的状态 -->
     <item android:state_enabled="true" android:state_focused="true">
         <shape>
-    	    <gradient android:startColor="@color/cwh_alp_grey" android:endColor="@color/cwh_alp_grey" android:angle="270"/>
+            <gradient android:startColor="@color/cwh_alp_grey" android:endColor="@color/cwh_alp_grey" android:angle="270" />
             <corners android:radius="10dp" />
-    	<!--     <stroke
-    	        android:color="@color/light_black"
-    	        android:width="1px"/>
-    	        --> 
+            <!--     <stroke
+                    android:color="@color/light_black"
+                    android:width="1px"/>
+                    -->
         </shape>
     </item>
     <!-- 没操作的状态 -->
@@ -21,7 +21,7 @@
             <stroke
     	        android:color="@color/light_black"
     	        android:width="1px"/>
-    	          --> 
+    	          -->
         </shape>
     </item>
 </selector>
