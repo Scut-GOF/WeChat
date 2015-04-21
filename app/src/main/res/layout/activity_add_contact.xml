@@ -243,6 +243,14 @@
                 android:textSize="22sp"
                 android:background="@color/gray" />
 
+            <ImageView
+                android:id="@+id/imageView"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:layout_below="@id/addition"
+                android:layout_centerHorizontal="true"
+                android:background="@drawable/abc_ic_ab_back_mtrl_am_alpha"/>
+
         </RelativeLayout>
 
     </LinearLayout>
