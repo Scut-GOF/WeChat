@@ -1,23 +1,38 @@
 package gof.scut.wechatcontacts;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.ImageView;
 
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.EncodeHintType;
 import com.google.zxing.WriterException;
 import com.google.zxing.common.BitMatrix;
 import com.google.zxing.qrcode.QRCodeWriter;
+import com.google.gson.Gson;
 
 import java.util.Hashtable;
 
+import gof.scut.common.MyApplication;
+import gof.scut.common.utils.Log;
+import gof.scut.common.utils.database.MainTableUtils;
 import gof.scut.cwh.models.object.IdObj;
 
 public class AddContactActivity extends Activity {
+
+    private static final String TAG = AddContactActivity.class.getSimpleName();
+    private final Context mContext = AddContactActivity.this;
+
     private final static int SCANNIN_GREQUEST_CODE = 1;
+    private MainTableUtils mainTableUtils;
+    private Gson gson;
+
+    //view
+    private ImageView imageView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,6 +54,15 @@ public class AddContactActivity extends Activity {
                 startActivityForResult(intent, SCANNIN_GREQUEST_CODE);
             }
         });
+
+        mainTableUtils = new MainTableUtils(mContext);
+        gson = MyApplication.getGson();
+
+
+        imageView = (ImageView)findViewById(R.id.imageView);
+
+        IdObj obj = new IdObj(101,"周萌","zhoumeng","zm","13660567470","华工","no");
+        createQRImage(gson.toJson(obj,IdObj.class));
 
     }
 
@@ -78,7 +102,7 @@ public class AddContactActivity extends Activity {
             Bitmap bitmap = Bitmap.createBitmap(QR_WIDTH, QR_HEIGHT, Bitmap.Config.ARGB_8888);
             bitmap.setPixels(pixels, 0, QR_WIDTH, 0, 0, QR_WIDTH, QR_HEIGHT);
             //显示到一个ImageView上面
-//            mImageView.setImageBitmap(bitmap);
+            imageView.setImageBitmap(bitmap);
         }
         catch (WriterException e)
         {
@@ -93,10 +117,17 @@ public class AddContactActivity extends Activity {
             case SCANNIN_GREQUEST_CODE:
                 if(resultCode == RESULT_OK){
                     Bundle bundle = data.getExtras();
-                    //显示扫描到的内容
-                    //mTextView.setText(bundle.getString("result"));
                     //显示
 //                    mImageView.setImageBitmap((Bitmap) data.getParcelableExtra("bitmap"));
+
+                    String resultString = bundle.getString("result");
+
+                    IdObj object = gson.fromJson(resultString,IdObj.class);
+                    mainTableUtils.insertAll(object.getName(),
+                            object.getlPinYin(),object.getsPinYin(),object.getAddress()
+                            ,object.getNotes());
+
+                    Log.d(null,object.toString());
                 }
                 break;
         }
