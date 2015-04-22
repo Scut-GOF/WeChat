@@ -5,6 +5,7 @@ package gof.scut.common.utils.database;
  */
 public interface TBIDLabelConstants {
 	String TABLE_NAME = "idLabel";
+	String FTS_TABLE_NAME = "fts_id_label";
 	String ID = "_id";
-	String LABEL = "labelId";
+	String LABEL = "label";
 }

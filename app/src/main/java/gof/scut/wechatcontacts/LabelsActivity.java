@@ -37,6 +37,7 @@ public class LabelsActivity extends Activity implements View.OnClickListener {
 	View addLabelView;
 
 	LabelTableUtils labelTableUtils;
+	Cursor cursorLabels;
 
 	final int RESULT_LOAD_IMAGE = 1;
 	String pathSelectedToAdd = "";
@@ -82,15 +83,17 @@ public class LabelsActivity extends Activity implements View.OnClickListener {
 	}
 
 	void initList() {
-		Cursor cursorLabels = labelTableUtils.selectAll();
+		cursorLabels = labelTableUtils.selectAll();
 		LabelsAdapter labelsAdapter = new LabelsAdapter(this, cursorLabels);
 		labelList.setAdapter(labelsAdapter);
+
 	}
 
 	void initGrids() {
-		Cursor cursorLabels = labelTableUtils.selectAll();
+		cursorLabels = labelTableUtils.selectAll();
 		LabelsAdapter labelsAdapter = new LabelsAdapter(this, cursorLabels);
 		labels.setAdapter(labelsAdapter);
+
 	}
 
 	void initPopAddLabel() {
@@ -192,5 +195,10 @@ public class LabelsActivity extends Activity implements View.OnClickListener {
 				popEditLabelName();
 				break;
 		}
+	}
+
+	protected void onDestroy() {
+		super.onDestroy();
+		if (cursorLabels != null) cursorLabels.close();
 	}
 }

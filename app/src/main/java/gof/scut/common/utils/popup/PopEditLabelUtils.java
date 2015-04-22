@@ -116,11 +116,15 @@ public class PopEditLabelUtils {
 
 			Cursor cursor = context.getContentResolver().query(selectedImage,
 					filePathColumn, null, null, null);
-			cursor.moveToFirst();
+			try {
+				cursor.moveToFirst();
+				int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
+				pathSelectedToAdd = cursor.getString(columnIndex);
+			} finally {
+				cursor.close();
+			}
 
-			int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
-			pathSelectedToAdd = cursor.getString(columnIndex);
-			cursor.close();
+
 		}
 	}
 
