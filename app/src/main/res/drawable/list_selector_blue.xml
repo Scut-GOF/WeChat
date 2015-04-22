@@ -2,9 +2,8 @@
 <selector xmlns:android="http://schemas.android.com/apk/res/android">
     <!-- 按下的状态 -->
     <item android:state_enabled="true" android:state_pressed="true" android:drawable="@color/blue">
-		<shape>
-            <gradient android:startColor="@color/blue" android:endColor="@color/blue"
-                android:angle="90"/>
+        <shape>
+            <gradient android:startColor="@color/blue" android:endColor="@color/blue" android:angle="90" />
 
         </shape>
     </item>
@@ -13,10 +12,9 @@
 
     </item>
     <!-- 没操作的状态 -->
-    <item >
+    <item>
         <shape>
-            <gradient android:startColor="@null" android:endColor="@null"
-                android:angle="90"/>
+            <gradient android:startColor="@null" android:endColor="@null" android:angle="90" />
 
         </shape>
     </item>

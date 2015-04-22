@@ -2,19 +2,17 @@
 <selector xmlns:android="http://schemas.android.com/apk/res/android">
     <!-- 按下的状态 -->
     <item android:state_enabled="true" android:state_pressed="true">
-    	<shape>
-			<gradient android:startColor="@color/light_blue" android:endColor="@color/light_blue" android:angle="270" />
+        <shape>
+            <gradient android:startColor="@color/light_blue" android:endColor="@color/light_blue" android:angle="270" />
             <corners android:radius="6dp" />
-    	    <stroke
-    	        android:color="@color/white"
-    	        android:width="1px"/>
+            <stroke android:color="@color/white" android:width="1px" />
         </shape>
     </item>
     <item android:state_enabled="true" android:state_checked="true">
-    	<shape>
-			<gradient android:startColor="@color/light_blue" android:endColor="@color/light_blue" android:angle="270" />
+        <shape>
+            <gradient android:startColor="@color/light_blue" android:endColor="@color/light_blue" android:angle="270" />
             <corners android:radius="6dp" />
-			<stroke android:color="@color/white" android:width="3px" />
+            <stroke android:color="@color/white" android:width="3px" />
         </shape>
     </item>
     <!-- 没操作的状态 -->
@@ -22,7 +20,7 @@
         <shape>
             <gradient android:startColor="@color/white" android:endColor="@color/white" android:angle="270" />
             <corners android:radius="6dp" />
-			<stroke android:color="@color/light_blue" android:width="3px" />
+            <stroke android:color="@color/light_blue" android:width="3px" />
         </shape>
     </item>
 </selector>
