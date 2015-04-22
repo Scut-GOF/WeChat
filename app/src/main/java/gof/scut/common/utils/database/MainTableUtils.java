@@ -12,10 +12,11 @@ public class MainTableUtils {
 	public MainTableUtils(Context context) {
 		dataBaseHelper = new DataBaseHelper(context);
 		//TODO insert several data
-		for (int i = 0; i < 100; i++) {
+		for (int i = 0; i < 10; i++) {
 			insertAll("Friend" + i, "" + i, "" + i, "", "");
 		}
-
+		deleteWithID(9 + "");
+		updateAllWithID("Friend" + 9, "9", "9", "", "", "8");
 	}
 
 	//insert
@@ -30,6 +31,10 @@ public class MainTableUtils {
 		SQLiteDatabase db = dataBaseHelper.getWritableDatabase();
 		long status = db.insert(TBMainConstants.TABLE_NAME, null, value);
 		db.close();
+//		value.put(TBMainConstants.ID, notes);
+//		db = dataBaseHelper.getWritableDatabase();
+//		status += db.insert(TBMainConstants.FTS_TABLE_NAME, null, value);
+//		db.close();
 		return status;
 	}
 
@@ -80,9 +85,14 @@ public class MainTableUtils {
 
 	public Cursor selectAllIDName() {
 		SQLiteDatabase db = dataBaseHelper.getReadableDatabase();
-		Cursor c = db.query(TBMainConstants.TABLE_NAME, new String[]{TBMainConstants.ID, TBMainConstants.NAME},
-				null, null, null, null, TBMainConstants.NAME);
+		Cursor c;
+//		c = db.query(TBMainConstants.TABLE_NAME, new String[]{TBMainConstants.ID, TBMainConstants.NAME},
+//				null, null, null, null, TBMainConstants.NAME);
 		//db.close();
+		c = db.rawQuery("select " + TBMainConstants.ID + "," + TBMainConstants.NAME + " from "
+				+ TBMainConstants.FTS_TABLE_NAME, null);
+//		c = db.query(TBMainConstants.FTS_TABLE_NAME, new String[]{TBMainConstants.ID, TBMainConstants.NAME},
+//				null, null, null, null, TBMainConstants.FTS_TABLE_NAME);
 		return c;
 	}
 
@@ -106,10 +116,15 @@ public class MainTableUtils {
 
 	public Cursor selectAllWithID(String id) {
 		SQLiteDatabase db = dataBaseHelper.getReadableDatabase();
-		Cursor c = db.query(TBMainConstants.TABLE_NAME,
-				new String[]{TBMainConstants.NAME, TBMainConstants.L_PINYIN,
-						TBMainConstants.S_PINYIN, TBMainConstants.ADDRESS, TBMainConstants.NOTES},
-				TBMainConstants.ID + " LIKE ?", new String[]{id}, null, null, null);
+		Cursor c;
+//		c = db.query(TBMainConstants.TABLE_NAME,
+//				new String[]{TBMainConstants.NAME, TBMainConstants.L_PINYIN,
+//						TBMainConstants.S_PINYIN, TBMainConstants.ADDRESS, TBMainConstants.NOTES},
+//				TBMainConstants.ID + " LIKE ?", new String[]{id}, null, null, null);
+
+		c = db.rawQuery("select * from " + TBMainConstants.FTS_TABLE_NAME + " where "
+						+ TBMainConstants.ID + " match ?",
+				new String[]{"'" + id + "'"});//?  SHOULDN'T BE PUT IN SINGE COBRA
 		//db.close();
 		return c;
 	}

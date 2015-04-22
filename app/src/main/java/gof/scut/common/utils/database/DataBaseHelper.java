@@ -78,6 +78,48 @@ public class DataBaseHelper extends SQLiteOpenHelper {
 			" BEGIN delete from " + TBIDLabelConstants.TABLE_NAME
 			+ " WHERE " + TBIDLabelConstants.LABEL + " = OLD."
 			+ TBIDLabelConstants.LABEL + ";END";
+
+	//create virtual table fts_contacts using fts4(_id,name,l_pinyin,s_pinyin,address,notes);
+	//create virtual table fts_id_label using fts4(_id,label);
+	//label表很小，没必要建virtual table
+	private final static String SQL_CREATE_FTS_CONTACTS = "create virtual table "
+			+ TBMainConstants.FTS_TABLE_NAME + " using fts4("
+			+ TBMainConstants.ID + "," + TBMainConstants.NAME + "," + TBMainConstants.L_PINYIN + ","
+			+ TBMainConstants.S_PINYIN + "," + TBMainConstants.ADDRESS + "," + TBMainConstants.NOTES + ")";
+	//create trigger insert_fts_contacts after insert on contacts begin insert into fts_contacts
+	// values (new._id,new.name,new.l_pinyin,new.s_pinyin,new.address,new.notes);end;
+	private final static String SQL_TRIGGER_INSERT_FTS_CONTACTS =
+			"create trigger insert_fts_contacts after insert on " + TBMainConstants.TABLE_NAME
+					+ " begin insert into " + TBMainConstants.FTS_TABLE_NAME
+					+ " values (new." + TBMainConstants.ID + ",new." + TBMainConstants.NAME
+					+ ",new." + TBMainConstants.L_PINYIN + ",new." + TBMainConstants.S_PINYIN
+					+ ",new." + TBMainConstants.ADDRESS + ",new." + TBMainConstants.NOTES + ");end;";
+	// Don't use a trigger for updating the words table because of a bug
+	// in FTS3.  The bug is such that the call to get the last inserted
+	// row is incorrect.
+
+	//create trigger update_fts_contacts after update on contacts begin update fts_contacts
+	// set _id=new._id,name=new.name,l_pinyin=new.l_pinyin,s_pinyin=new.s_pinyin,address=new.address,
+	// notes=new.notes where _id=old._id;end;
+	private final static String SQL_TRIGGER_UPDATE_FTS_CONTACTS =
+			"create trigger update_fts_contacts after update on " + TBMainConstants.TABLE_NAME
+					+ " begin update " + TBMainConstants.FTS_TABLE_NAME + " set "
+					+ TBMainConstants.ID + " = new." + TBMainConstants.ID + ","
+					+ TBMainConstants.NAME + " = new." + TBMainConstants.NAME + ","
+					+ TBMainConstants.L_PINYIN + " = new." + TBMainConstants.L_PINYIN + ","
+					+ TBMainConstants.S_PINYIN + " = new." + TBMainConstants.S_PINYIN + ","
+					+ TBMainConstants.ADDRESS + " = new." + TBMainConstants.ADDRESS + ","
+					+ TBMainConstants.NOTES + " = new." + TBMainConstants.NOTES + " where "
+					+ TBMainConstants.ID + " = old." + TBMainConstants.ID + ";end";
+	//create trigger delete_fts_contacts after delete on contacts begin delete from fts_contacts where _id=old._id;end;
+	private final static String SQL_TRIGGER_DELETE_FTS_CONTACTS =
+			"create trigger delete_fts_contacts after delete on " + TBMainConstants.TABLE_NAME
+					+ " begin delete from " + TBMainConstants.FTS_TABLE_NAME + " where "
+					+ TBMainConstants.ID + " = old." + TBMainConstants.ID + ";end";
+	private final static String SQL_CREATE_FTS_ID_LABEL = "create virtual table "
+			+ TBIDLabelConstants.FTS_TABLE_NAME + " using fts4("
+			+ TBIDLabelConstants.ID + "," + TBIDLabelConstants.LABEL + ")";
+
 	public DataBaseHelper(Context context) {
 		super(context, DATABASE_NAME, null, DBVersion);
 	}
@@ -99,6 +141,11 @@ public class DataBaseHelper extends SQLiteOpenHelper {
 		db.execSQL(SQL_TRIGGER_UPDATE_MEMBER);
 		db.execSQL(SQL_TRIGGER_UPDATE_LABEL);
 		db.execSQL(SQL_TRIGGER_REMOVE_LABEL);
+
+		db.execSQL(SQL_CREATE_FTS_CONTACTS);
+		db.execSQL(SQL_TRIGGER_INSERT_FTS_CONTACTS);
+		db.execSQL(SQL_TRIGGER_UPDATE_FTS_CONTACTS);
+		db.execSQL(SQL_TRIGGER_DELETE_FTS_CONTACTS);
 	}
 
 	@Override
