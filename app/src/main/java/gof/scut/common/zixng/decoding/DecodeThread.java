@@ -36,53 +36,53 @@ import gof.scut.common.zixng.codescan.MipcaActivityCapture;
  */
 final class DecodeThread extends Thread {
 
-  public static final String BARCODE_BITMAP = "barcode_bitmap";
-  private final MipcaActivityCapture activity;
-  private final Hashtable<DecodeHintType, Object> hints;
-  private Handler handler;
-  private final CountDownLatch handlerInitLatch;
+	public static final String BARCODE_BITMAP = "barcode_bitmap";
+	private final MipcaActivityCapture activity;
+	private final Hashtable<DecodeHintType, Object> hints;
+	private Handler handler;
+	private final CountDownLatch handlerInitLatch;
 
-  DecodeThread(MipcaActivityCapture activity,
-               Vector<BarcodeFormat> decodeFormats,
-               String characterSet,
-               ResultPointCallback resultPointCallback) {
+	DecodeThread(MipcaActivityCapture activity,
+	             Vector<BarcodeFormat> decodeFormats,
+	             String characterSet,
+	             ResultPointCallback resultPointCallback) {
 
-    this.activity = activity;
-    handlerInitLatch = new CountDownLatch(1);
+		this.activity = activity;
+		handlerInitLatch = new CountDownLatch(1);
 
-    hints = new Hashtable<DecodeHintType, Object>(3);
+		hints = new Hashtable<DecodeHintType, Object>(3);
 
-    if (decodeFormats == null || decodeFormats.isEmpty()) {
-    	 decodeFormats = new Vector<BarcodeFormat>();
-    	 decodeFormats.addAll(DecodeFormatManager.ONE_D_FORMATS);
-    	 decodeFormats.addAll(DecodeFormatManager.QR_CODE_FORMATS);
-    	 decodeFormats.addAll(DecodeFormatManager.DATA_MATRIX_FORMATS);
-    }
-    
-    hints.put(DecodeHintType.POSSIBLE_FORMATS, decodeFormats);
+		if (decodeFormats == null || decodeFormats.isEmpty()) {
+			decodeFormats = new Vector<BarcodeFormat>();
+			decodeFormats.addAll(DecodeFormatManager.ONE_D_FORMATS);
+			decodeFormats.addAll(DecodeFormatManager.QR_CODE_FORMATS);
+			decodeFormats.addAll(DecodeFormatManager.DATA_MATRIX_FORMATS);
+		}
 
-    if (characterSet != null) {
-      hints.put(DecodeHintType.CHARACTER_SET, characterSet);
-    }
+		hints.put(DecodeHintType.POSSIBLE_FORMATS, decodeFormats);
 
-    hints.put(DecodeHintType.NEED_RESULT_POINT_CALLBACK, resultPointCallback);
-  }
+		if (characterSet != null) {
+			hints.put(DecodeHintType.CHARACTER_SET, characterSet);
+		}
 
-  Handler getHandler() {
-    try {
-      handlerInitLatch.await();
-    } catch (InterruptedException ie) {
-      // continue?
-    }
-    return handler;
-  }
+		hints.put(DecodeHintType.NEED_RESULT_POINT_CALLBACK, resultPointCallback);
+	}
 
-  @Override
-  public void run() {
-    Looper.prepare();
-    handler = new DecodeHandler(activity, hints);
-    handlerInitLatch.countDown();
-    Looper.loop();
-  }
+	Handler getHandler() {
+		try {
+			handlerInitLatch.await();
+		} catch (InterruptedException ie) {
+			// continue?
+		}
+		return handler;
+	}
+
+	@Override
+	public void run() {
+		Looper.prepare();
+		handler = new DecodeHandler(activity, hints);
+		handlerInitLatch.countDown();
+		Looper.loop();
+	}
 
 }

@@ -1,14 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<selector xmlns:android="http://schemas.android.com/apk/res/android" >
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
 
     <!-- 选中的状态 -->
     <item android:state_enabled="true" android:state_focused="true">
         <shape>
-    	    <gradient android:startColor="@color/cwh_alp_white" android:endColor="@color/cwh_alp_white" android:angle="270"/>
+            <gradient android:startColor="@color/cwh_alp_white" android:endColor="@color/cwh_alp_white" android:angle="270" />
             <corners android:radius="6dp" />
-    	    <stroke
-    	        android:color="@color/cwh_orange_button"
-    	        android:width="2px"/>
+            <stroke android:color="@color/cwh_orange_button" android:width="2px" />
         </shape>
     </item>
     <!-- 没操作的状态 -->
@@ -16,9 +14,7 @@
         <shape>
             <gradient android:startColor="@color/cwh_alp_white" android:endColor="@color/cwh_alp_white" android:angle="270" />
             <corners android:radius="6dp" />
-            <stroke
-    	        android:color="@color/cwh_orange_button"
-    	        android:width="2px"/>
+            <stroke android:color="@color/cwh_orange_button" android:width="2px" />
         </shape>
     </item>
 </selector>

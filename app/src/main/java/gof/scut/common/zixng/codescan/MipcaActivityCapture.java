@@ -32,6 +32,7 @@ import gof.scut.wechatcontacts.R;
 
 /**
  * Initial the camera
+ *
  * @author Ryan.Tang
  */
 public class MipcaActivityCapture extends Activity implements Callback {
@@ -47,7 +48,9 @@ public class MipcaActivityCapture extends Activity implements Callback {
 	private static final float BEEP_VOLUME = 0.10f;
 	private boolean vibrate;
 
-	/** Called when the activity is first created. */
+	/**
+	 * Called when the activity is first created.
+	 */
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -55,14 +58,14 @@ public class MipcaActivityCapture extends Activity implements Callback {
 		//ViewUtil.addTopView(getApplicationContext(), this, R.string.scan_card);
 		CameraManager.init(getApplication());
 		viewfinderView = (ViewfinderView) findViewById(R.id.viewfinder_view);
-		
+
 		Button mButtonBack = (Button) findViewById(R.id.button_back);
 		mButtonBack.setOnClickListener(new OnClickListener() {
-			
+
 			@Override
 			public void onClick(View v) {
 				MipcaActivityCapture.this.finish();
-				
+
 			}
 		});
 		hasSurface = false;
@@ -90,7 +93,7 @@ public class MipcaActivityCapture extends Activity implements Callback {
 		}
 		initBeepSound();
 		vibrate = true;
-		
+
 	}
 
 	@Override
@@ -108,9 +111,10 @@ public class MipcaActivityCapture extends Activity implements Callback {
 		inactivityTimer.shutdown();
 		super.onDestroy();
 	}
-	
+
 	/**
 	 * ����ɨ����
+	 *
 	 * @param result
 	 * @param barcode
 	 */
@@ -120,7 +124,7 @@ public class MipcaActivityCapture extends Activity implements Callback {
 		String resultString = result.getText();
 		if (resultString.equals("")) {
 			Toast.makeText(MipcaActivityCapture.this, "Scan failed!", Toast.LENGTH_SHORT).show();
-		}else {
+		} else {
 			Intent resultIntent = new Intent();
 			Bundle bundle = new Bundle();
 			bundle.putString("result", resultString);
@@ -130,7 +134,7 @@ public class MipcaActivityCapture extends Activity implements Callback {
 		}
 		MipcaActivityCapture.this.finish();
 	}
-	
+
 	private void initCamera(SurfaceHolder surfaceHolder) {
 		try {
 			CameraManager.get().openDriver(surfaceHolder);
@@ -147,7 +151,7 @@ public class MipcaActivityCapture extends Activity implements Callback {
 
 	@Override
 	public void surfaceChanged(SurfaceHolder holder, int format, int width,
-			int height) {
+	                           int height) {
 
 	}
 
