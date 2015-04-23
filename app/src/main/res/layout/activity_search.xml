@@ -4,21 +4,42 @@
     android:layout_height="match_parent"
     android:background="@color/white"
     android:orientation="vertical"
-    android:padding="5dp"
+
     tools:context=".MainActivity">
 
-
-    <EditText
-        android:background="@drawable/layout_stroke"
-        android:inputType="textPhonetic"
-        android:id="@+id/search_key"
-        android:layout_marginTop="2dp"
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="40dp"
-        android:textSize="24sp" />
+        android:layout_height="wrap_content"
+        android:padding="2dp"
+        android:orientation="horizontal"
+        android:background="@color/my_dark_grey">
+
+        <EditText
+            android:layout_weight="1"
+            style="@style/input_button"
+            android:inputType="textPhonetic"
+            android:id="@+id/search_key" />
+
+        <Button
+            android:layout_marginRight="@dimen/vertical_margin"
+            android:layout_toRightOf="@id/search_key"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:layout_gravity="center_vertical"
+            android:text="CANCEL"
+            android:textColor="@color/my_blue"
+            android:textSize="20sp"
+            android:background="@color/transparent"
+            android:clickable="true" />
+
+    </LinearLayout>
 
 
     <ListView
+        android:layout_marginLeft="@dimen/vertical_margin"
+        android:layout_marginRight="@dimen/vertical_margin"
         android:id="@+id/search_result"
         android:layout_width="fill_parent"
         android:layout_height="match_parent"

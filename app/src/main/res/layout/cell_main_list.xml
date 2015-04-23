@@ -11,37 +11,29 @@
         android:layout_margin="5dp">
 
         <TextView
-            android:layout_width="0dp"
+            android:layout_width="wrap_content"
             android:layout_weight="1"
             android:layout_height="wrap_content"
             android:textSize="22sp"
-            android:text="New Text"
+            android:text="Name"
+            android:textStyle="bold"
+            android:textColor="@color/black"
+            android:layout_gravity="center_vertical"
             android:id="@+id/name" />
 
         <Button
-            android:layout_width="wrap_content"
-            android:layout_height="48dp"
-            style="@style/light_white_button"
-            android:text="MSG"
-
+            style="@style/call_message"
+            android:background="@drawable/msg50"
             android:id="@+id/send_msg" />
 
         <Button
-            android:layout_width="wrap_content"
-            android:layout_height="48dp"
-            android:layout_marginLeft="5dp"
-            android:layout_marginStart="5dp"
-            style="@style/light_white_button"
-            android:text="TEL"
+            style="@style/call_message"
+            android:background="@drawable/call"
             android:id="@+id/call" />
+
     </LinearLayout>
 
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="2dp"
-        android:layout_marginLeft="5dp"
-        android:layout_marginRight="5dp"
-        android:background="@color/light_blue" />
+    <View style="@style/bar" />
 
 
 </LinearLayout>
