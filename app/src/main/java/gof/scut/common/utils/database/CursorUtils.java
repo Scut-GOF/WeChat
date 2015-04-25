@@ -16,4 +16,8 @@ public class CursorUtils {
 		}
 
 	}
+
+	public static void closeExistsCursor(Cursor c) {
+		if (c != null) c.close();
+	}
 }

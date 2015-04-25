@@ -9,7 +9,7 @@ import android.database.sqlite.SQLiteDatabase;
  */
 public class AllTableUtils {
 	private static DataBaseHelper dataBaseHelper;
-
+	SQLiteDatabase db;
 	public AllTableUtils(Context context) {
 		dataBaseHelper = new DataBaseHelper(context);
 		//insert several data
@@ -19,13 +19,24 @@ public class AllTableUtils {
 	}
 
 	public Cursor selectAllIDNameOnLabel(String labelName) {
-		SQLiteDatabase db = dataBaseHelper.getReadableDatabase();
+		closeDataBase();
+		db = dataBaseHelper.getReadableDatabase();
+		Cursor c1 = db.rawQuery("SELECT  _id,name FROM contacts WHERE _id IN ( SELECT _id FROM idLabel WHERE label = '" + labelName + "')", null);
+		Cursor c2 = db.rawQuery("SELECT _id FROM idLabel WHERE label = '" + labelName + "'", null);
+		Cursor c3 = db.rawQuery("SELECT _id FROM fts_id_label WHERE label = '" + labelName + "'", null);
+		Cursor c4 = db.rawQuery("SELECT _id FROM fts_id_label ", null);
+
 		//SELECT  _id,name FROM contacts WHERE _id IN ( SELECT _id FROM idLabel WHERE label = '" + labelName + "')"
 		Cursor c = db.rawQuery("SELECT " + TBMainConstants.ID + "," + TBMainConstants.NAME
-				+ " FROM " + TBMainConstants.TABLE_NAME + " WHERE " + TBMainConstants.ID
-				+ " IN ( SELECT " + TBMainConstants.ID + " FROM " + TBIDLabelConstants.TABLE_NAME
-				+ " WHERE " + TBIDLabelConstants.LABEL + " = '" + labelName + "')", null);
+				+ " FROM " + TBMainConstants.FTS_TABLE_NAME + " WHERE " + TBMainConstants.ID
+				+ " IN ( SELECT " + TBMainConstants.ID + " FROM " + TBIDLabelConstants.FTS_TABLE_NAME
+				+ " WHERE " + TBIDLabelConstants.LABEL + " match ? )", new String[]{"'" + labelName + "'"});
 
 		return c;
+	}
+
+	public void closeDataBase() {
+		if (db == null) return;
+		if (db.isOpen()) db.close();
 	}
 }

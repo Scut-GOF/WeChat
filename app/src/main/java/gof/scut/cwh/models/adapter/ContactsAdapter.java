@@ -91,7 +91,7 @@ public class ContactsAdapter extends BaseAdapter {
 				Cursor cTel = telTableUtil.selectTelWithID(id);
 				//close when dismiss
 				if (cTel.getCount() > 1) {
-					initPopChoice(TelsAdapter.CHOICE_MSG, cTel);
+					initPopChoice(TelsAdapter.CHOICE_MSG, cTel, telTableUtil);
 					popPhoneSelector();
 				} else if (cTel.getCount() == 1) {
 					ArrayList<String> phoneList = new ArrayList<String>();
@@ -114,10 +114,10 @@ public class ContactsAdapter extends BaseAdapter {
 				Cursor cTel = telTableUtil.selectTelWithID(id);
 				//close when dismiss
 				if (cTel.getCount() > 1) {
-					initPopChoice(TelsAdapter.CHOICE_CALL, cTel);
+					initPopChoice(TelsAdapter.CHOICE_CALL, cTel, telTableUtil);
 					popPhoneSelector();
 				} else if (cTel.getCount() == 1) {
-					ArrayList<String> phoneList = new ArrayList<String>();
+					ArrayList<String> phoneList = new ArrayList<>();
 					CursorUtils.cursorToStringArray(cTel, phoneList, TBTelConstants.TEL);
 					UseSystemUtils.sysCall(context, phoneList.get(0));
 				}
@@ -148,7 +148,7 @@ public class ContactsAdapter extends BaseAdapter {
 		telChoiceView.findViewById(R.id.phone_choices).startAnimation(anim1);
 	}
 
-	private void initPopChoice(int telOrMsg, final Cursor cursor) {
+	private void initPopChoice(int telOrMsg, final Cursor cursor, final TelTableUtils telTableUtil) {
 		telChoiceView = LayoutInflater.from(context).inflate(
 				R.layout.pop_phone_choice, null, false);
 		telChoiceWindow = new PopupWindow(telChoiceView,
@@ -190,9 +190,14 @@ public class ContactsAdapter extends BaseAdapter {
 			@Override
 			public void onDismiss() {
 				cursor.close();
+				closeTelDataBase(telTableUtil);
 			}
 
 		});
 
+	}
+
+	void closeTelDataBase(TelTableUtils telTableUtils) {
+		telTableUtils.closeDataBase();
 	}
 }

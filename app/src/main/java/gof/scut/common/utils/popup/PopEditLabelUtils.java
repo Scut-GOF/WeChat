@@ -70,7 +70,7 @@ public class PopEditLabelUtils {
 				addLabelName = labelName.getText().toString();
 				addLabelIcon = pathSelectedToAdd;
 				doOnConfirm(new String[]{addLabelName, addLabelIcon});
-				addLabelWindow.dismiss();
+//				addLabelWindow.dismiss();
 
 			}
 		});
@@ -107,6 +107,7 @@ public class PopEditLabelUtils {
 
 	public void doOnConfirm(String[] params) {
 		todoOnResult.doOnPosResult(params);
+		//addLabelWindow.dismiss();
 	}
 
 	public void handleResult(int requestCode, int resultCode, Intent data) {
@@ -133,5 +134,9 @@ public class PopEditLabelUtils {
 		addLabelWindow.showAtLocation(((Activity) context).findViewById(parentId), Gravity.CENTER, 0, 0);
 		Animation anim1 = AnimationUtils.loadAnimation(context, R.anim.scale_center_enter);
 		addLabelView.findViewById(R.id.add_label_name).startAnimation(anim1);
+	}
+
+	public void dismissWindow() {
+		addLabelWindow.dismiss();
 	}
 }

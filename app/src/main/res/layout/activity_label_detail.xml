@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:id="@+id/label_detail_layout"
-    android:background="@color/white"
-    android:orientation="vertical">
+              xmlns:tools="http://schemas.android.com/tools"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:id="@+id/label_detail_layout"
+              android:background="@color/white"
+              android:orientation="vertical">
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -25,7 +25,7 @@
             android:id="@+id/labels_back"
             android:layout_centerVertical="true"
             android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true" />
+            android:layout_alignParentStart="true"/>
 
 
         <TextView
@@ -41,7 +41,7 @@
             android:id="@+id/edit_label"
 
             android:layout_alignParentRight="true"
-            android:layout_alignParentEnd="true" />
+            android:layout_alignParentEnd="true"/>
     </RelativeLayout>
 
     <LinearLayout
@@ -53,19 +53,19 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/add_id_to_label"
-            android:text="+IDLabel" />
+            android:text="+IDLabel"/>
 
         <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/delete_id_label"
-            android:text="-IDLabel" />
+            android:text="-IDLabel"/>
 
         <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/update_id_label"
-            android:text="oIdLabel" />
+            android:text="oIdLabel"/>
     </LinearLayout>
 
     <LinearLayout
@@ -82,18 +82,18 @@
             android:layout_margin="5dp"
             android:background="@drawable/chart_1_2"
             android:scaleType="fitCenter"
-            android:id="@+id/label_icon" />
+            android:id="@+id/label_icon"/>
 
         <TextView
             android:id="@+id/label_name"
             android:text="label name"
-
+            android:clickable="true"
             android:layout_marginLeft="6dp"
             android:layout_marginStart="6dp"
             android:layout_marginTop="2dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textSize="22sp" />
+            android:textSize="22sp"/>
 
         <TextView
             android:id="@+id/member_count"
@@ -103,7 +103,7 @@
             android:layout_marginTop="2dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textSize="22sp" />
+            android:textSize="22sp"/>
 
     </LinearLayout>
 
@@ -112,7 +112,7 @@
         android:layout_height="wrap_content"
         android:text="@string/members"
         android:layout_margin="5dp"
-        style="@style/medium_title" />
+        style="@style/medium_title"/>
 
     <View
         android:layout_width="match_parent"
@@ -121,7 +121,7 @@
         android:layout_marginTop="4dp"
         android:layout_marginLeft="10dp"
         android:layout_marginRight="10dp"
-        android:background="@color/light_gray" />
+        android:background="@color/light_gray"/>
 
     <LinearLayout
         android:visibility="gone"
@@ -140,7 +140,7 @@
             android:background="@drawable/cwh_white_button_selector"
             android:textColor="@drawable/light_orange_button_text_selector"
             android:textSize="18sp"
-            android:text="@string/add" />
+            android:text="@string/add"/>
 
         <TextView
             android:layout_width="wrap_content"
@@ -149,7 +149,7 @@
             android:textColor="@color/bright_grey"
             android:layout_marginLeft="5dp"
             android:layout_marginStart="5dp"
-            android:text="@string/add_member" />
+            android:text="@string/add_member"/>
     </LinearLayout>
 
     <ListView
@@ -157,13 +157,13 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
-        android:divider="@null" />
+        android:divider="@null"/>
 
     <View
         android:layout_width="match_parent"
         android:layout_height="1dp"
         android:layout_margin="4dp"
-        android:background="@color/light_gray" />
+        android:background="@color/light_gray"/>
 
     <Button
         android:visibility="gone"
@@ -175,6 +175,6 @@
         android:textSize="21sp"
         android:background="@drawable/cwh_green_button_selector"
         android:textColor="@drawable/cwh_blue_button_text_selector"
-        android:text="@string/delete" />
+        android:text="@string/delete"/>
 
 </LinearLayout>
