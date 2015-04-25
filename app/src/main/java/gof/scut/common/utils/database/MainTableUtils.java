@@ -108,7 +108,7 @@ public class MainTableUtils {
 //				null, null, null, null, TBMainConstants.NAME);
 		//db.close();
 		c = db.rawQuery("select " + TBMainConstants.ID + "," + TBMainConstants.NAME + " from "
-				+ TBMainConstants.FTS_TABLE_NAME, null);
+				+ TBMainConstants.FTS_TABLE_NAME + " order by " + TBMainConstants.NAME, null);
 //		c = db.query(TBMainConstants.FTS_TABLE_NAME, new String[]{TBMainConstants.ID, TBMainConstants.NAME},
 //				null, null, null, null, TBMainConstants.FTS_TABLE_NAME);
 		return c;
@@ -203,10 +203,52 @@ public class MainTableUtils {
 		Cursor c;
 		//heightLight
 		c = db.rawQuery("select * from "
-				+ TBMainConstants.FTS_TABLE_NAME + "inner join" + TBIDLabelConstants.FTS_TABLE_NAME
-				+ " where " + TBMainConstants.FTS_TABLE_NAME
-				+ " match ? and " + TBIDLabelConstants.FTS_TABLE_NAME + " match ?"
-				, new String[]{word, word});
+				+ TBMainConstants.FTS_TABLE_NAME + " inner join " + TBIDLabelConstants.FTS_TABLE_NAME
+				+ " on "
+				+ TBMainConstants.FTS_TABLE_NAME + "." + TBMainConstants.ID
+				+ "=" + TBIDLabelConstants.FTS_TABLE_NAME + "." + TBMainConstants.ID
+				+ " where "
+				+ TBMainConstants.FTS_TABLE_NAME + " match ? or " + TBIDLabelConstants.FTS_TABLE_NAME + " match ?"
+				, new String[]{"'" + word + "'", "'" + word + "'"});
+		return c;
+	}
+
+	public Cursor fullTextSearchWithNumOrWord(String word) {
+		closeDataBase();
+		db = dataBaseHelper.getReadableDatabase();
+		Cursor c;
+		//heightLight
+		c = db.rawQuery("select * from ("
+				+ TBMainConstants.FTS_TABLE_NAME + " inner join " + TBIDLabelConstants.FTS_TABLE_NAME
+				+ " on "
+				+ TBMainConstants.FTS_TABLE_NAME + "." + TBMainConstants.ID
+				+ "=" + TBIDLabelConstants.FTS_TABLE_NAME + "." + TBIDLabelConstants.ID
+				+ ") inner join " + TBTelConstants.FTS_TABLE_NAME + " on "
+				+ TBMainConstants.FTS_TABLE_NAME + "." + TBMainConstants.ID
+				+ "=" + TBTelConstants.FTS_TABLE_NAME + "." + TBTelConstants.ID
+				+ " where "
+				+ TBMainConstants.FTS_TABLE_NAME + " match ? or "
+				+ TBIDLabelConstants.FTS_TABLE_NAME + " match ? or "
+				+ TBTelConstants.TEL + " match ? "
+				, new String[]{"'" + word + "'", "'" + word + "'", "'" + word + "*'"});
+		return c;
+	}
+
+	public Cursor fullTextSearchWithTel(String tel) {
+		closeDataBase();
+		db = dataBaseHelper.getReadableDatabase();
+		Cursor c;
+		//heightLight
+		c = db.rawQuery("select * from ("
+				+ TBMainConstants.FTS_TABLE_NAME + " inner join " + TBIDLabelConstants.FTS_TABLE_NAME
+				+ " on "
+				+ TBMainConstants.FTS_TABLE_NAME + "." + TBMainConstants.ID
+				+ "=" + TBIDLabelConstants.FTS_TABLE_NAME + "." + TBIDLabelConstants.ID
+				+ ") inner join " + TBTelConstants.FTS_TABLE_NAME + " on "
+				+ TBMainConstants.FTS_TABLE_NAME + "." + TBMainConstants.ID
+				+ "=" + TBTelConstants.FTS_TABLE_NAME + "." + TBTelConstants.ID
+				+ " where " + TBTelConstants.TEL + " match ? "
+				, new String[]{"'" + tel + "*'"});
 		return c;
 	}
 

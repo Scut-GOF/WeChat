@@ -7,43 +7,33 @@
               android:background="@color/white"
               android:orientation="vertical">
 
+
     <RelativeLayout
+        android:id="@+id/title"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/light_blue"
-        android:gravity="start"
-        android:padding="2dp"
-        android:id="@+id/barRelativeLayout">
+        android:background="@color/my_blue">
 
         <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:clickable="true"
-
-            style="@style/simple_back_button"
-            android:text="@string/back_to_labels"
             android:id="@+id/labels_back"
-            android:layout_centerVertical="true"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true"/>
-
-
-        <TextView
-            android:clickable="true"
-
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/edit"
-            android:textColor="@color/white"
-            android:padding="5dp"
-            android:layout_margin="5dp"
-            android:textSize="22sp"
+            android:text="@string/all_label"
+            style="@style/simple_back_button"
+            android:clickable="true"/>
+
+        <TextView
             android:id="@+id/edit_label"
-
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
-            android:layout_alignParentEnd="true"/>
+            android:layout_marginRight="5dp"
+            android:layout_centerVertical="true"
+            android:text="@string/edit"
+            android:textSize="22sp"
+            android:textColor="@color/white"
+            android:clickable="true"/>
     </RelativeLayout>
-
 
     <LinearLayout
         android:orientation="horizontal"
@@ -54,17 +44,18 @@
         android:layout_height="wrap_content">
 
         <ImageView
-            android:layout_width="50dp"
-            android:layout_height="50dp"
+            android:layout_width="65dp"
+            android:layout_height="65dp"
             android:layout_margin="5dp"
-            android:background="@drawable/chart_1_2"
+            android:background="@drawable/label50"
             android:scaleType="fitCenter"
             android:id="@+id/label_icon"/>
 
         <TextView
             android:id="@+id/label_name"
-            android:text="label name"
-            android:clickable="true"
+            android:text="Label"
+            android:textStyle="bold"
+            android:textColor="@color/black"
             android:layout_marginLeft="6dp"
             android:layout_marginStart="6dp"
             android:layout_marginTop="2dp"
@@ -77,6 +68,7 @@
             android:layout_marginLeft="4dp"
             android:layout_marginStart="4dp"
             android:text="(0)"
+            android:textColor="@color/black"
             android:layout_marginTop="2dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -85,20 +77,10 @@
     </LinearLayout>
 
     <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        style="@style/purple_title"
         android:text="@string/members"
-        android:layout_margin="5dp"
-        style="@style/medium_title"/>
+        android:layout_margin="5dp"/>
 
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:layout_marginBottom="4dp"
-        android:layout_marginTop="4dp"
-        android:layout_marginLeft="10dp"
-        android:layout_marginRight="10dp"
-        android:background="@color/light_gray"/>
 
     <LinearLayout
         android:visibility="gone"

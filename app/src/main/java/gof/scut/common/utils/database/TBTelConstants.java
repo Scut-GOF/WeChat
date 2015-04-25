@@ -5,6 +5,7 @@ package gof.scut.common.utils.database;
  */
 public interface TBTelConstants {
 	String TABLE_NAME = "tel";
+	String FTS_TABLE_NAME = "fts_tel";
 	String ID = "_id";
 	String TEL = "tel";
 }

@@ -145,6 +145,33 @@ public class DataBaseHelper extends SQLiteOpenHelper {
 					+ TBIDLabelConstants.FTS_TABLE_NAME + " where "
 					+ TBIDLabelConstants.ID + "=old." + TBIDLabelConstants.ID + " and "
 					+ TBIDLabelConstants.LABEL + "=old." + TBIDLabelConstants.LABEL + ";end";
+
+	//create virtual table fts_tel using fts4(_id,tel);
+	private final static String SQL_CREATE_FTS_TEL =
+			"create virtual table " + TBTelConstants.FTS_TABLE_NAME + " using fts4("
+					+ TBTelConstants.ID + "," + TBTelConstants.TEL + ")";
+	//create trigger insert_fts_tel after insert on tel begin insert into fts_tel values(new._id,new.label);end;
+	private final static String SQL_TRIGGER_INSERT_FTS_TEL =
+			"create trigger insert_fts_tel after insert on "
+					+ TBTelConstants.TABLE_NAME + " begin insert into "
+					+ TBTelConstants.FTS_TABLE_NAME + " values(new."
+					+ TBTelConstants.ID + ",new." + TBTelConstants.TEL + ");end";
+	//create trigger update_fts_tel after update on tel begin update fts_tel set _id=new._id,tel=new.tel where tel=old.tel and _id=old._id;end;
+	private final static String SQL_TRIGGER_UPDATE_FTS_TEL =
+			"create trigger update_fts_tel after update on "
+					+ TBTelConstants.TABLE_NAME + " begin update " + TBTelConstants.FTS_TABLE_NAME + " set "
+					+ TBTelConstants.ID + "=new." + TBTelConstants.ID + ","
+					+ TBTelConstants.TEL + " = new." + TBTelConstants.TEL + " where "
+					+ TBTelConstants.ID + " = old." + TBTelConstants.ID + " and "
+					+ TBTelConstants.TEL + " = old." + TBTelConstants.TEL + ";end";
+	//create trigger delete_fts_tel after delete on tel begin delete from fts_tel where _id = old._id and tel=old.tel;end;
+	private final static String SQL_TRIGGER_DELETE_FTS_TEL =
+			"create trigger delete_fts_tel after delete on "
+					+ TBTelConstants.TABLE_NAME + " begin delete from "
+					+ TBTelConstants.FTS_TABLE_NAME + " where "
+					+ TBTelConstants.ID + "=old." + TBTelConstants.ID + " and "
+					+ TBTelConstants.TEL + "=old." + TBTelConstants.TEL + ";end";
+
 	public DataBaseHelper(Context context) {
 		super(context, DATABASE_NAME, null, DBVersion);
 	}
@@ -152,10 +179,7 @@ public class DataBaseHelper extends SQLiteOpenHelper {
 
 	@Override
 	public void onCreate(SQLiteDatabase db) {
-//        create table at the first time
-//        db.execSQL("drop table "+TBMainConstants.TABLE_NAME);
-//        db.execSQL("drop table "+TBTelConstants.TABLE_NAME);
-//        db.execSQL("drop table "+TBIDLabelConstants.TABLE_NAME);
+
 		db.execSQL(SQL_MAIN_TABLE_CREATE);
 		db.execSQL(SQL_TEL_TABLE_CREATE);
 		db.execSQL(SQL_LABEL_TABLE_CREATE);
@@ -176,6 +200,11 @@ public class DataBaseHelper extends SQLiteOpenHelper {
 		db.execSQL(SQL_TRIGGER_INSERT_FTS_IL);
 		db.execSQL(SQL_TRIGGER_UPDATE_FTS_IL);
 		db.execSQL(SQL_TRIGGER_DELETE_FTS_IL);
+
+		db.execSQL(SQL_CREATE_FTS_TEL);
+		db.execSQL(SQL_TRIGGER_INSERT_FTS_TEL);
+		db.execSQL(SQL_TRIGGER_UPDATE_FTS_TEL);
+		db.execSQL(SQL_TRIGGER_DELETE_FTS_TEL);
 	}
 
 	@Override

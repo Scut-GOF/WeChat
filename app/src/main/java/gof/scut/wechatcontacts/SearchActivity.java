@@ -1,22 +1,29 @@
 package gof.scut.wechatcontacts;
 
 import android.app.Activity;
+import android.database.Cursor;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
 
 import gof.scut.common.utils.Log;
+import gof.scut.common.utils.StringUtils;
+import gof.scut.common.utils.database.CursorUtils;
+import gof.scut.common.utils.database.MainTableUtils;
 
 
 public class SearchActivity extends Activity {
 
-	TextView searchKey;
+	EditText searchKey;
 	ListView searchResult;
+	MainTableUtils mainTableUtils;
+	Cursor cursorResult;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -39,11 +46,11 @@ public class SearchActivity extends Activity {
 	}
 
 	void initDataBase() {
-
+		mainTableUtils = new MainTableUtils(this);
 	}
 
 	void findView() {
-		searchKey = (TextView) findViewById(R.id.search_key);
+		searchKey = (EditText) findViewById(R.id.search_key);
 		searchResult = (ListView) findViewById(R.id.search_result);
 	}
 
@@ -67,9 +74,31 @@ public class SearchActivity extends Activity {
 		});
 	}
 
-	void fullTextSearch(String condition) {
-		Log.d("Search", condition);
-
+	void fullTextSearch(String keyword) {
+		Log.d("Search", keyword);
+		//非数字不搜索电话
+		if (!StringUtils.isNumber(keyword))
+			cursorResult = mainTableUtils.fullTextSearchWithWord(keyword);
+		else cursorResult = mainTableUtils.fullTextSearchWithNumOrWord(keyword);
 	}
 
+	@Override
+	protected void onPause() {
+		super.onPause();
+		CursorUtils.closeExistsCursor(cursorResult);
+		mainTableUtils.closeDataBase();
+	}
+
+	protected void onStop() {
+		super.onStop();
+		CursorUtils.closeExistsCursor(cursorResult);
+		mainTableUtils.closeDataBase();
+	}
+
+	@Override
+	protected void onDestroy() {
+		super.onDestroy();
+		CursorUtils.closeExistsCursor(cursorResult);
+		mainTableUtils.closeDataBase();
+	}
 }
