@@ -11,6 +11,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import gof.scut.common.utils.ActivityUtils;
 import gof.scut.common.utils.BitmapUtils;
@@ -18,6 +19,7 @@ import gof.scut.common.utils.BundleNames;
 import gof.scut.common.utils.Log;
 import gof.scut.common.utils.StringUtils;
 import gof.scut.common.utils.database.AllTableUtils;
+import gof.scut.common.utils.database.CursorUtils;
 import gof.scut.common.utils.database.IDLabelTableUtils;
 import gof.scut.common.utils.database.LabelTableUtils;
 import gof.scut.common.utils.popup.PopConfirmUtils;
@@ -108,10 +110,22 @@ public class LabelDetailActivity extends Activity implements View.OnClickListene
 				//add label id
 				labelObj.setLabelName(params[0]);
 				labelObj.setIconPath(params[1]);
+				//check if label exists
+				Cursor labelsWithName = labelTableUtils.selectAllOnLabel(labelObj.getLabelName());
+				if (labelsWithName.getCount() != 0) {
+					Toast.makeText(LabelDetailActivity.this, "标签已存在，请指定其他标签名", Toast.LENGTH_LONG).show();
+					labelsWithName.close();
+					labelTableUtils.closeDataBase();
+					return;
+				}
+				labelsWithName.close();
+				labelTableUtils.closeDataBase();
+
 				long state = labelTableUtils.updateAllWithLabel(labelObj, labelName.getText().toString());
 				if (state < 0) Log.e("LabelsActivity", "update label failed");
 				labelIcon.setImageBitmap(BitmapUtils.decodeBitmapFromPath(labelObj.getIconPath()));
 				labelName.setText(labelObj.getLabelName());
+				popEditLabelUtils.dismissWindow();
 			}
 
 			@Override
@@ -147,23 +161,26 @@ public class LabelDetailActivity extends Activity implements View.OnClickListene
 		deleteLabel.setOnClickListener(this);
 		addMember.setOnClickListener(this);
 		labelIcon.setOnClickListener(this);
+		labelName.setOnClickListener(this);
 		addMemberLayout.setOnClickListener(this);
 		findViewById(R.id.add_id_to_label).setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				idLabelTableUtils.insertAll("0", "好人");
+				idLabelTableUtils.insertAll("1", labelObj.getLabelName());
+				idLabelTableUtils.insertAll("2", labelObj.getLabelName());
+				idLabelTableUtils.insertAll("3", labelObj.getLabelName());
 			}
 		});
 		findViewById(R.id.delete_id_label).setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				idLabelTableUtils.deleteWithID("0");
+				idLabelTableUtils.deleteWithID_Label("1", labelObj.getLabelName());
 			}
 		});
 		findViewById(R.id.update_id_label).setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				idLabelTableUtils.updateLabelWithID("坏人", "0");
+				idLabelTableUtils.updateLabelWithID_Label("坏人", "1", labelObj.getLabelName());
 			}
 		});
 
@@ -188,6 +205,8 @@ public class LabelDetailActivity extends Activity implements View.OnClickListene
 
 	void initViewList() {
 		//cursor,contactsAdapter,labelMembers
+		CursorUtils.closeExistsCursor(cursorEdit);
+		CursorUtils.closeExistsCursor(cursorView);
 		cursorView = allTableUtils.selectAllIDNameOnLabel(labelObj.getLabelName());
 		ContactsAdapter adapter = new ContactsAdapter(this, cursorView);
 		labelMembers.setAdapter(adapter);
@@ -197,6 +216,8 @@ public class LabelDetailActivity extends Activity implements View.OnClickListene
 	void initEditList() {
 
 		//cursor,contactsAdapter,labelMembers
+		CursorUtils.closeExistsCursor(cursorEdit);
+		CursorUtils.closeExistsCursor(cursorView);
 		cursorEdit = allTableUtils.selectAllIDNameOnLabel(labelObj.getLabelName());
 		MemEditAdapter adapter = new MemEditAdapter(this, cursorEdit, labelObj.getLabelName());
 		labelMembers.setAdapter(adapter);
@@ -218,6 +239,7 @@ public class LabelDetailActivity extends Activity implements View.OnClickListene
 			case R.id.add_member:
 				//TODO it's a test
 				idLabelTableUtils.insertAll("1", labelObj.getLabelName());
+				//TODO UPDATE COUNT
 				initEditList();
 				break;
 			case R.id.delete_label:
@@ -244,6 +266,7 @@ public class LabelDetailActivity extends Activity implements View.OnClickListene
 				ActivityUtils.ActivitySkip(this, SearchActivity.class);
 				break;
 			case R.id.label_icon:
+			case R.id.label_name:
 				popEditLabelUtils.popEditLabel();
 				break;
 		}
@@ -255,9 +278,11 @@ public class LabelDetailActivity extends Activity implements View.OnClickListene
 		popEditLabelUtils.handleResult(requestCode, resultCode, data);
 	}
 
-	protected void onDestroy() {
-		super.onDestroy();
-		if (cursorEdit != null) cursorEdit.close();
-		if (cursorView != null) cursorView.close();
+	protected void onPause() {
+		super.onPause();
+		CursorUtils.closeExistsCursor(cursorEdit);
+		CursorUtils.closeExistsCursor(cursorView);
+		allTableUtils.closeDataBase();
+
 	}
 }

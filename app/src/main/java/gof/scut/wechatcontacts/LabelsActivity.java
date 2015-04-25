@@ -21,9 +21,11 @@ import android.widget.GridView;
 import android.widget.ListView;
 import android.widget.PopupWindow;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import gof.scut.common.utils.ActivityUtils;
 import gof.scut.common.utils.Log;
+import gof.scut.common.utils.database.CursorUtils;
 import gof.scut.common.utils.database.LabelTableUtils;
 import gof.scut.cwh.models.adapter.LabelsAdapter;
 
@@ -53,7 +55,7 @@ public class LabelsActivity extends Activity implements View.OnClickListener {
 	@Override
 	protected void onResume() {
 		super.onResume();
-		initGrids();
+		//initGrids();
 		initList();
 	}
 
@@ -83,6 +85,7 @@ public class LabelsActivity extends Activity implements View.OnClickListener {
 	}
 
 	void initList() {
+		CursorUtils.closeExistsCursor(cursorLabels);
 		cursorLabels = labelTableUtils.selectAll();
 		LabelsAdapter labelsAdapter = new LabelsAdapter(this, cursorLabels);
 		labelList.setAdapter(labelsAdapter);
@@ -90,6 +93,7 @@ public class LabelsActivity extends Activity implements View.OnClickListener {
 	}
 
 	void initGrids() {
+		CursorUtils.closeExistsCursor(cursorLabels);
 		cursorLabels = labelTableUtils.selectAll();
 		LabelsAdapter labelsAdapter = new LabelsAdapter(this, cursorLabels);
 		labels.setAdapter(labelsAdapter);
@@ -122,10 +126,22 @@ public class LabelsActivity extends Activity implements View.OnClickListener {
 				final String addLabelName, addLabelIcon;
 				addLabelName = labelName.getText().toString();
 				addLabelIcon = pathSelectedToAdd;
+
+				//check if label exists
+				Cursor labelsWithName = labelTableUtils.selectAllOnLabel(addLabelName);
+				if (labelsWithName.getCount() != 0) {
+					Toast.makeText(LabelsActivity.this, "标签已存在，请指定其他标签名", Toast.LENGTH_LONG).show();
+					labelsWithName.close();
+					labelTableUtils.closeDataBase();
+					return;
+				}
+				labelsWithName.close();
+				labelTableUtils.closeDataBase();
+
 				long state = labelTableUtils.insertAll(addLabelName, addLabelIcon);
 				if (state < 0) Log.e("LabelsActivity", "add label failed");
 				addLabelWindow.dismiss();
-				initGrids();
+				//initGrids();
 				initList();
 			}
 		});
@@ -197,8 +213,9 @@ public class LabelsActivity extends Activity implements View.OnClickListener {
 		}
 	}
 
-	protected void onDestroy() {
-		super.onDestroy();
-		if (cursorLabels != null) cursorLabels.close();
+	protected void onPause() {
+		super.onPause();
+		CursorUtils.closeExistsCursor(cursorLabels);
+		labelTableUtils.closeDataBase();
 	}
 }

@@ -9,6 +9,7 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 
 import gof.scut.common.utils.ActivityUtils;
+import gof.scut.common.utils.database.CursorUtils;
 import gof.scut.common.utils.database.MainTableUtils;
 import gof.scut.cwh.models.adapter.ContactsAdapter;
 
@@ -77,6 +78,7 @@ public class MainActivity extends Activity implements View.OnClickListener {
 		//When clickOnNameAndTel, view
 		//When click on image, view label group
 		//edit when view
+		CursorUtils.closeExistsCursor(cursor);
 		cursor = mainTableUtils.selectAllIDName();
 		ContactsAdapter adapter = new ContactsAdapter(this, cursor);
 		contacts.setAdapter(adapter);
@@ -117,8 +119,9 @@ public class MainActivity extends Activity implements View.OnClickListener {
 	}
 
 	@Override
-	protected void onDestroy() {
-		super.onDestroy();
-		if (cursor != null) cursor.close();
+	protected void onPause() {
+		super.onPause();
+		CursorUtils.closeExistsCursor(cursor);
+		mainTableUtils.closeDataBase();
 	}
 }
