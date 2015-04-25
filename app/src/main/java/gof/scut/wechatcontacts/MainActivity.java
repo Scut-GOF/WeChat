@@ -21,7 +21,7 @@ import gof.scut.cwh.models.adapter.ContactsAdapter;
 public class MainActivity extends Activity implements View.OnClickListener {
 
 	//Views
-	private Button btSearch, btMenu;
+	private Button btSearch;
 
 	private ListView contacts;
 	private Button btAdd, btGroup, btMe;
@@ -41,9 +41,6 @@ public class MainActivity extends Activity implements View.OnClickListener {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
 		init();
-		ArrayList<String> splitResults = StringUtils.splitWithWord("好像很厉害的厉害的样子", "厉害");
-		for (int i = 0; i < splitResults.size(); i++)
-			Log.d("SPLIT", splitResults.get(i));
 
 	}
 
@@ -63,7 +60,7 @@ public class MainActivity extends Activity implements View.OnClickListener {
 
 	private void findViews() {
 		btSearch = (Button) findViewById(R.id.bt_search);
-		btMenu = (Button) findViewById(R.id.bt_menu);
+
 
 		contacts = (ListView) findViewById(R.id.search_list);
 		btAdd = (Button) findViewById(R.id.bt_add);
@@ -72,9 +69,6 @@ public class MainActivity extends Activity implements View.OnClickListener {
 	}
 
 	private void eventHandler() {
-		btSearch.setOnClickListener(this);
-		btMenu.setOnClickListener(this);
-
 		btSearch.setOnClickListener(this);
 		btAdd.setOnClickListener(this);
 		btGroup.setOnClickListener(this);
@@ -101,10 +95,6 @@ public class MainActivity extends Activity implements View.OnClickListener {
 				ActivityUtils.ActivitySkip(this, SearchActivity.class);
 
 				break;
-			case R.id.bt_menu:
-				//A MENU WITH SETTING IN IT
-				ActivityUtils.ActivitySkip(this, SettingActivity.class);
-				break;
 			case R.id.bt_add:
 				//TO ADD CONTACTS ACTIVITY
 				ActivityUtils.ActivitySkip(this, AddContactActivity.class);
@@ -120,6 +110,11 @@ public class MainActivity extends Activity implements View.OnClickListener {
 		}
 	}
 
+	//	@Override
+//	protected void onRestart(){
+//		super.onRestart();
+//		initList();
+//	}
 	@Override
 	protected void onResume() {
 		super.onResume();

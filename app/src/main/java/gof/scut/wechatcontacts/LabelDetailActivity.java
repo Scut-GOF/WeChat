@@ -133,7 +133,7 @@ public class LabelDetailActivity extends Activity implements View.OnClickListene
 
 			}
 		}, "编辑标签", R.id.label_detail_layout);
-		findViewById(R.id.barRelativeLayout).setEnabled(true);
+		findViewById(R.id.title).setEnabled(true);
 		setListener();
 
 	}

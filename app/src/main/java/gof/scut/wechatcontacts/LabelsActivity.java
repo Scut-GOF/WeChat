@@ -81,7 +81,7 @@ public class LabelsActivity extends Activity implements View.OnClickListener {
 		addLabel = (TextView) findViewById(R.id.add_label);
 		labels = (GridView) findViewById(R.id.labels);
 		labelList = (ListView) findViewById(R.id.label_list);
-		labelsBack = (TextView) findViewById(R.id.labels_back);
+		labelsBack = (TextView) findViewById(R.id.cancel);
 	}
 
 	void initList() {
@@ -204,7 +204,7 @@ public class LabelsActivity extends Activity implements View.OnClickListener {
 	@Override
 	public void onClick(View v) {
 		switch (v.getId()) {
-			case R.id.labels_back:
+			case R.id.cancel:
 				finish();
 				break;
 			case R.id.add_label:

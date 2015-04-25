@@ -30,6 +30,10 @@ public class StringUtils {
 		}
 		return splits;
 	}
+//example
+//	ArrayList<String> splitResults = StringUtils.splitWithWord("好像很厉害的厉害的样子", "厉害");
+//	for (int i = 0; i < splitResults.size(); i++)
+//			Log.d("SPLIT", splitResults.get(i));
 
 	public static String splitChinese(String str) {
 		StringReader re = new StringReader(str);
@@ -47,4 +51,13 @@ public class StringUtils {
 	}
 //	example
 //	Log.d("SPLIT",StringUtils.splitChinese("IK Analyzer是一个开源的，基于java语言" );
+
+	public static boolean isNumber(String str) {
+		char[] s = str.toCharArray();
+		for (int i = 0; i < s.length; i++) {
+			if (!Character.isDigit(s[i]))
+				return false;
+		}
+		return true;
+	}
 }

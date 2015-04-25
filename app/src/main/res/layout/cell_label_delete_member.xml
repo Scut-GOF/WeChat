@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:layout_width="match_parent"
+              android:orientation="horizontal"
+              android:layout_height="50dp">
+
+    <ImageButton
+        style="@style/simple_button"
+        android:background="@drawable/delete50"/>
+
+    <TextView
+        style="@style/black_detail"
+        android:layout_gravity="center_vertical"
+        android:text="Member"
+        android:id="@+id/tv_label_member"
+        android:layout_weight="1"/>
+
+
+</LinearLayout>

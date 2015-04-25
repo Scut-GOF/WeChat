@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              android:layout_width="match_parent"
               android:orientation="vertical"
+              android:layout_width="match_parent"
               android:layout_height="wrap_content">
 
     <LinearLayout
@@ -27,19 +27,6 @@
                 android:id="@+id/tv_phone_content"
                 android:layout_weight="1"/>
         </LinearLayout>
-
-        <Button
-            style="@style/call_message"
-            android:background="@drawable/msg50"
-            android:id="@+id/send_msg"/>
-
-        <Button
-            style="@style/call_message"
-            android:background="@drawable/call"
-            android:id="@+id/call"/>
     </LinearLayout>
-
-    <TextView style="@style/bar"/>
-
 
 </LinearLayout>

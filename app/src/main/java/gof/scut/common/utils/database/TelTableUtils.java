@@ -123,8 +123,12 @@ public class TelTableUtils {
 	public Cursor selectTelWithID(String ID) {
 		closeDataBase();
 		db = dataBaseHelper.getReadableDatabase();
-		Cursor c = db.query(TBTelConstants.TABLE_NAME, new String[]{TBTelConstants.TEL},
-				TBTelConstants.ID + " = ?", new String[]{ID}, null, null, null);
+		Cursor c;
+		c = db.rawQuery("select " + TBTelConstants.TEL + " from "
+						+ TBTelConstants.FTS_TABLE_NAME + " where " + TBTelConstants.ID + " match ?",
+				new String[]{"'" + ID + "'"});
+//		c = db.query(TBTelConstants.TABLE_NAME, new String[]{TBTelConstants.TEL},
+//				TBTelConstants.ID + " = ?", new String[]{ID}, null, null, null);
 		//db.close();
 		return c;
 	}
@@ -132,8 +136,12 @@ public class TelTableUtils {
 	public Cursor selectIDWithTel(String tel) {
 		closeDataBase();
 		db = dataBaseHelper.getReadableDatabase();
-		Cursor c = db.query(TBTelConstants.TABLE_NAME, new String[]{TBTelConstants.ID},
-				TBTelConstants.TEL + " = ?", new String[]{tel}, null, null, null);
+		Cursor c;
+		c = db.rawQuery("select " + TBTelConstants.ID + " from "
+						+ TBTelConstants.FTS_TABLE_NAME + " where " + TBTelConstants.TEL + " match ?",
+				new String[]{"'" + tel + "'"});
+//		c = db.query(TBTelConstants.TABLE_NAME, new String[]{TBTelConstants.ID},
+//				TBTelConstants.TEL + " = ?", new String[]{tel}, null, null, null);
 		//db.close();
 		return c;
 	}

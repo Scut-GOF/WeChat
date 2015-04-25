@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
-    android:padding="5dp"
-    android:gravity="center_vertical"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+              android:orientation="vertical"
+              android:padding="5dp"
+              android:gravity="center_vertical"
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content">
 
 
     <LinearLayout
@@ -18,33 +18,32 @@
         <ImageView
             android:layout_width="50dp"
             android:layout_height="50dp"
-            android:background="@drawable/chart_1_2"
+            android:background="@drawable/label50"
             android:scaleType="fitCenter"
-            android:id="@+id/label_icon" />
+            android:id="@+id/label_icon"/>
 
         <TextView
             android:id="@+id/label_name"
+            style="@style/black_detail"
             android:text="label name"
             android:layout_marginLeft="6dp"
             android:layout_marginTop="2dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textSize="22sp" />
+            android:textSize="22sp"/>
 
         <TextView
+            style="@style/black_detail"
             android:id="@+id/member_count"
             android:layout_marginLeft="4dp"
             android:text="(0)"
             android:layout_marginTop="2dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textSize="22sp" />
+            android:textSize="22sp"/>
 
     </LinearLayout>
 
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:background="@color/light_blue" />
+    <View style="@style/bar"/>
 
 </LinearLayout>

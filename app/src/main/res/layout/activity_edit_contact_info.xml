@@ -1,0 +1,209 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              xmlns:tools="http://schemas.android.com/tools"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:background="@color/white"
+              android:orientation="vertical"
+              tools:context="gof.scut.wechatcontacts.ContactInfoActivity">
+
+    <RelativeLayout
+        android:id="@+id/title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/my_blue">
+
+        <TextView
+            android:id="@+id/bt_back"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/all_contact"
+            style="@style/simple_back_button"
+            android:clickable="true"
+            android:layout_marginLeft="@dimen/vertical_margin"/>
+
+        <TextView
+            android:id="@+id/bt_modify"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+
+            android:layout_centerVertical="true"
+            android:text="@string/edit"
+            android:textSize="22sp"
+            android:textColor="@color/white"
+            android:clickable="true"
+            android:layout_marginRight="@dimen/vertical_margin"/>
+    </RelativeLayout>
+
+    <LinearLayout
+        android:id="@+id/scan_layout"
+        android:layout_below="@id/title"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:orientation="horizontal"
+        style="@style/simple_green_button_background">
+
+        <ImageView
+            android:id="@+id/scan"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:layout_marginLeft="@dimen/vertical_margin"
+            android:layout_gravity="center_vertical"
+            android:background="@drawable/binerycode50"/>
+
+        <TextView
+            android:id="@+id/bt_scan"
+            style="@style/simple_green_button"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:text="Scan Binary Code"/>
+    </LinearLayout>
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:layout_marginLeft="@dimen/vertical_margin"
+        android:layout_marginRight="@dimen/vertical_margin"
+        android:weightSum="1">
+
+        <EditText
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="10dp"
+            android:background="@null"
+            android:text="Name"
+            android:textStyle="bold"
+            android:id="@+id/tv_name"
+            android:textSize="22sp"/>
+
+        <TextView style="@style/bar"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            style="@style/purple_title"
+            android:text="Phone"/>
+
+        <ListView
+            android:layout_weight="0.5"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/edit_lv_tels"
+            android:layout_gravity="center_horizontal"/>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:layout_marginBottom="5dp">
+
+            <ImageButton
+                style="@style/simple_button"
+                android:background="@drawable/add_detail50"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/my_light_grey"
+                android:layout_gravity="center_vertical"
+                android:text="add phone"
+                android:textSize="22sp"
+                android:id="@+id/add_contact_phone"/>
+        </LinearLayout>
+
+
+        <TextView style="@style/bar"/>
+
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            style="@style/purple_title"
+            android:text="Label"/>
+
+        <ListView
+            android:layout_weight="0.5"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/edit_lv_labels"
+            android:layout_gravity="center_horizontal"/>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:layout_marginBottom="5dp">
+
+            <ImageButton
+                style="@style/simple_button"
+                android:background="@drawable/add_detail50"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/my_light_grey"
+                android:layout_gravity="center_vertical"
+                android:text="add phone"
+                android:textSize="22sp"
+                android:id="@+id/add_contact_label"/>
+        </LinearLayout>
+
+
+        <TextView style="@style/bar"/>
+
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+            <TextView
+                style="@style/purple_title"
+                android:text="Address"
+                android:id="@+id/edit_contact_address"/>
+
+            <EditText
+                android:id="@+id/edit_address"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Add Address"
+                style="@style/un_written"
+                android:background="@null"
+                android:layout_toRightOf="@id/edit_contact_address"/>
+
+            <TextView
+                android:layout_below="@id/edit_contact_address"
+                android:layout_toRightOf="@id/edit_contact_address"
+                style="@style/bar"/>
+        </RelativeLayout>
+
+
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+            <TextView
+                style="@style/purple_title"
+                android:text="Addition"
+                android:id="@+id/edit_contact_addition"/>
+
+            <EditText
+                android:id="@+id/edit_addition"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Add Addiotn"
+                style="@style/un_written"
+                android:background="@null"
+                android:layout_toRightOf="@id/edit_contact_addition"/>
+
+            <TextView
+                android:layout_below="@id/edit_contact_addition"
+                android:layout_toRightOf="@id/edit_contact_addition"
+                style="@style/bar"/>
+        </RelativeLayout>
+
+    </LinearLayout>
+</LinearLayout>
+
+
+
