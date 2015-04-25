@@ -4,8 +4,29 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
-    <Button
-        style="@style/simple_white_button"
+    <LinearLayout
+        android:orientation="horizontal"
         android:layout_width="match_parent"
-        android:id="@+id/tel_number" />
+        android:layout_height="wrap_content"
+        android:layout_margin="5dp">
+
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1">
+
+            <TextView
+                style="@style/purple_title"
+                android:text="Phone"
+                android:id="@+id/tv_phone_title" />
+
+            <TextView
+                style="@style/black_detail"
+                android:text="13660478621"
+                android:id="@+id/tv_phone_content"
+                android:layout_weight="1" />
+        </LinearLayout>
+    </LinearLayout>
+
 </LinearLayout>

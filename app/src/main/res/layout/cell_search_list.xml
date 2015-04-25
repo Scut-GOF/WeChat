@@ -4,77 +4,26 @@
     android:orientation="vertical"
     android:layout_height="wrap_content">
 
-    <LinearLayout
-        android:orientation="horizontal"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="5dp">
-
         <TextView
-            style="@style/black_detail"
-            android:layout_width="3dp"
-            android:layout_weight="1"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textSize="22sp"
-            android:text="New Text"
+            android:text="Name"
+            android:textStyle="bold"
+            android:textColor="@color/black"
             android:id="@+id/name" />
 
-    </LinearLayout>
-
-    <View
-        android:layout_width="200dp"
-        android:layout_height="1dp"
-        android:layout_marginLeft="5dp"
-        android:layout_marginRight="5dp"
-        android:background="@color/light_gray" />
 
     <TextView
         style="@style/black_detail"
         android:layout_width="match_parent"
         android:layout_weight="1"
         android:layout_height="wrap_content"
-        android:textSize="20sp"
-        android:text="New Text"
+        android:text="something"
         android:layout_margin="5dp"
-        android:id="@+id/tel" />
+        android:id="@+id/searched_detail" />
 
-    <View
-        android:layout_width="200dp"
-        android:layout_height="1dp"
-        android:layout_marginLeft="5dp"
-        android:layout_marginRight="5dp"
-        android:background="@color/light_gray" />
-
-    <TextView
-        style="@style/black_detail"
-        android:layout_width="match_parent"
-        android:layout_weight="1"
-        android:layout_height="wrap_content"
-        android:textSize="20sp"
-        android:text="New Text"
-        android:layout_margin="5dp"
-        android:id="@+id/address" />
-
-    <View
-        android:layout_width="200dp"
-        android:layout_height="1dp"
-        android:layout_marginLeft="5dp"
-        android:layout_marginRight="5dp"
-        android:background="@color/light_gray" />
-
-    <TextView
-        style="@style/black_detail"
-        android:layout_width="match_parent"
-        android:layout_weight="1"
-        android:layout_height="wrap_content"
-        android:textSize="20sp"
-        android:text="New Text"
-        android:layout_margin="5dp"
-        android:id="@+id/note" />
-
-    <View
-        style="@style/bar"
-        android:background="@color/light_blue" />
+    <View style="@style/bar" />
 
 
 </LinearLayout>

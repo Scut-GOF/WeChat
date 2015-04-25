@@ -32,4 +32,7 @@
     <string name="confirm">confirm</string>
     <string name="Member">Member</string>
     <string name="my_information">MY INFORMATION</string>
+    <string name="all_contact"><![CDATA[<All Contact]]></string>
+    <string name="all_label"><![CDATA[<All Label]]></string>
+
 </resources>

@@ -18,7 +18,7 @@
             android:id="@+id/labels_back"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="<All Label"
+            android:text="@string/all_label"
             style="@style/simple_back_button"
             android:clickable="true" />
 
