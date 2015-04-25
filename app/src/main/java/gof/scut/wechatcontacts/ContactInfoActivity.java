@@ -8,6 +8,7 @@ import android.view.MenuItem;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import gof.scut.common.utils.database.CursorUtils;
 import gof.scut.common.utils.database.MainTableUtils;
 import gof.scut.common.utils.database.TBMainConstants;
 import gof.scut.common.utils.database.TelTableUtils;
@@ -91,4 +92,18 @@ public class ContactInfoActivity extends ActionBarActivity {
 		if (cursorTels != null) cursorTels.close();
 		telTableUtils.closeDataBase();
 	}
+
+	protected void onStop() {
+		super.onStop();
+		if (cursorTels != null) cursorTels.close();
+		telTableUtils.closeDataBase();
+	}
+
+	@Override
+	protected void onDestroy() {
+		super.onDestroy();
+		CursorUtils.closeExistsCursor(cursorTels);
+		telTableUtils.closeDataBase();
+	}
+
 }

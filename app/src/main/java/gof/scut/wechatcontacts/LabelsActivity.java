@@ -218,4 +218,17 @@ public class LabelsActivity extends Activity implements View.OnClickListener {
 		CursorUtils.closeExistsCursor(cursorLabels);
 		labelTableUtils.closeDataBase();
 	}
+
+	protected void onStop() {
+		super.onStop();
+		CursorUtils.closeExistsCursor(cursorLabels);
+		labelTableUtils.closeDataBase();
+	}
+
+	@Override
+	protected void onDestroy() {
+		super.onDestroy();
+		CursorUtils.closeExistsCursor(cursorLabels);
+		labelTableUtils.closeDataBase();
+	}
 }
