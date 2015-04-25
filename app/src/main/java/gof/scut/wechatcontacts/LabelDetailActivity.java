@@ -163,26 +163,26 @@ public class LabelDetailActivity extends Activity implements View.OnClickListene
 		labelIcon.setOnClickListener(this);
 		labelName.setOnClickListener(this);
 		addMemberLayout.setOnClickListener(this);
-		findViewById(R.id.add_id_to_label).setOnClickListener(new View.OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				idLabelTableUtils.insertAll("1", labelObj.getLabelName());
-				idLabelTableUtils.insertAll("2", labelObj.getLabelName());
-				idLabelTableUtils.insertAll("3", labelObj.getLabelName());
-			}
-		});
-		findViewById(R.id.delete_id_label).setOnClickListener(new View.OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				idLabelTableUtils.deleteWithID_Label("1", labelObj.getLabelName());
-			}
-		});
-		findViewById(R.id.update_id_label).setOnClickListener(new View.OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				idLabelTableUtils.updateLabelWithID_Label("坏人", "1", labelObj.getLabelName());
-			}
-		});
+//		findViewById(R.id.add_id_to_label).setOnClickListener(new View.OnClickListener() {
+//			@Override
+//			public void onClick(View v) {
+//				idLabelTableUtils.insertAll("1", labelObj.getLabelName());
+//				idLabelTableUtils.insertAll("2", labelObj.getLabelName());
+//				idLabelTableUtils.insertAll("3", labelObj.getLabelName());
+//			}
+//		});
+//		findViewById(R.id.delete_id_label).setOnClickListener(new View.OnClickListener() {
+//			@Override
+//			public void onClick(View v) {
+//				idLabelTableUtils.deleteWithID_Label("1", labelObj.getLabelName());
+//			}
+//		});
+//		findViewById(R.id.update_id_label).setOnClickListener(new View.OnClickListener() {
+//			@Override
+//			public void onClick(View v) {
+//				idLabelTableUtils.updateLabelWithID_Label("坏人", "1", labelObj.getLabelName());
+//			}
+//		});
 
 	}
 

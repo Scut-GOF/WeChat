@@ -44,29 +44,6 @@
             android:layout_alignParentEnd="true"/>
     </RelativeLayout>
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
-
-        <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/add_id_to_label"
-            android:text="+IDLabel"/>
-
-        <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/delete_id_label"
-            android:text="-IDLabel"/>
-
-        <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/update_id_label"
-            android:text="oIdLabel"/>
-    </LinearLayout>
 
     <LinearLayout
         android:orientation="horizontal"

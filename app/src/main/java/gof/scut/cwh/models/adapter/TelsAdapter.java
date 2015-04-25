@@ -51,7 +51,7 @@ public class TelsAdapter extends BaseAdapter {
 	@Override
 	public View getView(int position, View convertView, final ViewGroup parent) {
 		LayoutInflater inflater = LayoutInflater.from(context);
-		layout = (LinearLayout) inflater.inflate(R.layout.cell_phone_list, null);
+		layout = (LinearLayout) inflater.inflate(R.layout.cell_phone_chose_pop, null);
 		Button tel = (Button) layout.findViewById(R.id.tel_number);
 		cursor.moveToPosition(position);
 		final String cTel = cursor.getString(cursor.getColumnIndex(TBTelConstants.TEL));
