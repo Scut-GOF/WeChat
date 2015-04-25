@@ -21,10 +21,10 @@ public class AllTableUtils {
 	public Cursor selectAllIDNameOnLabel(String labelName) {
 		closeDataBase();
 		db = dataBaseHelper.getReadableDatabase();
-		Cursor c1 = db.rawQuery("SELECT  _id,name FROM contacts WHERE _id IN ( SELECT _id FROM idLabel WHERE label = '" + labelName + "')", null);
-		Cursor c2 = db.rawQuery("SELECT _id FROM idLabel WHERE label = '" + labelName + "'", null);
-		Cursor c3 = db.rawQuery("SELECT _id FROM fts_id_label WHERE label = '" + labelName + "'", null);
-		Cursor c4 = db.rawQuery("SELECT _id FROM fts_id_label ", null);
+//		Cursor c1 = db.rawQuery("SELECT  _id,name FROM contacts WHERE _id IN ( SELECT _id FROM idLabel WHERE label = '" + labelName + "')", null);
+//		Cursor c2 = db.rawQuery("SELECT _id FROM idLabel WHERE label = '" + labelName + "'", null);
+//		Cursor c3 = db.rawQuery("SELECT _id FROM fts_id_label WHERE label = '" + labelName + "'", null);
+//		Cursor c4 = db.rawQuery("SELECT _id FROM fts_id_label ", null);
 
 		//SELECT  _id,name FROM contacts WHERE _id IN ( SELECT _id FROM idLabel WHERE label = '" + labelName + "')"
 		Cursor c = db.rawQuery("SELECT " + TBMainConstants.ID + "," + TBMainConstants.NAME

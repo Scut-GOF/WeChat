@@ -2,11 +2,15 @@ package gof.scut.wechatcontacts;
 
 import android.app.Activity;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ListView;
 import android.widget.TextView;
+
+import gof.scut.common.utils.Log;
 
 
 public class SearchActivity extends Activity {
@@ -44,17 +48,27 @@ public class SearchActivity extends Activity {
 	}
 
 	void setListener() {
-		searchKey.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+		searchKey.addTextChangedListener(new TextWatcher() {
 			@Override
-			public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-				//TODO call when change text
-				fullTextSearch(v.getText().toString());
-				return false;
+			public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+			}
+
+			@Override
+			public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+			}
+
+			@Override
+			public void afterTextChanged(Editable s) {
+				if (s.equals("")) return;
+				fullTextSearch(s.toString());
 			}
 		});
 	}
 
 	void fullTextSearch(String condition) {
+		Log.d("Search", condition);
 
 	}
 

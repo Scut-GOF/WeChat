@@ -90,8 +90,8 @@ public class IDLabelTableUtils {
 
 		long status;
 		try {
-		status = db.update(TBIDLabelConstants.TABLE_NAME, value,
-				TBIDLabelConstants.ID + "=?", new String[]{byID});
+			status = db.update(TBIDLabelConstants.TABLE_NAME, value,
+					TBIDLabelConstants.ID + "=?", new String[]{byID});
 		} finally {
 			db.close();
 		}
@@ -123,8 +123,13 @@ public class IDLabelTableUtils {
 	public Cursor selectLabelWithID(String ID) {
 		closeDataBase();
 		db = dataBaseHelper.getReadableDatabase();
-		Cursor c = db.query(TBIDLabelConstants.TABLE_NAME, new String[]{TBIDLabelConstants.LABEL},
-				TBIDLabelConstants.ID + " = ?", new String[]{ID}, null, null, null);
+
+		Cursor c;
+		c = db.rawQuery("select " + TBIDLabelConstants.LABEL + " from "
+						+ TBIDLabelConstants.FTS_TABLE_NAME + " where " + TBIDLabelConstants.ID + " match ?",
+				new String[]{"'" + ID + "'"});
+//		c = db.query(TBIDLabelConstants.FTS_TABLE_NAME, new String[]{TBIDLabelConstants.LABEL},
+//				TBIDLabelConstants.ID + " = ?", new String[]{ID}, null, null, null);
 		//db.close();
 		return c;
 	}

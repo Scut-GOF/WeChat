@@ -215,7 +215,8 @@ public class LabelTableUtils {
 	public Cursor selectAllOnLabel(String label) {
 		closeDataBase();
 		db = dataBaseHelper.getReadableDatabase();
-		Cursor c = db.query(TBLabelConstants.TABLE_NAME, new String[]{TBLabelConstants.LABEL},
+		Cursor c;
+		c = db.query(TBLabelConstants.TABLE_NAME, new String[]{TBLabelConstants.LABEL},
 				TBLabelConstants.LABEL + " = ?", new String[]{label}, null, null, null);
 		//db.close();
 		return c;

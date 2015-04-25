@@ -144,7 +144,7 @@ public class MainTableUtils {
 //				TBMainConstants.ID + " LIKE ?", new String[]{id}, null, null, null);
 
 		c = db.rawQuery("select * from " + TBMainConstants.FTS_TABLE_NAME + " where "
-						+ TBMainConstants.ID + " match ?",
+						+ TBMainConstants.ID + " = ?",
 				new String[]{"'" + id + "'"});//  SHOULDN'T BE PUT IN SINGE COBRA
 		//db.close();
 		return c;
@@ -201,8 +201,12 @@ public class MainTableUtils {
 		closeDataBase();
 		db = dataBaseHelper.getReadableDatabase();
 		Cursor c;
-		//docid,heightLight
-		c = db.rawQuery(null, null);
+		//heightLight
+		c = db.rawQuery("select * from "
+				+ TBMainConstants.FTS_TABLE_NAME + "inner join" + TBIDLabelConstants.FTS_TABLE_NAME
+				+ " where " + TBMainConstants.FTS_TABLE_NAME
+				+ " match ? and " + TBIDLabelConstants.FTS_TABLE_NAME + " match ?"
+				, new String[]{word, word});
 		return c;
 	}
 
