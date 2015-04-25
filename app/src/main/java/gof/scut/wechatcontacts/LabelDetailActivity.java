@@ -285,4 +285,19 @@ public class LabelDetailActivity extends Activity implements View.OnClickListene
 		allTableUtils.closeDataBase();
 
 	}
+
+	protected void onStop() {
+		super.onStop();
+		CursorUtils.closeExistsCursor(cursorEdit);
+		CursorUtils.closeExistsCursor(cursorView);
+		allTableUtils.closeDataBase();
+	}
+
+	@Override
+	protected void onDestroy() {
+		super.onDestroy();
+		CursorUtils.closeExistsCursor(cursorEdit);
+		CursorUtils.closeExistsCursor(cursorView);
+		allTableUtils.closeDataBase();
+	}
 }
