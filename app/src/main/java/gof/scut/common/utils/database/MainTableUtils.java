@@ -144,7 +144,7 @@ public class MainTableUtils {
 //				TBMainConstants.ID + " LIKE ?", new String[]{id}, null, null, null);
 
 		c = db.rawQuery("select * from " + TBMainConstants.FTS_TABLE_NAME + " where "
-						+ TBMainConstants.ID + " = ?",
+						+ TBMainConstants.ID + " match ?",
 				new String[]{"'" + id + "'"});//  SHOULDN'T BE PUT IN SINGE COBRA
 		//db.close();
 		return c;
