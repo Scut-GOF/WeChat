@@ -9,6 +9,7 @@ import com.android.volley.toolbox.Volley;
 import com.google.gson.Gson;
 
 /**
+ *
  * Created by zm on 2015/4/20.
  */
 public class MyApplication extends Application {

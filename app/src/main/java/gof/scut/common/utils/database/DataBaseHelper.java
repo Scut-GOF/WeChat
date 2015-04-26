@@ -6,7 +6,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 
 
 public class DataBaseHelper extends SQLiteOpenHelper {
-	public final static int DBVersion = 1;
+	public final static int DBVersion = 2;
 
 	private final static String DATABASE_NAME = "gofContacts";
 	private final static String SQL_MAIN_TABLE_CREATE = "CREATE TABLE IF NOT EXISTS "
@@ -209,6 +209,16 @@ public class DataBaseHelper extends SQLiteOpenHelper {
 
 	@Override
 	public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
+
+        db.execSQL("DROP TABLE IF EXISTS " + TBMainConstants.TABLE_NAME);
+        db.execSQL("DROP TABLE IF EXISTS " + TBIDLabelConstants.TABLE_NAME);
+        db.execSQL("DROP TABLE IF EXISTS " + TBTelConstants.TABLE_NAME);
+        db.execSQL("DROP TABLE IF EXISTS " + TBLabelConstants.TABLE_NAME);
+
+//        db.execSQL("DROP VIRTUAL TABLE IF EXISTS " + TBMainConstants.FTS_TABLE_NAME);
+//        db.execSQL("DROP VIRTUAL TABLE IF EXISTS " + TBIDLabelConstants.FTS_TABLE_NAME);
+//        db.execSQL("DROP VIRTUAL TABLE IF EXISTS " + TBTelConstants.FTS_TABLE_NAME);
+        onCreate(db);
 	}
 
 }
