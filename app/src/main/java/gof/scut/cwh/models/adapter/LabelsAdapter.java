@@ -61,7 +61,7 @@ public class LabelsAdapter extends BaseAdapter {
 		final String strMemberCount = cursor.getString(cursor.getColumnIndex(TBLabelConstants.MEMBER_COUNT));
 		memberCount.setText("(" + strMemberCount + ")");
 		labelIcon.setBackgroundDrawable(null);
-		if (iconPath.equals("")) labelIcon.setBackgroundResource(R.drawable.chart_1_2);
+		if (iconPath.equals("")) labelIcon.setBackgroundResource(R.drawable.label50);
 		else labelIcon.setImageBitmap(BitmapUtils.decodeBitmapFromPath(iconPath));
 		layout.setOnClickListener(new View.OnClickListener() {
 			@Override

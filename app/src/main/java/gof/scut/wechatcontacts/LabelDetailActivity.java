@@ -98,7 +98,7 @@ public class LabelDetailActivity extends Activity implements View.OnClickListene
 		labelName.setText(labelObj.getLabelName());
 		labelIcon.setBackgroundDrawable(null);
 		if (labelObj.getIconPath().equals("")) {
-			labelIcon.setBackgroundResource(R.drawable.chart_1_2);
+			labelIcon.setBackgroundResource(R.drawable.label50);
 		} else {
 			labelIcon.setImageBitmap(BitmapUtils.decodeBitmapFromPath(labelObj.getIconPath()));
 		}
@@ -237,7 +237,7 @@ public class LabelDetailActivity extends Activity implements View.OnClickListene
 				checkState();
 				break;
 			case R.id.add_member:
-				//TODO it's a test
+				//TODO it's a test,should search a member and return
 				idLabelTableUtils.insertAll("1", labelObj.getLabelName());
 				//TODO UPDATE COUNT
 				initEditList();
