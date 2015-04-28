@@ -4,6 +4,10 @@ package gof.scut.common.utils;
  * Created by Administrator on 2015/4/16.
  */
 
+import android.graphics.Color;
+import android.text.Html;
+import android.text.Spanned;
+
 import org.wltea.analyzer.core.IKSegmenter;
 import org.wltea.analyzer.core.Lexeme;
 
@@ -19,15 +23,27 @@ public class StringUtils {
 	}
 
 	public static ArrayList<String> splitWithWord(String str, String word) {
-
+		ArrayList<String> splits = new ArrayList<>();
+		if (!str.contains(word)) {
+			splits.add(0, str);
+			return splits;
+		}
+		if (str.equals(word)) {
+			splits.add(word);
+			return splits;
+		}
 		StringTokenizer stringTokenizer = new StringTokenizer(str, word);
-		ArrayList<String> splits = new ArrayList();
+		String headChecker = "";
 		while (stringTokenizer.hasMoreTokens()) {
 			String splitStr = stringTokenizer.nextToken();
 			splits.add(splitStr);
-			if (stringTokenizer.hasMoreTokens())
+			headChecker += splitStr;
+			if (stringTokenizer.hasMoreTokens()) {
 				splits.add(word);
+				headChecker += word;
+			}
 		}
+		if (!headChecker.equals(str)) splits.add(0, word);
 		return splits;
 	}
 //example
@@ -59,5 +75,48 @@ public class StringUtils {
 				return false;
 		}
 		return true;
+	}
+
+	public static Spanned highLight(String keyword, String str, String highColor, String generalColor) {
+
+		if (!str.contains(keyword))
+			return Html.fromHtml("<font color=\"#" + generalColor + "\">" + str + "</font>");
+		ArrayList<String> splitNames = StringUtils.splitWithWord(str, keyword);
+		str = "";
+		for (int i = 0; i < splitNames.size(); i++) {
+			if (splitNames.get(i).equals(keyword))
+				splitNames.set(i, "<font color=\"#" + highColor + "\">" + splitNames.get(i) + "</font>");
+			else
+				splitNames.set(i, "<font color=\"#" + generalColor + "\">" + splitNames.get(i) + "</font>");
+			str += splitNames.get(i);
+		}
+		return Html.fromHtml(str);
+	}
+
+	public static boolean StringCmp(String str1, String str2, int str1FromIndex) {
+		//both arg lower case
+		for (int i = 0; i < str2.length(); i++) {
+			if (str1FromIndex + i >= str1.length()) return false;
+			if (str1.charAt(str1FromIndex + i) != str2.charAt(i)) return false;
+
+		}
+		return true;
+	}
+
+	public static Spanned simpleHighLight(String keyword, String str, String highColor, String generalColor) {
+		String result = "";
+		//keyword should be lower case
+		int kwLength = keyword.length();
+		for (int i = 0; i < str.length(); i++) {
+			if ((str.charAt(i) == keyword.charAt(0) || str.charAt(i) == (keyword.charAt(0) - 32)) && (StringCmp(str.toLowerCase(), keyword, i))) {
+
+				for (int j = 0; j < kwLength; j++)
+					result += ("<font color=\"#" + highColor + "\">" + str.charAt(i + j) + "</font>");
+				i += (kwLength - 1);
+
+
+			} else result += ("<font color=\"#" + generalColor + "\">" + str.charAt(i) + "</font>");
+		}
+		return Html.fromHtml(result);
 	}
 }

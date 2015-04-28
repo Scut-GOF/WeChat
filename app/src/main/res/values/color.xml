@@ -7,6 +7,8 @@
     <color name="light_grey">#999999</color>
     <color name="bright_grey">#929292</color>
     <color name="thistle">#D8BFD8</color>
+    <color name="my_light_grey">#eeeeee</color>
+    <color name="my_dark_grey">#bfbfbf</color>
     <!--蓟色 -->
     <color name="light_gray">#D3D3D3</color>
     <!--亮灰色 -->
@@ -172,6 +174,7 @@
     <!--中紫色 -->
     <color name="purple">#800080</color>
     <!--紫色 -->
+    <color name="my_purple">#A4005B</color>
     <!--褐色系-->
     <color name="firebrick">#B22222</color>
     <!--火砖色 -->
@@ -271,6 +274,7 @@
     <!--暗青色 -->
     <color name="teal">#008080</color>
     <!--水鸭色 -->
+    <color name="my_blue">#0075a9</color>
 
     <!-- 绿色系 -->
     <color name="cwh_green">#8dc131</color>
@@ -311,15 +315,7 @@
     <color name="spring_green">#00FF7F</color>
     <!--春绿色-->
     <color name="lime">#00FF00</color>
-
-    <color name="my_blue">#0075a9</color>
-
     <color name="my_green">#b3d465</color>
     <color name="my_dark_green">#8fc31f</color>
-    <color name="my_purple">#A4005B</color>
 
-    <color name="my_light_grey">#eeeeee</color>
-
-    <color name="my_dark_grey">#bfbfbf</color>
-    8fc31f
 </resources>

@@ -14,10 +14,9 @@ public class MainTableUtils {
 		dataBaseHelper = new DataBaseHelper(context);
 		//TODO insert several data
 		for (int i = 0; i < 10; i++) {
-			insertAll("Friend" + i, "" + i, "" + i, "", "");
+			insertAll("Friend" + i, "L" + i, "S" + i, "ADDR" + i, "NOTE" + i);
 		}
-		deleteWithID(9 + "");
-		updateAllWithID("Friend" + 9, "9", "9", "", "", "8");
+
 	}
 
 	//insert
@@ -201,15 +200,64 @@ public class MainTableUtils {
 		closeDataBase();
 		db = dataBaseHelper.getReadableDatabase();
 		Cursor c;
-		//heightLight
-		c = db.rawQuery("select * from "
-				+ TBMainConstants.FTS_TABLE_NAME + " inner join " + TBIDLabelConstants.FTS_TABLE_NAME
-				+ " on "
-				+ TBMainConstants.FTS_TABLE_NAME + "." + TBMainConstants.ID
-				+ "=" + TBIDLabelConstants.FTS_TABLE_NAME + "." + TBMainConstants.ID
-				+ " where "
-				+ TBMainConstants.FTS_TABLE_NAME + " match ? or " + TBIDLabelConstants.FTS_TABLE_NAME + " match ?"
-				, new String[]{"'" + word + "'", "'" + word + "'"});
+//		select * from (
+//				select *,'' label,'' tel from fts_contacts
+//				where fts_contacts match 'l*' group by _id
+//				union
+//		select fts_contacts.*,label, '' tel from (
+//				(select _id lid,label from fts_id_label where fts_id_label match 'l*')  left join fts_contacts
+//		on fts_contacts._id = lid)group by lid
+//		) group by _id;
+		c = db.rawQuery("select * from ( "
+						+ "select *,'' " + TBIDLabelConstants.LABEL + ",'' " + TBTelConstants.TEL
+						+ " from " + TBMainConstants.FTS_TABLE_NAME
+						+ " where " + TBMainConstants.FTS_TABLE_NAME
+						+ " match ? group by " + TBMainConstants.ID
+						+ " union "
+						+ "select " + TBMainConstants.FTS_TABLE_NAME + ".*," + TBIDLabelConstants.LABEL + ",'' " + TBTelConstants.TEL
+						+ " from (select " + TBIDLabelConstants.ID + " lid," + TBIDLabelConstants.LABEL + " from "
+						+ TBIDLabelConstants.FTS_TABLE_NAME + " where " + TBIDLabelConstants.FTS_TABLE_NAME + " match ?) "
+						+ "left join " + TBMainConstants.FTS_TABLE_NAME
+						+ " on " + TBMainConstants.FTS_TABLE_NAME + "." + TBMainConstants.ID + "= lid group by lid"
+						+ " )group by " + TBMainConstants.ID,
+				new String[]{"'" + word + "*'", "'" + word + "*'"});
+		//repeated rows
+//		c = db.rawQuery("select * from ( "
+//				+ TBMainConstants.FTS_TABLE_NAME + " join " + TBIDLabelConstants.FTS_TABLE_NAME
+//				+ " on " + TBMainConstants.FTS_TABLE_NAME + "." + TBMainConstants.ID + "="
+//				+ TBIDLabelConstants.FTS_TABLE_NAME + "." + TBIDLabelConstants.ID + ")"
+//				+ " where " + TBMainConstants.FTS_TABLE_NAME + "." + TBMainConstants.ID + " in ("
+//				+" select "+TBMainConstants.ID+" from "+TBMainConstants.FTS_TABLE_NAME
+//				+" where "+TBMainConstants.FTS_TABLE_NAME+" match ? "
+//				+" union "
+//				+" select "+TBIDLabelConstants.ID+" from "+TBIDLabelConstants.FTS_TABLE_NAME
+//				+" where "+TBIDLabelConstants.FTS_TABLE_NAME+" match ? "
+//				+" union "
+//				+" select "+TBTelConstants.ID+" from "+TBTelConstants.FTS_TABLE_NAME
+//				+" where "+TBTelConstants.FTS_TABLE_NAME+" match ? "
+//				+") order by "+TBMainConstants.NAME
+//				, new String[]{"'" + word + "*'", "'" + word + "*'", "'" + word + "*'"});
+//		//select * from contacts left outer join id_label
+//		c = db.rawQuery("select * from (("
+//				+" select * from "+TBMainConstants.FTS_TABLE_NAME
+//				+" where "
+//				+ TBMainConstants.FTS_TABLE_NAME + " match ? )"
+//				+" left join (select "+TBIDLabelConstants.ID+" as LID,"
+//				+TBIDLabelConstants.LABEL+" from "
+//				+ TBIDLabelConstants.FTS_TABLE_NAME
+//				+ " where "
+//				+ TBIDLabelConstants.FTS_TABLE_NAME + " match ?) on "
+//				+TBMainConstants.ID+"= LID) group by "+TBMainConstants.ID
+//				, new String[]{"'" + word + "*'","'" + word + "*'"});
+		//in one query, match can be used only one time,so union is needed
+//		c = db.rawQuery("select * from "
+//				+ TBMainConstants.FTS_TABLE_NAME + " inner join " + TBIDLabelConstants.FTS_TABLE_NAME
+//				+ " on "
+//				+ TBMainConstants.FTS_TABLE_NAME + "." + TBMainConstants.ID
+//				+ "=" + TBIDLabelConstants.FTS_TABLE_NAME + "." + TBMainConstants.ID
+//				+ " where "
+//				+ TBMainConstants.FTS_TABLE_NAME + " match ? or " + TBIDLabelConstants.FTS_TABLE_NAME + " match ?"
+//				, new String[]{"'*" + word + "*'", "'*" + word + "*'"});
 		return c;
 	}
 
@@ -217,40 +265,50 @@ public class MainTableUtils {
 		closeDataBase();
 		db = dataBaseHelper.getReadableDatabase();
 		Cursor c;
-		//heightLight
-		c = db.rawQuery("select * from ("
-				+ TBMainConstants.FTS_TABLE_NAME + " inner join " + TBIDLabelConstants.FTS_TABLE_NAME
-				+ " on "
-				+ TBMainConstants.FTS_TABLE_NAME + "." + TBMainConstants.ID
-				+ "=" + TBIDLabelConstants.FTS_TABLE_NAME + "." + TBIDLabelConstants.ID
-				+ ") inner join " + TBTelConstants.FTS_TABLE_NAME + " on "
-				+ TBMainConstants.FTS_TABLE_NAME + "." + TBMainConstants.ID
-				+ "=" + TBTelConstants.FTS_TABLE_NAME + "." + TBTelConstants.ID
-				+ " where "
-				+ TBMainConstants.FTS_TABLE_NAME + " match ? or "
-				+ TBIDLabelConstants.FTS_TABLE_NAME + " match ? or "
-				+ TBTelConstants.TEL + " match ? "
-				, new String[]{"'" + word + "'", "'" + word + "'", "'" + word + "*'"});
+		//TODO NOT USE OR
+//		c=db.rawQuery("select * from contacts",null);
+//		c=db.rawQuery("select * from label",null);
+//		c=db.rawQuery("select * from idlabel",null);
+//		c=db.rawQuery("select * from tel",null);
+		c = db.rawQuery("select * from ( "
+				+ "select *,'' " + TBIDLabelConstants.LABEL + ",'' " + TBTelConstants.TEL
+				+ " from " + TBMainConstants.FTS_TABLE_NAME
+				+ " where " + TBMainConstants.FTS_TABLE_NAME
+				+ " match ? group by " + TBMainConstants.ID
+				+ " union "
+				+ "select " + TBMainConstants.FTS_TABLE_NAME + ".*," + TBIDLabelConstants.LABEL + ",'' " + TBTelConstants.TEL
+				+ " from (select " + TBIDLabelConstants.ID + " lid, " + TBIDLabelConstants.LABEL + " from "
+				+ TBIDLabelConstants.FTS_TABLE_NAME + " where " + TBIDLabelConstants.FTS_TABLE_NAME + " match ?) "
+				+ "left join " + TBMainConstants.FTS_TABLE_NAME
+				+ " on " + TBMainConstants.FTS_TABLE_NAME + "." + TBMainConstants.ID + "= lid"
+				+ " group by lid"
+				+ " union "
+				+ "select " + TBMainConstants.FTS_TABLE_NAME + ".*,'' " + TBIDLabelConstants.LABEL + ", " + TBTelConstants.TEL
+				+ " from (select " + TBTelConstants.ID + " tid," + TBTelConstants.TEL + " from "
+				+ TBTelConstants.FTS_TABLE_NAME + " where " + TBTelConstants.FTS_TABLE_NAME + " match ?) "
+				+ "left join " + TBMainConstants.FTS_TABLE_NAME
+				+ " on " + TBMainConstants.FTS_TABLE_NAME + "." + TBMainConstants.ID + "= tid"
+				+ " group by tid)"
+				+ " group by " + TBMainConstants.ID, new String[]{"'" + word + "*'", "'" + word + "*'", "'" + word + "*'"});
+//		c = db.rawQuery("select * from ((("
+//				+ " select * from " + TBMainConstants.FTS_TABLE_NAME
+//				+ " where "
+//				+ TBMainConstants.FTS_TABLE_NAME + " match ? )"
+//				+ " left join (select " + TBIDLabelConstants.ID + " as LID,"
+//				+ TBIDLabelConstants.LABEL + " from "
+//				+ TBIDLabelConstants.FTS_TABLE_NAME
+//				+ " where "
+//				+ TBIDLabelConstants.FTS_TABLE_NAME + " match ?) on "
+//				+ TBMainConstants.ID + "= LID) left join (select " + TBTelConstants.ID + " as TID,"
+//				+ TBTelConstants.TEL + " from "
+//				+ TBTelConstants.FTS_TABLE_NAME
+//				+ " where "
+//				+ TBTelConstants.FTS_TABLE_NAME + " match ?) on "
+//				+ TBMainConstants.ID + "= TID) group by " + TBMainConstants.ID
+//				, new String[]{"'" + word + "*'", "'" + word + "*'", "'" + word + "*'"});
 		return c;
 	}
 
-	public Cursor fullTextSearchWithTel(String tel) {
-		closeDataBase();
-		db = dataBaseHelper.getReadableDatabase();
-		Cursor c;
-		//heightLight
-		c = db.rawQuery("select * from ("
-				+ TBMainConstants.FTS_TABLE_NAME + " inner join " + TBIDLabelConstants.FTS_TABLE_NAME
-				+ " on "
-				+ TBMainConstants.FTS_TABLE_NAME + "." + TBMainConstants.ID
-				+ "=" + TBIDLabelConstants.FTS_TABLE_NAME + "." + TBIDLabelConstants.ID
-				+ ") inner join " + TBTelConstants.FTS_TABLE_NAME + " on "
-				+ TBMainConstants.FTS_TABLE_NAME + "." + TBMainConstants.ID
-				+ "=" + TBTelConstants.FTS_TABLE_NAME + "." + TBTelConstants.ID
-				+ " where " + TBTelConstants.TEL + " match ? "
-				, new String[]{"'" + tel + "*'"});
-		return c;
-	}
 
 	public void closeDataBase() {
 		if (db == null) return;

@@ -16,6 +16,7 @@ import gof.scut.common.utils.Log;
 import gof.scut.common.utils.StringUtils;
 import gof.scut.common.utils.database.CursorUtils;
 import gof.scut.common.utils.database.MainTableUtils;
+import gof.scut.cwh.models.adapter.SearchResultAdapter;
 
 
 public class SearchActivity extends Activity {
@@ -63,23 +64,26 @@ public class SearchActivity extends Activity {
 
 			@Override
 			public void onTextChanged(CharSequence s, int start, int before, int count) {
-
+				fullTextSearch(s.toString());
 			}
 
 			@Override
 			public void afterTextChanged(Editable s) {
-				if (s.equals("")) return;
-				fullTextSearch(s.toString());
+
 			}
 		});
 	}
 
 	void fullTextSearch(String keyword) {
-		Log.d("Search", keyword);
+//		Log.d("Search", keyword);
+		if (keyword.equals("")) return;
+		CursorUtils.closeExistsCursor(cursorResult);
 		//非数字不搜索电话
 		if (!StringUtils.isNumber(keyword))
 			cursorResult = mainTableUtils.fullTextSearchWithWord(keyword);
 		else cursorResult = mainTableUtils.fullTextSearchWithNumOrWord(keyword);
+		SearchResultAdapter searchResultAdapter = new SearchResultAdapter(this, cursorResult, keyword);
+		searchResult.setAdapter(searchResultAdapter);
 	}
 
 	@Override
