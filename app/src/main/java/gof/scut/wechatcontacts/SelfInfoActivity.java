@@ -13,9 +13,11 @@ import com.google.zxing.WriterException;
 import com.google.zxing.common.BitMatrix;
 import com.google.zxing.qrcode.QRCodeWriter;
 
+import java.util.ArrayList;
 import java.util.Hashtable;
 
 import gof.scut.common.MyApplication;
+import gof.scut.common.utils.Log;
 import gof.scut.cwh.models.object.IdObj;
 
 
@@ -42,8 +44,16 @@ public class SelfInfoActivity extends Activity {
     }
 
     private void eventHandler() {
+        ArrayList<String> phones = new ArrayList<>();
+        phones.add("13660567470");
+        phones.add("13678953472");
+
         IdObj obj = new IdObj(101, "周萌", "zhoumeng", "zm", "13660567470", "华工", "no");
+        obj.setTels(phones);
+
         createQRImage(gson.toJson(obj, IdObj.class));
+
+        Log.d(null,gson.toJson(obj, IdObj.class));
 
         findViewById(R.id.cancel).setOnClickListener(new View.OnClickListener() {
             @Override
