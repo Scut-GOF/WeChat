@@ -9,7 +9,6 @@
         android:layout_height="wrap_content"
         android:textSize="22sp"
         android:text="Name"
-        android:textStyle="bold"
         android:textColor="@color/black"
         android:id="@+id/name"/>
 
