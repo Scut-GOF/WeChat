@@ -4,7 +4,6 @@ package gof.scut.common.utils;
  * Created by Administrator on 2015/4/16.
  */
 
-import android.graphics.Color;
 import android.text.Html;
 import android.text.Spanned;
 
@@ -14,7 +13,6 @@ import org.wltea.analyzer.core.Lexeme;
 import java.io.IOException;
 import java.io.StringReader;
 import java.util.ArrayList;
-import java.util.List;
 import java.util.StringTokenizer;
 
 public class StringUtils {
@@ -77,21 +75,6 @@ public class StringUtils {
 		return true;
 	}
 
-	public static Spanned highLight(String keyword, String str, String highColor, String generalColor) {
-
-		if (!str.contains(keyword))
-			return Html.fromHtml("<font color=\"#" + generalColor + "\">" + str + "</font>");
-		ArrayList<String> splitNames = StringUtils.splitWithWord(str, keyword);
-		str = "";
-		for (int i = 0; i < splitNames.size(); i++) {
-			if (splitNames.get(i).equals(keyword))
-				splitNames.set(i, "<font color=\"#" + highColor + "\">" + splitNames.get(i) + "</font>");
-			else
-				splitNames.set(i, "<font color=\"#" + generalColor + "\">" + splitNames.get(i) + "</font>");
-			str += splitNames.get(i);
-		}
-		return Html.fromHtml(str);
-	}
 
 	public static boolean StringCmp(String str1, String str2, int str1FromIndex) {
 		//both arg lower case

@@ -21,6 +21,7 @@
             android:id="@+id/search_key"/>
 
         <Button
+            android:id="@+id/cancel"
             android:layout_marginRight="@dimen/vertical_margin"
             android:layout_toRightOf="@id/search_key"
             android:layout_width="wrap_content"

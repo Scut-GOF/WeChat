@@ -1,8 +1,8 @@
 package gof.scut.cwh.models.adapter;
 
+import android.app.Activity;
 import android.content.Context;
 import android.database.Cursor;
-import android.graphics.Color;
 import android.text.Html;
 import android.text.Spanned;
 import android.view.LayoutInflater;
@@ -12,29 +12,31 @@ import android.widget.BaseAdapter;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import java.util.ArrayList;
-
-import gof.scut.common.utils.Log;
+import gof.scut.common.utils.ActivityUtils;
+import gof.scut.common.utils.BundleNames;
 import gof.scut.common.utils.StringUtils;
 import gof.scut.common.utils.database.TBIDLabelConstants;
 import gof.scut.common.utils.database.TBMainConstants;
 import gof.scut.common.utils.database.TBTelConstants;
+import gof.scut.cwh.models.object.ActivityConstants;
+import gof.scut.cwh.models.object.IdObj;
+import gof.scut.wechatcontacts.ContactInfoActivity;
 import gof.scut.wechatcontacts.R;
 
-/**
- * Created by cwh on 15-4-26.
- */
 public class SearchResultAdapter extends BaseAdapter {
 	private Context context;
 	private Cursor cursor;
 	private LinearLayout layout;
 	private String keyword;
+	private int fromActivity;
+
 	//private boolean flag;
 
-	public SearchResultAdapter(Context context, Cursor cursor, String keyword) {
+	public SearchResultAdapter(Context context, Cursor cursor, String keyword, int fromActivity) {
 		this.context = context;
 		this.cursor = cursor;
 		this.keyword = keyword.toLowerCase();
+		this.fromActivity = fromActivity;
 		//flag = false;
 	}
 
@@ -59,6 +61,7 @@ public class SearchResultAdapter extends BaseAdapter {
 		cursor.moveToPosition(position);
 		LayoutInflater inflater = LayoutInflater.from(context);
 
+		final String id = cursor.getString(cursor.getColumnIndex(TBMainConstants.ID));
 		layout = (LinearLayout) inflater.inflate(R.layout.cell_search_list, parent, false);
 		TextView tvName = (TextView) layout.findViewById(R.id.name);
 		TextView searchDetail = (TextView) layout.findViewById(R.id.searched_detail);
@@ -72,6 +75,19 @@ public class SearchResultAdapter extends BaseAdapter {
 		layout.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
+				IdObj obj = new IdObj(Integer.parseInt(id));
+				switch (fromActivity) {
+					case ActivityConstants.MAIN_ACTIVITY:
+						ActivityUtils.ActivitySkipWithObject(context, ContactInfoActivity.class, BundleNames.ID_OBJ, obj);
+						break;
+					case ActivityConstants.LABEL_DETAIL_ACTIVITY:
+						ActivityUtils.setActivityResult(context, ActivityConstants.RESULT_ADD_MEMBER, BundleNames.ID_OBJ, obj);
+						((Activity) context).finish();
+						break;
+					default:
+						ActivityUtils.ActivitySkipWithObject(context, ContactInfoActivity.class, BundleNames.ID_OBJ, obj);
+						break;
+				}
 
 			}
 		});

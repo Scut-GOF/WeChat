@@ -27,6 +27,7 @@ public class IdObj implements Serializable {
 		this.name = name;
 		this.lPinYin = lPinYin;
 		this.sPinYin = sPinYin;
+
 		this.tel = tel;
 		this.address = address;
 		this.notes = notes;

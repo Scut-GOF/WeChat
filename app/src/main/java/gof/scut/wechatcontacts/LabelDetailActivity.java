@@ -22,12 +22,16 @@ import gof.scut.common.utils.database.AllTableUtils;
 import gof.scut.common.utils.database.CursorUtils;
 import gof.scut.common.utils.database.IDLabelTableUtils;
 import gof.scut.common.utils.database.LabelTableUtils;
+import gof.scut.common.utils.database.TBLabelConstants;
 import gof.scut.common.utils.popup.PopConfirmUtils;
 import gof.scut.common.utils.popup.PopEditLabelUtils;
 import gof.scut.common.utils.popup.TodoOnResult;
 import gof.scut.cwh.models.adapter.ContactsAdapter;
 import gof.scut.cwh.models.adapter.MemEditAdapter;
+import gof.scut.cwh.models.object.ActivityConstants;
+import gof.scut.cwh.models.object.IdObj;
 import gof.scut.cwh.models.object.LabelObj;
+import gof.scut.cwh.models.object.Signal;
 
 
 public class LabelDetailActivity extends Activity implements View.OnClickListener {
@@ -68,7 +72,7 @@ public class LabelDetailActivity extends Activity implements View.OnClickListene
 	@Override
 	protected void onResume() {
 		super.onResume();
-		initViewList();
+		checkState();
 	}
 
 	void init() {
@@ -111,15 +115,15 @@ public class LabelDetailActivity extends Activity implements View.OnClickListene
 				labelObj.setLabelName(params[0]);
 				labelObj.setIconPath(params[1]);
 				//check if label exists
-				Cursor labelsWithName = labelTableUtils.selectAllOnLabel(labelObj.getLabelName());
-				if (labelsWithName.getCount() != 0) {
-					Toast.makeText(LabelDetailActivity.this, "标签已存在，请指定其他标签名", Toast.LENGTH_LONG).show();
-					labelsWithName.close();
-					labelTableUtils.closeDataBase();
-					return;
-				}
-				labelsWithName.close();
-				labelTableUtils.closeDataBase();
+//				Cursor labelsWithName = labelTableUtils.selectAllOnLabel(labelObj.getLabelName());
+//				if (labelsWithName.getCount() != 0) {
+//					Toast.makeText(LabelDetailActivity.this, "标签已存在，请指定其他标签名", Toast.LENGTH_LONG).show();
+//					labelsWithName.close();
+//					labelTableUtils.closeDataBase();
+//					return;
+//				}
+//				labelsWithName.close();
+//				labelTableUtils.closeDataBase();
 
 				long state = labelTableUtils.updateAllWithLabel(labelObj, labelName.getText().toString());
 				if (state < 0) Log.e("LabelsActivity", "update label failed");
@@ -132,7 +136,7 @@ public class LabelDetailActivity extends Activity implements View.OnClickListene
 			public void doOnNegResult(String[] params) {
 
 			}
-		}, "编辑标签", R.id.label_detail_layout);
+		}, "编辑标签", R.id.label_detail_layout, labelObj);
 		findViewById(R.id.title).setEnabled(true);
 		setListener();
 
@@ -163,26 +167,6 @@ public class LabelDetailActivity extends Activity implements View.OnClickListene
 		labelIcon.setOnClickListener(this);
 		labelName.setOnClickListener(this);
 		addMemberLayout.setOnClickListener(this);
-//		findViewById(R.id.add_id_to_label).setOnClickListener(new View.OnClickListener() {
-//			@Override
-//			public void onClick(View v) {
-//				idLabelTableUtils.insertAll("1", labelObj.getLabelName());
-//				idLabelTableUtils.insertAll("2", labelObj.getLabelName());
-//				idLabelTableUtils.insertAll("3", labelObj.getLabelName());
-//			}
-//		});
-//		findViewById(R.id.delete_id_label).setOnClickListener(new View.OnClickListener() {
-//			@Override
-//			public void onClick(View v) {
-//				idLabelTableUtils.deleteWithID_Label("1", labelObj.getLabelName());
-//			}
-//		});
-//		findViewById(R.id.update_id_label).setOnClickListener(new View.OnClickListener() {
-//			@Override
-//			public void onClick(View v) {
-//				idLabelTableUtils.updateLabelWithID_Label("坏人", "1", labelObj.getLabelName());
-//			}
-//		});
 
 	}
 
@@ -214,7 +198,7 @@ public class LabelDetailActivity extends Activity implements View.OnClickListene
 	}
 
 	void initEditList() {
-
+		getLabelMemberCount();
 		//cursor,contactsAdapter,labelMembers
 		CursorUtils.closeExistsCursor(cursorEdit);
 		CursorUtils.closeExistsCursor(cursorView);
@@ -224,6 +208,17 @@ public class LabelDetailActivity extends Activity implements View.OnClickListene
 
 	}
 
+	private void getLabelMemberCount() {
+		Cursor cursorCount = labelTableUtils.selectMemCount(labelObj.getLabelName());
+		try {
+			cursorCount.moveToNext();
+			String count = cursorCount.getString(cursorCount.getColumnIndex(TBLabelConstants.MEMBER_COUNT));
+			memberCount.setText(StringUtils.addBrackets(count));
+		} finally {
+			CursorUtils.closeExistsCursor(cursorCount);
+			labelTableUtils.closeDataBase();
+		}
+	}
 
 	@Override
 	public void onClick(View v) {
@@ -237,11 +232,19 @@ public class LabelDetailActivity extends Activity implements View.OnClickListene
 				checkState();
 				break;
 			case R.id.add_member:
-				//TODO it's a test,should search a member and return
-				idLabelTableUtils.insertAll("1", labelObj.getLabelName());
-				//TODO UPDATE COUNT
-				initEditList();
+
+//				idLabelTableUtils.insertAll("1", labelObj.getLabelName());
+//
+//				initEditList();
+//				break;
+			case R.id.add_member_layout:
+
+				ActivityUtils.startActivityWithObjectForResult
+						(this, SearchActivity.class, Signal.NAME,
+								new Signal(ActivityConstants.LABEL_DETAIL_ACTIVITY, ActivityConstants.SEARCH_ACTIVITY),
+								ActivityConstants.RESULT_ADD_MEMBER);
 				break;
+
 			case R.id.delete_label:
 				PopConfirmUtils popConfirmUtils = new PopConfirmUtils();
 				popConfirmUtils.prepare(this, R.layout.pop_confirm);
@@ -251,7 +254,7 @@ public class LabelDetailActivity extends Activity implements View.OnClickListene
 					@Override
 					public void doOnPosResult(String[] params) {
 						labelTableUtils.deleteWithLabel(labelObj.getLabelName());
-						//TODO add trigger to delete id-label relation
+						getLabelMemberCount();
 						finish();
 					}
 
@@ -262,9 +265,7 @@ public class LabelDetailActivity extends Activity implements View.OnClickListene
 				});
 				popConfirmUtils.popWindowAtCenter(R.id.member_list, R.id.confirm_title);
 				break;
-			case R.id.add_member_layout:
-				ActivityUtils.ActivitySkip(this, SearchActivity.class);
-				break;
+
 			case R.id.label_icon:
 			case R.id.label_name:
 				popEditLabelUtils.popEditLabel();
@@ -275,7 +276,22 @@ public class LabelDetailActivity extends Activity implements View.OnClickListene
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 		super.onActivityResult(requestCode, resultCode, data);
-		popEditLabelUtils.handleResult(requestCode, resultCode, data);
+		switch (requestCode) {
+			case ActivityConstants.RESULT_LOAD_IMAGE:
+				popEditLabelUtils.handleResult(requestCode, resultCode, data);
+				break;
+			case ActivityConstants.RESULT_ADD_MEMBER:
+				Bundle bundle = data.getExtras();
+				int id = ((IdObj) bundle.getSerializable(BundleNames.ID_OBJ)).getId();
+				if (id != 0) {
+					long status = idLabelTableUtils.insertAll("" + id, labelObj.getLabelName());
+					if (status < 0)
+						Toast.makeText(this, "添加联系人标签失败，\n是否已经在标签中？", Toast.LENGTH_LONG).show();
+					initEditList();
+				}
+				break;
+		}
+
 	}
 
 	protected void onPause() {
@@ -300,4 +316,5 @@ public class LabelDetailActivity extends Activity implements View.OnClickListene
 		CursorUtils.closeExistsCursor(cursorView);
 		allTableUtils.closeDataBase();
 	}
+
 }

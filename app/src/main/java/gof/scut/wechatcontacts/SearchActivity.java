@@ -5,26 +5,32 @@ import android.database.Cursor;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.view.KeyEvent;
-import android.view.Menu;
-import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
-import android.widget.TextView;
 
-import gof.scut.common.utils.Log;
+import gof.scut.common.utils.ActivityUtils;
+import gof.scut.common.utils.BundleNames;
 import gof.scut.common.utils.StringUtils;
 import gof.scut.common.utils.database.CursorUtils;
 import gof.scut.common.utils.database.MainTableUtils;
 import gof.scut.cwh.models.adapter.SearchResultAdapter;
+import gof.scut.cwh.models.object.ActivityConstants;
+import gof.scut.cwh.models.object.IdObj;
+import gof.scut.cwh.models.object.Signal;
 
 
-public class SearchActivity extends Activity {
+public class SearchActivity extends Activity implements View.OnClickListener {
 
-	EditText searchKey;
-	ListView searchResult;
-	MainTableUtils mainTableUtils;
-	Cursor cursorResult;
+	private EditText searchKey;
+	private Button cancel;
+	private ListView searchResult;
+	private MainTableUtils mainTableUtils;
+	private Cursor cursorResult;
+
+	private int fromActivity;
+
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -41,9 +47,24 @@ public class SearchActivity extends Activity {
 	}
 
 	void init() {
+		callTypeCheck();
 		initDataBase();
 		findView();
 		setListener();
+	}
+
+	void callTypeCheck() {
+		//可能调用搜索的地方有main，label detail,
+		Bundle bundle = getIntent().getExtras();
+		setFromActivity(((Signal) bundle.getSerializable(Signal.NAME)).getFrom());
+	}
+
+	public int getFromActivity() {
+		return fromActivity;
+	}
+
+	public void setFromActivity(int fromActivity) {
+		this.fromActivity = fromActivity;
 	}
 
 	void initDataBase() {
@@ -53,6 +74,7 @@ public class SearchActivity extends Activity {
 	void findView() {
 		searchKey = (EditText) findViewById(R.id.search_key);
 		searchResult = (ListView) findViewById(R.id.search_result);
+		cancel = (Button) findViewById(R.id.cancel);
 	}
 
 	void setListener() {
@@ -72,6 +94,7 @@ public class SearchActivity extends Activity {
 
 			}
 		});
+		cancel.setOnClickListener(this);
 	}
 
 	void fullTextSearch(String keyword) {
@@ -82,7 +105,8 @@ public class SearchActivity extends Activity {
 		if (!StringUtils.isNumber(keyword))
 			cursorResult = mainTableUtils.fullTextSearchWithWord(keyword);
 		else cursorResult = mainTableUtils.fullTextSearchWithNumOrWord(keyword);
-		SearchResultAdapter searchResultAdapter = new SearchResultAdapter(this, cursorResult, keyword);
+		SearchResultAdapter searchResultAdapter
+				= new SearchResultAdapter(this, cursorResult, keyword, getFromActivity());
 		searchResult.setAdapter(searchResultAdapter);
 	}
 
@@ -104,5 +128,19 @@ public class SearchActivity extends Activity {
 		super.onDestroy();
 		CursorUtils.closeExistsCursor(cursorResult);
 		mainTableUtils.closeDataBase();
+	}
+
+	@Override
+	public void onClick(View v) {
+		switch (v.getId()) {
+			case R.id.cancel:
+				if (getFromActivity() == ActivityConstants.LABEL_DETAIL_ACTIVITY) {
+					ActivityUtils.setActivityResult(
+							this, ActivityConstants.RESULT_ADD_MEMBER, BundleNames.ID_OBJ,
+							new IdObj(0));
+				}
+				finish();
+				break;
+		}
 	}
 }
