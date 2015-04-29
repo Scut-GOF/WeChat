@@ -2,21 +2,17 @@ package gof.scut.wechatcontacts;
 
 import android.app.Activity;
 import android.database.Cursor;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
-import android.widget.LinearLayout;
 import android.widget.ListView;
 
-import java.util.ArrayList;
-
 import gof.scut.common.utils.ActivityUtils;
-import gof.scut.common.utils.Log;
-import gof.scut.common.utils.StringUtils;
 import gof.scut.common.utils.database.CursorUtils;
 import gof.scut.common.utils.database.MainTableUtils;
 import gof.scut.cwh.models.adapter.ContactsAdapter;
+import gof.scut.cwh.models.object.ActivityConstants;
+import gof.scut.cwh.models.object.Signal;
 
 
 public class MainActivity extends Activity implements View.OnClickListener {
@@ -92,7 +88,8 @@ public class MainActivity extends Activity implements View.OnClickListener {
 
 		switch (v.getId()) {
 			case R.id.bt_search:
-				ActivityUtils.ActivitySkip(this, SearchActivity.class);
+				ActivityUtils.ActivitySkipWithObject(this, SearchActivity.class, Signal.NAME,
+						new Signal(ActivityConstants.MAIN_ACTIVITY, ActivityConstants.SEARCH_ACTIVITY));
 
 				break;
 			case R.id.bt_add:

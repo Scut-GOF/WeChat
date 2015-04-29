@@ -9,8 +9,6 @@ import android.view.ViewGroup;
 
 import java.io.Serializable;
 
-import gof.scut.cwh.models.object.IdObj;
-
 
 public class ActivityUtils {
 	public static void ActivitySkip(Context context, Class<?> toClass) {
@@ -24,6 +22,17 @@ public class ActivityUtils {
 		Intent intent = new Intent();
 		intent.setClass(context, toClass);
 		context.startActivity(intent);
+	}
+
+	public static void startActivityWithObjectForResult
+			(Context context, Class<?> toClass, String key, Serializable obj, int requestCode) {
+		Intent intent = new Intent();
+		intent.setClass(context, toClass);
+		Bundle bundle = new Bundle();
+		bundle.putSerializable(key, obj);
+		intent.putExtras(bundle);
+//        int id =((IdObj)bundle.getSerializable("  ")).getId();
+		((Activity) context).startActivityForResult(intent, requestCode);
 	}
 
 
@@ -45,5 +54,22 @@ public class ActivityUtils {
 
 	public static View getRootView(Activity context) {
 		return ((ViewGroup) context.findViewById(android.R.id.content)).getChildAt(0);
+	}
+
+	public static Intent getBundleIntent(Bundle bundle) {
+		Intent intent = new Intent();
+		intent.putExtras(bundle);
+		return intent;
+	}
+
+	public static Bundle getSingleObjectBundle(String key, Serializable obj) {
+		Bundle bundle = new Bundle();
+		bundle.putSerializable(key, obj);
+		return bundle;
+	}
+
+	public static void setActivityResult(Context context, int requestCode, String key, Serializable obj) {
+		Intent intent = getBundleIntent(getSingleObjectBundle(key, obj));
+		((Activity) context).setResult(requestCode, intent);
 	}
 }

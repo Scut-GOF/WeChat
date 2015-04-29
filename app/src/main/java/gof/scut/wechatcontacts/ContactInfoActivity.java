@@ -1,7 +1,7 @@
 package gof.scut.wechatcontacts;
 
+import android.app.Activity;
 import android.database.Cursor;
-import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -16,7 +16,7 @@ import gof.scut.cwh.models.object.IdObj;
 import gof.scut.fental.models.adapter.PhonesAdapter;
 
 
-public class ContactInfoActivity extends ActionBarActivity {
+public class ContactInfoActivity extends Activity {
 
 	private TextView tvName;
 	private TextView tvAddress;
