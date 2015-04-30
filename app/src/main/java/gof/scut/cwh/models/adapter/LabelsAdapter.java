@@ -13,8 +13,10 @@ import android.widget.TextView;
 import gof.scut.common.utils.ActivityUtils;
 import gof.scut.common.utils.BitmapUtils;
 import gof.scut.common.utils.BundleNames;
+import gof.scut.common.utils.database.IDLabelTableUtils;
 import gof.scut.common.utils.database.TBLabelConstants;
 import gof.scut.cwh.models.object.ActivityConstants;
+import gof.scut.cwh.models.object.IdObj;
 import gof.scut.cwh.models.object.LabelListObj;
 import gof.scut.cwh.models.object.LabelObj;
 import gof.scut.wechatcontacts.LabelDetailActivity;
@@ -30,6 +32,8 @@ public class LabelsAdapter extends BaseAdapter {
 	private LinearLayout layout;
 	private int fromActivity;
 	private LabelListObj labels;
+	private IdObj contact;
+//	private ContactLabelAdapter existsLabels;
 
 	public LabelsAdapter(Context context, Cursor cursor, int fromActivity) {
 		this.context = context;
@@ -42,6 +46,14 @@ public class LabelsAdapter extends BaseAdapter {
 		this.cursor = cursor;
 		this.fromActivity = fromActivity;
 		this.labels = labels;
+	}
+
+	public LabelsAdapter(Context context, Cursor cursor, int fromActivity, LabelListObj labels, IdObj contact) {
+		this.context = context;
+		this.cursor = cursor;
+		this.fromActivity = fromActivity;
+		this.labels = labels;
+		this.contact = contact;
 	}
 
 	public LabelsAdapter(Context context, Cursor cursor) {
@@ -84,7 +96,9 @@ public class LabelsAdapter extends BaseAdapter {
 		labelIcon.setBackgroundDrawable(null);
 		if (iconPath.equals("")) labelIcon.setBackgroundResource(R.drawable.label50);
 		else labelIcon.setImageBitmap(BitmapUtils.decodeBitmapFromPath(iconPath));
-		if (fromActivity == ActivityConstants.ADD_CONTACTS_ACTIVITY) {
+
+
+		if (fromActivity == ActivityConstants.ADD_CONTACTS_ACTIVITY || fromActivity == ActivityConstants.CONTACT_INFO_ACTIVITY) {
 			if (labels.inList(strLabelName)) {
 				setLayoutBg(R.color.alice_blue);
 			} else {
@@ -102,7 +116,17 @@ public class LabelsAdapter extends BaseAdapter {
 						ActivityUtils.ActivitySkipWithObject(context, LabelDetailActivity.class, BundleNames.LABEL_OBJ, label);
 						break;
 					case ActivityConstants.CONTACT_INFO_ACTIVITY:
-						//TODO add and REFRESH LABEL GRID
+						//TODO INSERT INTO DATABASE
+						if (!labels.inList(strLabelName)) {
+							IDLabelTableUtils idLabelTableUtils = new IDLabelTableUtils(context);
+							idLabelTableUtils.insertAll("" + contact.getId(), strLabelName);
+							labels.addLabel(strLabelName);
+						} else {
+							IDLabelTableUtils idLabelTableUtils = new IDLabelTableUtils(context);
+							idLabelTableUtils.deleteWithID_Label("" + contact.getId(), strLabelName);
+							labels.removeLabel(strLabelName);
+						}
+						notifyDataSetInvalidated();
 						break;
 					case ActivityConstants.ADD_CONTACTS_ACTIVITY:
 //						ActivityUtils.setActivityResult

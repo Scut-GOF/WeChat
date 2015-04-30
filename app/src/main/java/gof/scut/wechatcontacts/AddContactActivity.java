@@ -185,10 +185,17 @@ public class AddContactActivity extends RoboActivity {
 
 				Bundle bundle = data.getExtras();
 				LabelListObj labelListObj = (LabelListObj) bundle.getSerializable(BundleNames.LABEL_LIST);
-				//TODO REFRESH LABEL LIST, and finally insert id_label records into database
+
 				// do nothing if no label chose
-				if (labelListObj.getLabels().size() != 0)
+				//on edit contacts, change database in editlabel activity,
+				//so when back to edit contact activity, refresh database isn't needed;
+				// but on new contacts, only change string list in editlabel activity
+				// so when back to add contact activity, refresh database is needed;
+				if (labelListObj.getLabels().size() != 0) {
 					Toast.makeText(this, labelListObj.toString(), Toast.LENGTH_LONG).show();
+					//TODO REFRESH LABEL LIST, and finally insert id_label records into database
+				}
+
 				break;
 			default:
 				break;

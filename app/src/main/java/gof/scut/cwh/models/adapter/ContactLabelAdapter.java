@@ -15,6 +15,7 @@ import gof.scut.common.utils.BitmapUtils;
 import gof.scut.common.utils.database.IDLabelTableUtils;
 import gof.scut.common.utils.database.TBLabelConstants;
 import gof.scut.cwh.models.object.IdObj;
+import gof.scut.cwh.models.object.LabelListObj;
 import gof.scut.wechatcontacts.R;
 
 /**
@@ -25,12 +26,13 @@ public class ContactLabelAdapter extends BaseAdapter {
 	private Cursor cursor;
 	private LinearLayout layout;
 	private IdObj idObj;
+	private LabelListObj labelListObj;
 
-
-	public ContactLabelAdapter(Context context, Cursor cursor, IdObj idObj) {
+	public ContactLabelAdapter(Context context, Cursor cursor, IdObj idObj, LabelListObj labelListObj) {
 		this.context = context;
 		this.cursor = cursor;
 		this.idObj = idObj;
+		this.labelListObj = labelListObj;
 	}
 
 	@Override
@@ -49,7 +51,7 @@ public class ContactLabelAdapter extends BaseAdapter {
 	}
 
 	@Override
-	public View getView(int position, View layout, ViewGroup parent) {
+	public View getView(int position, View view, ViewGroup parent) {
 		cursor.moveToPosition(position);
 		LayoutInflater inflater = LayoutInflater.from(context);
 		//layout = (LinearLayout) inflater.inflate(R.layout.cell_label_grid, null);
@@ -61,6 +63,7 @@ public class ContactLabelAdapter extends BaseAdapter {
 		final String iconPath = cursor.getString(cursor.getColumnIndex(TBLabelConstants.LABEL_ICON));
 
 		labelName.setText(strLabelName);
+		labelListObj.addLabel(strLabelName);
 		labelIcon.setBackgroundDrawable(null);
 		if (iconPath.equals("")) labelIcon.setBackgroundResource(R.drawable.label50);
 		else labelIcon.setImageBitmap(BitmapUtils.decodeBitmapFromPath(iconPath));

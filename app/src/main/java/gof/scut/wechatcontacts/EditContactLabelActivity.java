@@ -6,13 +6,11 @@ import android.database.Cursor;
 import android.os.Bundle;
 import android.view.KeyEvent;
 import android.view.View;
-import android.widget.GridView;
 import android.widget.ListView;
 import android.widget.TextView;
 
 import gof.scut.common.utils.ActivityUtils;
 import gof.scut.common.utils.BundleNames;
-import gof.scut.common.utils.database.AllTableUtils;
 import gof.scut.common.utils.database.CursorUtils;
 import gof.scut.common.utils.database.LabelTableUtils;
 import gof.scut.cwh.models.adapter.ContactLabelAdapter;
@@ -26,14 +24,15 @@ import gof.scut.cwh.models.object.Signal;
 public class EditContactLabelActivity extends Activity implements View.OnClickListener {
 
 	TextView labelsBack;
-	GridView existsLabels;
+	//	GridView existsLabels;
 	ListView labelList;
 	TextView tvSure;
 
 	LabelTableUtils labelTableUtils;
-	AllTableUtils allTableUtils;
+	//	AllTableUtils allTableUtils;
 	Cursor cursorLabels;
-	Cursor cursorExistsLabels;
+	//	Cursor cursorExistsLabels;
+	ContactLabelAdapter labelsAdapter;
 
 	IdObj contact;
 	LabelListObj selectedLabels;
@@ -60,17 +59,17 @@ public class EditContactLabelActivity extends Activity implements View.OnClickLi
 	@Override
 	protected void onResume() {
 		super.onResume();
-		if (fromActivity == ActivityConstants.CONTACT_INFO_ACTIVITY)
-			existsLabels.setVisibility(View.VISIBLE);
-		else
-			existsLabels.setVisibility(View.GONE);
-		if (fromActivity == ActivityConstants.CONTACT_INFO_ACTIVITY) initGrid();
+//		if (fromActivity == ActivityConstants.CONTACT_INFO_ACTIVITY)
+//			existsLabels.setVisibility(View.VISIBLE);
+//		else
+//			existsLabels.setVisibility(View.GONE);
+//		if (fromActivity == ActivityConstants.CONTACT_INFO_ACTIVITY) initGrid();
 		initList();
 	}
 
 	void initDatabase() {
 		labelTableUtils = new LabelTableUtils(this);
-		allTableUtils = new AllTableUtils(this);
+//		allTableUtils = new AllTableUtils(this);
 	}
 
 	void init() {
@@ -102,12 +101,12 @@ public class EditContactLabelActivity extends Activity implements View.OnClickLi
 	void findView() {
 		labelList = (ListView) findViewById(R.id.label_list);
 		labelsBack = (TextView) findViewById(R.id.cancel);
-		existsLabels = (GridView) findViewById(R.id.exists_labels);
+//		existsLabels = (GridView) findViewById(R.id.exists_labels);
 		tvSure = (TextView) findViewById(R.id.bt_sure);
-		if (fromActivity == ActivityConstants.CONTACT_INFO_ACTIVITY)
-			existsLabels.setVisibility(View.VISIBLE);
-		else
-			existsLabels.setVisibility(View.GONE);
+//		if (fromActivity == ActivityConstants.CONTACT_INFO_ACTIVITY)
+//			existsLabels.setVisibility(View.VISIBLE);
+//		else
+//			existsLabels.setVisibility(View.GONE);
 	}
 
 	void initList() {
@@ -119,20 +118,15 @@ public class EditContactLabelActivity extends Activity implements View.OnClickLi
 
 	}
 
-	void initGrid() {
+//	void initGrid() {
+//		CursorUtils.closeExistsCursor(cursorExistsLabels);
+//		cursorLabels = allTableUtils.selectLabelDetailForID(contact.getId() + "");
+//		labelsAdapter
+//				= new ContactLabelAdapter(this, cursorExistsLabels, contact,selectedLabels);
+//		existsLabels.setAdapter(labelsAdapter);
+//	}
 
-		CursorUtils.closeExistsCursor(cursorExistsLabels);
-		cursorLabels = allTableUtils.selectLabelDetailForID(contact.getId() + "");
-		ContactLabelAdapter labelsAdapter = new ContactLabelAdapter(this, cursorExistsLabels, contact);
-		existsLabels.setAdapter(labelsAdapter);
-	}
 
-
-	@Override
-	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-		super.onActivityResult(requestCode, resultCode, data);
-
-	}
 
 	@Override
 	public void onClick(View v) {
@@ -146,6 +140,10 @@ public class EditContactLabelActivity extends Activity implements View.OnClickLi
 					ActivityUtils.setActivityResult
 							(this, ActivityConstants.REQUEST_CODE_LABEL, BundleNames.LABEL_LIST,
 									selectedLabels);
+				//on edit contacts, change database in this activity,
+				//so when back to edit contact activity, refresh database isn't needed;
+				// but on new contacts, only change string list in this activity
+				// so when back to add contact activity, refresh database is needed;
 				finish();
 				break;
 		}
@@ -155,18 +153,18 @@ public class EditContactLabelActivity extends Activity implements View.OnClickLi
 		super.onPause();
 		//setEmptyResult();
 		CursorUtils.closeExistsCursor(cursorLabels);
-		CursorUtils.closeExistsCursor(cursorExistsLabels);
+//		CursorUtils.closeExistsCursor(cursorExistsLabels);
 		labelTableUtils.closeDataBase();
-		allTableUtils.closeDataBase();
+//		allTableUtils.closeDataBase();
 	}
 
 	protected void onStop() {
 		super.onStop();
 		//setEmptyResult();
 		CursorUtils.closeExistsCursor(cursorLabels);
-		CursorUtils.closeExistsCursor(cursorExistsLabels);
+//		CursorUtils.closeExistsCursor(cursorExistsLabels);
 		labelTableUtils.closeDataBase();
-		allTableUtils.closeDataBase();
+//		allTableUtils.closeDataBase();
 	}
 
 	@Override
@@ -174,9 +172,9 @@ public class EditContactLabelActivity extends Activity implements View.OnClickLi
 		super.onDestroy();
 		//setEmptyResult();
 		CursorUtils.closeExistsCursor(cursorLabels);
-		CursorUtils.closeExistsCursor(cursorExistsLabels);
+//		CursorUtils.closeExistsCursor(cursorExistsLabels);
 		labelTableUtils.closeDataBase();
-		allTableUtils.closeDataBase();
+//		allTableUtils.closeDataBase();
 	}
 
 	private void setEmptyResult() {
