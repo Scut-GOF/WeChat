@@ -4,11 +4,13 @@ import android.app.Activity;
 import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
+import android.view.KeyEvent;
 import android.view.View;
 import android.widget.GridView;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import gof.scut.common.utils.ActivityUtils;
 import gof.scut.common.utils.BundleNames;
 import gof.scut.common.utils.database.AllTableUtils;
 import gof.scut.common.utils.database.CursorUtils;
@@ -17,6 +19,7 @@ import gof.scut.cwh.models.adapter.ContactLabelAdapter;
 import gof.scut.cwh.models.adapter.LabelsAdapter;
 import gof.scut.cwh.models.object.ActivityConstants;
 import gof.scut.cwh.models.object.IdObj;
+import gof.scut.cwh.models.object.LabelObj;
 import gof.scut.cwh.models.object.Signal;
 
 
@@ -131,6 +134,7 @@ public class EditContactLabelActivity extends Activity implements View.OnClickLi
 	public void onClick(View v) {
 		switch (v.getId()) {
 			case R.id.cancel:
+				setResult();
 				finish();
 				break;
 
@@ -139,6 +143,7 @@ public class EditContactLabelActivity extends Activity implements View.OnClickLi
 
 	protected void onPause() {
 		super.onPause();
+		//setResult();
 		CursorUtils.closeExistsCursor(cursorLabels);
 		CursorUtils.closeExistsCursor(cursorExistsLabels);
 		labelTableUtils.closeDataBase();
@@ -147,6 +152,7 @@ public class EditContactLabelActivity extends Activity implements View.OnClickLi
 
 	protected void onStop() {
 		super.onStop();
+		//setResult();
 		CursorUtils.closeExistsCursor(cursorLabels);
 		CursorUtils.closeExistsCursor(cursorExistsLabels);
 		labelTableUtils.closeDataBase();
@@ -156,9 +162,29 @@ public class EditContactLabelActivity extends Activity implements View.OnClickLi
 	@Override
 	protected void onDestroy() {
 		super.onDestroy();
+		//setResult();
 		CursorUtils.closeExistsCursor(cursorLabels);
 		CursorUtils.closeExistsCursor(cursorExistsLabels);
 		labelTableUtils.closeDataBase();
 		allTableUtils.closeDataBase();
+	}
+
+	private void setResult() {
+		if (getFromActivity() == ActivityConstants.ADD_CONTACTS_ACTIVITY)
+			ActivityUtils.setActivityResult
+					(this, ActivityConstants.REQUEST_CODE_LABEL, BundleNames.LABEL_OBJ,
+							new LabelObj("", "", 0));
+	}
+
+	@Override
+	public boolean onKeyDown(int keyCode, KeyEvent event) {
+		if ((keyCode == KeyEvent.KEYCODE_BACK)) {
+			setResult();
+			super.onKeyDown(keyCode, event);
+			return true;
+		} else {
+			return super.onKeyDown(keyCode, event);
+		}
+
 	}
 }

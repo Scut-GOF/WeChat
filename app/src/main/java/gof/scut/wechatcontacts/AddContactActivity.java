@@ -186,7 +186,9 @@ public class AddContactActivity extends RoboActivity {
 				Bundle bundle = data.getExtras();
 				LabelObj labelObj = (LabelObj) bundle.getSerializable(BundleNames.LABEL_OBJ);
 				//TODO REFRESH LABEL LIST, and finally insert id_label records into database
-				Toast.makeText(this, labelObj.toString(), Toast.LENGTH_LONG).show();
+				// do nothing if no label chose
+				if (!labelObj.getLabelName().equals(""))
+					Toast.makeText(this, labelObj.toString(), Toast.LENGTH_LONG).show();
 				break;
 			default:
 				break;
