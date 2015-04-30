@@ -19,7 +19,7 @@ import gof.scut.cwh.models.adapter.ContactLabelAdapter;
 import gof.scut.cwh.models.adapter.LabelsAdapter;
 import gof.scut.cwh.models.object.ActivityConstants;
 import gof.scut.cwh.models.object.IdObj;
-import gof.scut.cwh.models.object.LabelObj;
+import gof.scut.cwh.models.object.LabelListObj;
 import gof.scut.cwh.models.object.Signal;
 
 
@@ -28,6 +28,7 @@ public class EditContactLabelActivity extends Activity implements View.OnClickLi
 	TextView labelsBack;
 	GridView existsLabels;
 	ListView labelList;
+	TextView tvSure;
 
 	LabelTableUtils labelTableUtils;
 	AllTableUtils allTableUtils;
@@ -35,6 +36,7 @@ public class EditContactLabelActivity extends Activity implements View.OnClickLi
 	Cursor cursorExistsLabels;
 
 	IdObj contact;
+	LabelListObj selectedLabels;
 
 
 	int fromActivity;
@@ -75,9 +77,7 @@ public class EditContactLabelActivity extends Activity implements View.OnClickLi
 		intentCheck();
 		initDatabase();
 		findView();
-
 		setListener();
-
 	}
 
 	void intentCheck() {
@@ -86,20 +86,24 @@ public class EditContactLabelActivity extends Activity implements View.OnClickLi
 		Bundle bundle = intent.getExtras();
 		Signal signal = (Signal) bundle.getSerializable(Signal.NAME);
 		setFromActivity(signal.getFrom());
-		if (fromActivity == ActivityConstants.CONTACT_INFO_ACTIVITY)
+		if (fromActivity == ActivityConstants.CONTACT_INFO_ACTIVITY) {
 			contact = (IdObj) bundle.getSerializable(BundleNames.ID_OBJ);
+		} else if (fromActivity == ActivityConstants.ADD_CONTACTS_ACTIVITY) {
+			selectedLabels = new LabelListObj();
+		}
 	}
 
 	void setListener() {
 
 		labelsBack.setOnClickListener(this);
+		tvSure.setOnClickListener(this);
 	}
 
 	void findView() {
-
 		labelList = (ListView) findViewById(R.id.label_list);
 		labelsBack = (TextView) findViewById(R.id.cancel);
 		existsLabels = (GridView) findViewById(R.id.exists_labels);
+		tvSure = (TextView) findViewById(R.id.bt_sure);
 		if (fromActivity == ActivityConstants.CONTACT_INFO_ACTIVITY)
 			existsLabels.setVisibility(View.VISIBLE);
 		else
@@ -110,7 +114,7 @@ public class EditContactLabelActivity extends Activity implements View.OnClickLi
 
 		CursorUtils.closeExistsCursor(cursorLabels);
 		cursorLabels = labelTableUtils.selectAll();
-		LabelsAdapter labelsAdapter = new LabelsAdapter(this, cursorLabels, getFromActivity());
+		LabelsAdapter labelsAdapter = new LabelsAdapter(this, cursorLabels, getFromActivity(), selectedLabels);
 		labelList.setAdapter(labelsAdapter);
 
 	}
@@ -134,16 +138,22 @@ public class EditContactLabelActivity extends Activity implements View.OnClickLi
 	public void onClick(View v) {
 		switch (v.getId()) {
 			case R.id.cancel:
-				setResult();
+				setEmptyResult();
 				finish();
 				break;
-
+			case R.id.bt_sure:
+				if (getFromActivity() == ActivityConstants.ADD_CONTACTS_ACTIVITY)
+					ActivityUtils.setActivityResult
+							(this, ActivityConstants.REQUEST_CODE_LABEL, BundleNames.LABEL_LIST,
+									selectedLabels);
+				finish();
+				break;
 		}
 	}
 
 	protected void onPause() {
 		super.onPause();
-		//setResult();
+		//setEmptyResult();
 		CursorUtils.closeExistsCursor(cursorLabels);
 		CursorUtils.closeExistsCursor(cursorExistsLabels);
 		labelTableUtils.closeDataBase();
@@ -152,7 +162,7 @@ public class EditContactLabelActivity extends Activity implements View.OnClickLi
 
 	protected void onStop() {
 		super.onStop();
-		//setResult();
+		//setEmptyResult();
 		CursorUtils.closeExistsCursor(cursorLabels);
 		CursorUtils.closeExistsCursor(cursorExistsLabels);
 		labelTableUtils.closeDataBase();
@@ -162,24 +172,29 @@ public class EditContactLabelActivity extends Activity implements View.OnClickLi
 	@Override
 	protected void onDestroy() {
 		super.onDestroy();
-		//setResult();
+		//setEmptyResult();
 		CursorUtils.closeExistsCursor(cursorLabels);
 		CursorUtils.closeExistsCursor(cursorExistsLabels);
 		labelTableUtils.closeDataBase();
 		allTableUtils.closeDataBase();
 	}
 
-	private void setResult() {
+	private void setEmptyResult() {
+//		if (getFromActivity() == ActivityConstants.ADD_CONTACTS_ACTIVITY)
+//			ActivityUtils.setActivityResult
+//					(this, ActivityConstants.REQUEST_CODE_LABEL, BundleNames.LABEL_OBJ,
+//							new LabelObj("", "", 0));
+		selectedLabels.removeAllMember();
 		if (getFromActivity() == ActivityConstants.ADD_CONTACTS_ACTIVITY)
 			ActivityUtils.setActivityResult
-					(this, ActivityConstants.REQUEST_CODE_LABEL, BundleNames.LABEL_OBJ,
-							new LabelObj("", "", 0));
+					(this, ActivityConstants.REQUEST_CODE_LABEL, BundleNames.LABEL_LIST,
+							selectedLabels);
 	}
 
 	@Override
 	public boolean onKeyDown(int keyCode, KeyEvent event) {
 		if ((keyCode == KeyEvent.KEYCODE_BACK)) {
-			setResult();
+			setEmptyResult();
 			super.onKeyDown(keyCode, event);
 			return true;
 		} else {

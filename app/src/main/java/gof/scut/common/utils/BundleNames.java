@@ -6,4 +6,5 @@ package gof.scut.common.utils;
 public interface BundleNames {
 	String ID_OBJ = "IdObj";
 	String LABEL_OBJ = "LabelObj";
+	String LABEL_LIST = "LabelList";
 }

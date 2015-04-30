@@ -19,6 +19,18 @@
             style="@style/simple_back_button"
             android:clickable="true"/>
 
+        <TextView
+            android:id="@+id/bt_sure"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+
+            android:layout_centerVertical="true"
+            android:text="@string/sure"
+            android:textSize="22sp"
+            android:textColor="@color/white"
+            android:clickable="true"
+            android:layout_marginRight="@dimen/vertical_margin"/>
 
     </RelativeLayout>
 

@@ -26,6 +26,7 @@ public class ContactLabelAdapter extends BaseAdapter {
 	private LinearLayout layout;
 	private IdObj idObj;
 
+
 	public ContactLabelAdapter(Context context, Cursor cursor, IdObj idObj) {
 		this.context = context;
 		this.cursor = cursor;

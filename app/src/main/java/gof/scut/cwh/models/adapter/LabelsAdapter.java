@@ -1,6 +1,5 @@
 package gof.scut.cwh.models.adapter;
 
-import android.app.Activity;
 import android.content.Context;
 import android.database.Cursor;
 import android.view.LayoutInflater;
@@ -16,6 +15,7 @@ import gof.scut.common.utils.BitmapUtils;
 import gof.scut.common.utils.BundleNames;
 import gof.scut.common.utils.database.TBLabelConstants;
 import gof.scut.cwh.models.object.ActivityConstants;
+import gof.scut.cwh.models.object.LabelListObj;
 import gof.scut.cwh.models.object.LabelObj;
 import gof.scut.wechatcontacts.LabelDetailActivity;
 import gof.scut.wechatcontacts.R;
@@ -29,11 +29,19 @@ public class LabelsAdapter extends BaseAdapter {
 	private Cursor cursor;
 	private LinearLayout layout;
 	private int fromActivity;
+	private LabelListObj labels;
 
 	public LabelsAdapter(Context context, Cursor cursor, int fromActivity) {
 		this.context = context;
 		this.cursor = cursor;
 		this.fromActivity = fromActivity;
+	}
+
+	public LabelsAdapter(Context context, Cursor cursor, int fromActivity, LabelListObj labels) {
+		this.context = context;
+		this.cursor = cursor;
+		this.fromActivity = fromActivity;
+		this.labels = labels;
 	}
 
 	public LabelsAdapter(Context context, Cursor cursor) {
@@ -58,7 +66,7 @@ public class LabelsAdapter extends BaseAdapter {
 	}
 
 	@Override
-	public View getView(int position, View layout, ViewGroup parent) {
+	public View getView(int position, View convertView, ViewGroup parent) {
 		cursor.moveToPosition(position);
 		LayoutInflater inflater = LayoutInflater.from(context);
 		//layout = (LinearLayout) inflater.inflate(R.layout.cell_label_grid, null);
@@ -76,6 +84,14 @@ public class LabelsAdapter extends BaseAdapter {
 		labelIcon.setBackgroundDrawable(null);
 		if (iconPath.equals("")) labelIcon.setBackgroundResource(R.drawable.label50);
 		else labelIcon.setImageBitmap(BitmapUtils.decodeBitmapFromPath(iconPath));
+		if (fromActivity == ActivityConstants.ADD_CONTACTS_ACTIVITY) {
+			if (labels.inList(strLabelName)) {
+				setLayoutBg(R.color.alice_blue);
+			} else {
+				setLayoutBg(R.color.white);
+			}
+		}
+
 		layout.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
@@ -89,10 +105,16 @@ public class LabelsAdapter extends BaseAdapter {
 						//TODO add and REFRESH LABEL GRID
 						break;
 					case ActivityConstants.ADD_CONTACTS_ACTIVITY:
-						ActivityUtils.setActivityResult
-								(context, ActivityConstants.REQUEST_CODE_LABEL, BundleNames.LABEL_OBJ,
-										new LabelObj(strLabelName, iconPath, Integer.parseInt(strMemberCount)));
-						((Activity) context).finish();
+//						ActivityUtils.setActivityResult
+//								(context, ActivityConstants.REQUEST_CODE_LABEL, BundleNames.LABEL_OBJ,
+//										new LabelObj(strLabelName, iconPath, Integer.parseInt(strMemberCount)));
+//						((Activity) context).finish();
+						if (!labels.inList(strLabelName)) {
+							labels.addLabel(strLabelName);
+						} else {
+							labels.removeLabel(strLabelName);
+						}
+						notifyDataSetInvalidated();
 						break;
 				}
 
@@ -100,6 +122,10 @@ public class LabelsAdapter extends BaseAdapter {
 		});
 
 		return layout;
+	}
+
+	private void setLayoutBg(int colorId) {
+		layout.findViewById(R.id.label_cell).setBackgroundColor(context.getResources().getColor(colorId));
 	}
 
 }
