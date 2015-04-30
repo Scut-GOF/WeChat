@@ -28,7 +28,7 @@ import gof.scut.common.utils.Log;
 import gof.scut.common.utils.database.MainTableUtils;
 import gof.scut.cwh.models.object.ActivityConstants;
 import gof.scut.cwh.models.object.IdObj;
-import gof.scut.cwh.models.object.LabelObj;
+import gof.scut.cwh.models.object.LabelListObj;
 import gof.scut.cwh.models.object.Signal;
 import roboguice.activity.RoboActivity;
 import roboguice.inject.InjectView;
@@ -184,11 +184,11 @@ public class AddContactActivity extends RoboActivity {
 			case REQUEST_CODE_LABEL:
 
 				Bundle bundle = data.getExtras();
-				LabelObj labelObj = (LabelObj) bundle.getSerializable(BundleNames.LABEL_OBJ);
+				LabelListObj labelListObj = (LabelListObj) bundle.getSerializable(BundleNames.LABEL_LIST);
 				//TODO REFRESH LABEL LIST, and finally insert id_label records into database
 				// do nothing if no label chose
-				if (!labelObj.getLabelName().equals(""))
-					Toast.makeText(this, labelObj.toString(), Toast.LENGTH_LONG).show();
+				if (labelListObj.getLabels().size() != 0)
+					Toast.makeText(this, labelListObj.toString(), Toast.LENGTH_LONG).show();
 				break;
 			default:
 				break;
