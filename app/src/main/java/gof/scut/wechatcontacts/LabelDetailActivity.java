@@ -233,7 +233,7 @@ public class LabelDetailActivity extends Activity implements View.OnClickListene
 				break;
 			case R.id.add_member:
 
-//				idLabelTableUtils.insertAll("1", labelObj.getLabelName());
+//				allTableUtils.insertAll("1", labelObj.getLabelName());
 //
 //				initEditList();
 //				break;

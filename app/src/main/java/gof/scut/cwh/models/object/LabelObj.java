@@ -45,6 +45,15 @@ public class LabelObj implements Serializable {
 		return labelName;
 	}
 
+	@Override
+	public String toString() {
+		return "LabelObj{" +
+				"labelName='" + labelName + '\'' +
+				", iconPath='" + iconPath + '\'' +
+				", memCount=" + memCount +
+				'}';
+	}
+
 	public String getIconPath() {
 		return iconPath;
 	}

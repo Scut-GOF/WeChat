@@ -1,7 +1,5 @@
 package gof.scut.cwh.models.object;
 
-import android.os.Bundle;
-
 import java.io.Serializable;
 
 /**
@@ -32,19 +30,6 @@ public class Signal implements Serializable {
 		this.to = to;
 	}
 
-	public Bundle getContent() {
-		return content;
-	}
-
-	public void setContent(Bundle content) {
-		this.content = content;
-	}
-
-	public Signal(int from, int to, Bundle content) {
-		this.from = from;
-		this.to = to;
-		this.content = content;
-	}
 
 	public Signal(int from, int to) {
 
@@ -52,5 +37,4 @@ public class Signal implements Serializable {
 		this.to = to;
 	}
 
-	private Bundle content;
 }
