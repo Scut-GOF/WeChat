@@ -28,6 +28,7 @@ import gof.scut.common.utils.Log;
 import gof.scut.common.utils.database.CursorUtils;
 import gof.scut.common.utils.database.LabelTableUtils;
 import gof.scut.cwh.models.adapter.LabelsAdapter;
+import gof.scut.cwh.models.object.Signal;
 
 
 public class LabelsActivity extends Activity implements View.OnClickListener {
@@ -43,6 +44,7 @@ public class LabelsActivity extends Activity implements View.OnClickListener {
 
 	final int RESULT_LOAD_IMAGE = 1;
 	String pathSelectedToAdd = "";
+
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -65,11 +67,18 @@ public class LabelsActivity extends Activity implements View.OnClickListener {
 	}
 
 	void init() {
+		intentCheck();
 		initDatabase();
 		findView();
 		initPopAddLabel();
 		setListener();
 
+	}
+
+	void intentCheck() {
+		//AddContact, ContactInfo
+		Intent intent = this.getIntent();
+		Bundle bundle = intent.getBundleExtra(Signal.NAME);
 	}
 
 	void setListener() {

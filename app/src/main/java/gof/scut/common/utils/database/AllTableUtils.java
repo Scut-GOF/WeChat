@@ -10,11 +10,12 @@ import android.database.sqlite.SQLiteDatabase;
 public class AllTableUtils {
 	private static DataBaseHelper dataBaseHelper;
 	SQLiteDatabase db;
+
 	public AllTableUtils(Context context) {
 		dataBaseHelper = new DataBaseHelper(context);
 		//insert several data
 		/*for (int i=0;i<10;i++){
-            insertAll("Friend"+i,""+i,""+i,"10086",i%3,"","");
+		    insertAll("Friend"+i,""+i,""+i,"10086",i%3,"","");
         }*/
 	}
 
@@ -32,6 +33,16 @@ public class AllTableUtils {
 				+ " IN ( SELECT " + TBMainConstants.ID + " FROM " + TBIDLabelConstants.FTS_TABLE_NAME
 				+ " WHERE " + TBIDLabelConstants.LABEL + " match ? )", new String[]{"'" + labelName + "'"});
 
+		return c;
+	}
+
+	public Cursor selectLabelDetailForID(String id) {
+		closeDataBase();
+		//select *from label where label in (select label from fts_idlabel where id match id);
+		Cursor c = db.rawQuery("select * from " + TBLabelConstants.TABLE_NAME
+				+ " where " + TBLabelConstants.LABEL + " in ( select " + TBIDLabelConstants.LABEL + " from "
+				+ TBIDLabelConstants.FTS_TABLE_NAME + " where " + TBIDLabelConstants.ID + " match ?)"
+				, new String[]{"'" + id + "'"});
 		return c;
 	}
 

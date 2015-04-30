@@ -34,5 +34,6 @@
     <string name="my_information">MY INFORMATION</string>
     <string name="all_contact"><![CDATA[<All Contact]]></string>
     <string name="all_label"><![CDATA[<All Label]]></string>
+    <string name="title_activity_edit_contact_label">EditContactLabelActivity</string>
 
 </resources>

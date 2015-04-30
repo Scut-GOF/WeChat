@@ -10,8 +10,10 @@ public interface ActivityConstants {
 	int CONTACT_INFO_ACTIVITY = 2;
 	int LABEL_DETAIL_ACTIVITY = 3;
 	int SEARCH_ACTIVITY = 4;
+	int EditContactLabelActivity = 5;
 
 	int RESULT_LOAD_IMAGE = 1;
-	int RESULT_ADD_MEMBER = 2;
-	int RESULT_SIMPLE_SEARCH_CONTACTS = 3;
+	int REQUEST_CODE_LABEL = 2;
+	int RESULT_ADD_MEMBER = 3;
+	int RESULT_ADD_LABEL = 4;
 }
