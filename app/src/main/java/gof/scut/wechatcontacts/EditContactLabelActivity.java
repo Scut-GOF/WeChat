@@ -9,6 +9,7 @@ import android.widget.GridView;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import gof.scut.common.utils.ActivityUtils;
 import gof.scut.common.utils.BundleNames;
 import gof.scut.common.utils.database.AllTableUtils;
 import gof.scut.common.utils.database.CursorUtils;
@@ -17,6 +18,7 @@ import gof.scut.cwh.models.adapter.ContactLabelAdapter;
 import gof.scut.cwh.models.adapter.LabelsAdapter;
 import gof.scut.cwh.models.object.ActivityConstants;
 import gof.scut.cwh.models.object.IdObj;
+import gof.scut.cwh.models.object.LabelObj;
 import gof.scut.cwh.models.object.Signal;
 
 
@@ -131,6 +133,10 @@ public class EditContactLabelActivity extends Activity implements View.OnClickLi
 	public void onClick(View v) {
 		switch (v.getId()) {
 			case R.id.cancel:
+				if (getFromActivity() == ActivityConstants.ADD_CONTACTS_ACTIVITY)
+					ActivityUtils.setActivityResult
+							(this, ActivityConstants.REQUEST_CODE_LABEL, BundleNames.LABEL_OBJ,
+									new LabelObj("", "", 0));
 				finish();
 				break;
 
