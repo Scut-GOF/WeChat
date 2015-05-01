@@ -10,18 +10,27 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.concurrent.Semaphore;
+
 import gof.scut.common.utils.ActivityUtils;
 import gof.scut.common.utils.BundleNames;
 import gof.scut.common.utils.StringUtils;
 import gof.scut.common.utils.database.CursorUtils;
 import gof.scut.common.utils.database.MainTableUtils;
+import gof.scut.common.utils.database.TBLabelConstants;
+import gof.scut.common.utils.database.TBMainConstants;
+import gof.scut.common.utils.database.TBTelConstants;
 import gof.scut.cwh.models.adapter.SearchResultAdapter;
 import gof.scut.cwh.models.object.ActivityConstants;
 import gof.scut.cwh.models.object.IdObj;
+import gof.scut.cwh.models.object.SearchObj;
 import gof.scut.cwh.models.object.Signal;
 
 
 public class SearchActivity extends Activity implements View.OnClickListener {
+	private int fromActivity;
 
 	private EditText searchKey;
 	private Button cancel;
@@ -29,7 +38,10 @@ public class SearchActivity extends Activity implements View.OnClickListener {
 	private MainTableUtils mainTableUtils;
 	private Cursor cursorResult;
 
-	private int fromActivity;
+
+	final Semaphore semaphore = new Semaphore(1, true);
+
+	String keyword;
 
 
 	@Override
@@ -43,7 +55,6 @@ public class SearchActivity extends Activity implements View.OnClickListener {
 	@Override
 	protected void onResume() {
 		super.onResume();
-		fullTextSearch(searchKey.getText().toString());
 	}
 
 	void init() {
@@ -86,11 +97,21 @@ public class SearchActivity extends Activity implements View.OnClickListener {
 
 			@Override
 			public void onTextChanged(CharSequence s, int start, int before, int count) {
-				fullTextSearch(s.toString());
+
 			}
 
 			@Override
 			public void afterTextChanged(Editable s) {
+
+				keyword = s.toString();
+				new Thread() {
+					public void run() {
+
+						fullTextSearch(keyword);
+
+					}
+				}.start();
+
 
 			}
 		});
@@ -98,16 +119,60 @@ public class SearchActivity extends Activity implements View.OnClickListener {
 	}
 
 	void fullTextSearch(String keyword) {
-//		Log.d("Search", keyword);
-		if (keyword.equals("")) return;
+		if (keyword.equals("")) {
+			return;
+		}
+
+		try {
+			semaphore.acquire();
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
 		CursorUtils.closeExistsCursor(cursorResult);
 		//非数字不搜索电话
 		if (!StringUtils.isNumber(keyword))
 			cursorResult = mainTableUtils.fullTextSearchWithWord(keyword);
 		else cursorResult = mainTableUtils.fullTextSearchWithNumOrWord(keyword);
+
+		if (cursorResult.getCount() == 0) semaphore.release();
+
+		runOnUiThread(new Runnable() {
+			@Override
+			public void run() {
+				fullTextSearchSetUI();
+			}
+		});
+
+	}
+
+	void fullTextSearchSetUI() {
+		if (keyword.equals("")) {
+			return;
+		}
+		List<SearchObj> results = new ArrayList<>();
+		try {
+
+			for (int i = 0; i < cursorResult.getCount(); i++) {
+				cursorResult.moveToPosition(i);
+				results.add(new SearchObj(
+						cursorResult.getString(cursorResult.getColumnIndex(TBMainConstants.ID)),
+						cursorResult.getString(cursorResult.getColumnIndex(TBMainConstants.NAME)),
+						cursorResult.getString(cursorResult.getColumnIndex(TBMainConstants.L_PINYIN)),
+						cursorResult.getString(cursorResult.getColumnIndex(TBMainConstants.S_PINYIN)),
+						cursorResult.getString(cursorResult.getColumnIndex(TBMainConstants.ADDRESS)),
+						cursorResult.getString(cursorResult.getColumnIndex(TBMainConstants.NOTES)),
+						cursorResult.getString(cursorResult.getColumnIndex(TBLabelConstants.LABEL)),
+						cursorResult.getString(cursorResult.getColumnIndex(TBTelConstants.TEL))
+				));
+			}
+		} finally {
+			CursorUtils.closeExistsCursor(cursorResult);
+		}
 		SearchResultAdapter searchResultAdapter
-				= new SearchResultAdapter(this, cursorResult, keyword, getFromActivity());
+				= new SearchResultAdapter(this, results, keyword, getFromActivity());
 		searchResult.setAdapter(searchResultAdapter);
+		semaphore.release();
+
 	}
 
 	@Override

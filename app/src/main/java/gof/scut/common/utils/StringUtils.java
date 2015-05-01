@@ -90,6 +90,8 @@ public class StringUtils {
 		String result = "";
 		//keyword should be lower case
 		int kwLength = keyword.length();
+		if (kwLength == 0)
+			return Html.fromHtml("<font color=\"#" + generalColor + "\">" + str + "</font>");
 		for (int i = 0; i < str.length(); i++) {
 			if ((str.charAt(i) == keyword.charAt(0) || str.charAt(i) == (keyword.charAt(0) - 32)) && (StringCmp(str.toLowerCase(), keyword, i))) {
 

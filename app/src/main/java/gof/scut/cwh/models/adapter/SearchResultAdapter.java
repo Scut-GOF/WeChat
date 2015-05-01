@@ -2,52 +2,49 @@ package gof.scut.cwh.models.adapter;
 
 import android.app.Activity;
 import android.content.Context;
-import android.database.Cursor;
 import android.text.Html;
 import android.text.Spanned;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-import android.widget.LinearLayout;
 import android.widget.TextView;
+
+import java.util.List;
 
 import gof.scut.common.utils.ActivityUtils;
 import gof.scut.common.utils.BundleNames;
 import gof.scut.common.utils.StringUtils;
-import gof.scut.common.utils.database.TBIDLabelConstants;
-import gof.scut.common.utils.database.TBMainConstants;
-import gof.scut.common.utils.database.TBTelConstants;
 import gof.scut.cwh.models.object.ActivityConstants;
 import gof.scut.cwh.models.object.IdObj;
+import gof.scut.cwh.models.object.SearchObj;
 import gof.scut.wechatcontacts.ContactInfoActivity;
 import gof.scut.wechatcontacts.R;
 
 public class SearchResultAdapter extends BaseAdapter {
 	private Context context;
-	private Cursor cursor;
-	private LinearLayout layout;
+	private List<SearchObj> results;
 	private String keyword;
 	private int fromActivity;
+	private LayoutInflater inflater;
 
-	//private boolean flag;
-
-	public SearchResultAdapter(Context context, Cursor cursor, String keyword, int fromActivity) {
+	public SearchResultAdapter(Context context, List<SearchObj> results, String keyword, int fromActivity) {
 		this.context = context;
-		this.cursor = cursor;
+		this.results = results;
 		this.keyword = keyword.toLowerCase();
 		this.fromActivity = fromActivity;
-		//flag = false;
+		inflater = LayoutInflater.from(context);
 	}
+
 
 	@Override
 	public int getCount() {
-		return cursor.getCount();
+		return results.size();
 	}
 
 	@Override
 	public Object getItem(int position) {
-		return cursor.getPosition();
+		return results.get(position);
 	}
 
 	@Override
@@ -55,24 +52,35 @@ public class SearchResultAdapter extends BaseAdapter {
 		return position;
 	}
 
+	static class ViewHolder {
+		TextView tvName;
+		TextView searchDetail;
+	}
 
 	@Override
 	public View getView(int position, View convertView, ViewGroup parent) {
-		cursor.moveToPosition(position);
-		LayoutInflater inflater = LayoutInflater.from(context);
+		SearchObj result = results.get(position);
+		final String id = result.getId();
+		ViewHolder holder;
+		if (convertView == null) {
+			convertView = inflater.inflate(R.layout.cell_search_list, null);
+			holder = new ViewHolder();
+			holder.tvName = (TextView) convertView.findViewById(R.id.name);
+			holder.searchDetail = (TextView) convertView.findViewById(R.id.searched_detail);
+			convertView.setTag(holder);
+		} else {
+			holder = (ViewHolder) convertView.getTag();
+		}
 
-		final String id = cursor.getString(cursor.getColumnIndex(TBMainConstants.ID));
-		layout = (LinearLayout) inflater.inflate(R.layout.cell_search_list, parent, false);
-		TextView tvName = (TextView) layout.findViewById(R.id.name);
-		TextView searchDetail = (TextView) layout.findViewById(R.id.searched_detail);
-		String name = cursor.getString(cursor.getColumnIndex(TBMainConstants.NAME));
-		//flag = false;
-		//if (name.toLowerCase().contains(keyword))flag = true;
-		tvName.setText(StringUtils.simpleHighLight(keyword, name, "A4005B", "636362"));
-		searchDetail.setText(getFirstMatchInfo(position, keyword));
-		if (searchDetail.getText().toString().equals("")) searchDetail.setVisibility(View.GONE);
-		//if (!flag)layout.setVisibility(View.GONE);
-		layout.setOnClickListener(new View.OnClickListener() {
+
+		String name = result.getName();
+
+		holder.tvName.setText(StringUtils.simpleHighLight(keyword, name, "A4005B", "636362"));
+		holder.searchDetail.setText(getFirstMatchInfo(position, keyword));
+		if (holder.searchDetail.getText().toString().equals(""))
+			holder.searchDetail.setVisibility(View.GONE);
+
+		convertView.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
 				IdObj obj = new IdObj(Integer.parseInt(id));
@@ -91,39 +99,35 @@ public class SearchResultAdapter extends BaseAdapter {
 
 			}
 		});
-		return layout;
+		return convertView;
 	}
 
 	private Spanned getFirstMatchInfo(int position, String keyword) {
-		cursor.moveToPosition(position);
+		SearchObj result = results.get(position);
 		String matchInfo = "";
 		if (StringUtils.isNumber(keyword)) {
-			matchInfo = cursor.getString(cursor.getColumnIndex(TBTelConstants.TEL));
+			matchInfo = result.getTel();
 			if (matchInfo != null)
 				if (matchInfo.toLowerCase().contains(keyword)) {
 					matchInfo = "Tel:" + matchInfo;
-					//flag = true;
 					return StringUtils.simpleHighLight(keyword, matchInfo, "A4005B", "636362");
 				}
 		} else {
-			matchInfo = cursor.getString(cursor.getColumnIndex(TBIDLabelConstants.LABEL));
+			matchInfo = result.getLabel();
 			if (matchInfo != null) {
 				if (matchInfo.toLowerCase().contains(keyword)) {
 					matchInfo = "Label:" + matchInfo;
-					//flag = true;
 					return StringUtils.simpleHighLight(keyword, matchInfo, "A4005B", "636362");
 				}
 			}
-			matchInfo = cursor.getString(cursor.getColumnIndex(TBMainConstants.ADDRESS));
+			matchInfo = result.getAddress();
 			if (matchInfo.toLowerCase().contains(keyword)) {
-				//flag = true;
 				matchInfo = "Address:" + matchInfo;
 				return StringUtils.simpleHighLight(keyword, matchInfo, "A4005B", "636362");
 			}
-			matchInfo = cursor.getString(cursor.getColumnIndex(TBMainConstants.NOTES));
+			matchInfo = result.getNote();
 			if (matchInfo.toLowerCase().contains(keyword)) {
 				matchInfo = "Notes:" + matchInfo;
-				//flag = true;
 				return StringUtils.simpleHighLight(keyword, matchInfo, "A4005B", "636362");
 			}
 		}
