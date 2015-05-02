@@ -3,6 +3,7 @@ package gof.scut.wechatcontacts;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -121,14 +122,13 @@ public class AddContactActivity extends RoboActivity {
 		save.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				//TODO 验证
-				mainTableUtils.insertAll(
-						name.getText().toString(),
-						"object.getlPinYin()",
-						"object.getsPinYin()",
-						address.getText().toString(),
-						addition.getText().toString()
-				);
+                    mainTableUtils.insertAll(
+                            name.getText().toString(),
+                            "object.getlPinYin()",
+                            "object.getsPinYin()",
+                            address.getText().toString(),
+                            addition.getText().toString()
+                    );
 			}
 		});
 
@@ -136,10 +136,12 @@ public class AddContactActivity extends RoboActivity {
 		addPhone.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				//TODO 判断
-				phoneList.add(phone.getText().toString());
-				phoneAdapter.notifyDataSetChanged();
-				phone.setText("");
+				String phoneNumber = phone.getText().toString();
+                if(checkPhone(phoneNumber)){
+                    phoneList.add(phoneNumber);
+                    phoneAdapter.notifyDataSetChanged();
+                    phone.setText("");
+                }
 			}
 		});
 		//add label number
@@ -161,6 +163,21 @@ public class AddContactActivity extends RoboActivity {
 			}
 		});
 	}
+
+    //检查手机号码格式
+    private boolean checkPhone(String phoneNumber){
+        String telRegex = "[1]\\d{10}";//第一位是1，后10位为0-9任意数字，共计11位；
+        
+        if(TextUtils.isEmpty(phoneNumber))
+            return false;
+
+        if (!phoneNumber.matches(telRegex)){
+            Toast.makeText(mContext, "手机号码格式错误!",Toast.LENGTH_SHORT).show();
+            return false;
+        }
+
+        return true;
+    }
 
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
