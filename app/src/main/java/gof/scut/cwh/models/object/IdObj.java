@@ -37,6 +37,12 @@ public class IdObj implements Serializable {
 		this.id = id;
 	}
 
+	public IdObj(String name, String address, String notes) {
+		this.name = name;
+		this.address = address;
+		this.notes = notes;
+	}
+
 	public IdObj(String name, String id) {
 		this.name = name;
 		this.id = Integer.parseInt(id);
