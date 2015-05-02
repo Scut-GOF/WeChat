@@ -4,9 +4,6 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
-/**
- * Created by Administrator on 2015/4/17.
- */
 public class AllTableUtils {
 	private static DataBaseHelper dataBaseHelper;
 	SQLiteDatabase db;

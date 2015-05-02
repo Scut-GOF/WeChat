@@ -23,12 +23,15 @@ import android.widget.PopupWindow;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import gof.scut.common.utils.ActivityUtils;
 import gof.scut.common.utils.Log;
-import gof.scut.common.utils.database.CursorUtils;
 import gof.scut.common.utils.database.LabelTableUtils;
+import gof.scut.common.utils.database.TBLabelConstants;
 import gof.scut.cwh.models.adapter.LabelsAdapter;
-import gof.scut.cwh.models.object.Signal;
+import gof.scut.cwh.models.object.LabelObj;
 
 
 public class LabelsActivity extends Activity implements View.OnClickListener {
@@ -40,7 +43,6 @@ public class LabelsActivity extends Activity implements View.OnClickListener {
 	View addLabelView;
 
 	LabelTableUtils labelTableUtils;
-	Cursor cursorLabels;
 
 	final int RESULT_LOAD_IMAGE = 1;
 	String pathSelectedToAdd = "";
@@ -67,7 +69,6 @@ public class LabelsActivity extends Activity implements View.OnClickListener {
 	}
 
 	void init() {
-		intentCheck();
 		initDatabase();
 		findView();
 		initPopAddLabel();
@@ -75,11 +76,6 @@ public class LabelsActivity extends Activity implements View.OnClickListener {
 
 	}
 
-	void intentCheck() {
-		//AddContact, ContactInfo
-		Intent intent = this.getIntent();
-		Bundle bundle = intent.getBundleExtra(Signal.NAME);
-	}
 
 	void setListener() {
 		addLabel.setOnClickListener(this);
@@ -94,20 +90,26 @@ public class LabelsActivity extends Activity implements View.OnClickListener {
 	}
 
 	void initList() {
-		CursorUtils.closeExistsCursor(cursorLabels);
+		Cursor cursorLabels;
+//		CursorUtils.closeExistsCursor(cursorLabels);
 		cursorLabels = labelTableUtils.selectAll();
-		LabelsAdapter labelsAdapter = new LabelsAdapter(this, cursorLabels);
+		List<LabelObj> labels = new ArrayList<>();
+		for (int i = 0; i < cursorLabels.getCount(); i++) {
+			cursorLabels.moveToPosition(i);
+			labels.add(new LabelObj(
+					cursorLabels.getString(cursorLabels.getColumnIndex(TBLabelConstants.LABEL)),
+					cursorLabels.getString(cursorLabels.getColumnIndex(TBLabelConstants.LABEL_ICON)),
+					Integer.parseInt(cursorLabels.getString(cursorLabels.getColumnIndex(TBLabelConstants.MEMBER_COUNT)))
+			));
+		}
+		cursorLabels.close();
+		labelTableUtils.closeDataBase();
+		LabelsAdapter labelsAdapter = new LabelsAdapter(this, labels);
 		labelList.setAdapter(labelsAdapter);
 
 	}
 
-	void initGrids() {
-		CursorUtils.closeExistsCursor(cursorLabels);
-		cursorLabels = labelTableUtils.selectAll();
-		LabelsAdapter labelsAdapter = new LabelsAdapter(this, cursorLabels);
-		labels.setAdapter(labelsAdapter);
 
-	}
 
 	void initPopAddLabel() {
 
@@ -222,22 +224,22 @@ public class LabelsActivity extends Activity implements View.OnClickListener {
 		}
 	}
 
-	protected void onPause() {
-		super.onPause();
-		CursorUtils.closeExistsCursor(cursorLabels);
-		labelTableUtils.closeDataBase();
-	}
-
-	protected void onStop() {
-		super.onStop();
-		CursorUtils.closeExistsCursor(cursorLabels);
-		labelTableUtils.closeDataBase();
-	}
-
-	@Override
-	protected void onDestroy() {
-		super.onDestroy();
-		CursorUtils.closeExistsCursor(cursorLabels);
-		labelTableUtils.closeDataBase();
-	}
+//	protected void onPause() {
+//		super.onPause();
+////		CursorUtils.closeExistsCursor(cursorLabels);
+//		labelTableUtils.closeDataBase();
+//	}
+//
+//	protected void onStop() {
+//		super.onStop();
+////		CursorUtils.closeExistsCursor(cursorLabels);
+//		labelTableUtils.closeDataBase();
+//	}
+//
+//	@Override
+//	protected void onDestroy() {
+//		super.onDestroy();
+////		CursorUtils.closeExistsCursor(cursorLabels);
+//		labelTableUtils.closeDataBase();
+//	}
 }

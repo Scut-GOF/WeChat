@@ -10,7 +10,7 @@ public class IdObj implements Serializable {
 	private String lPinYin;
 	private String sPinYin;
 	private String tel;
-    private ArrayList<String> tels = new ArrayList<>();
+	private ArrayList<String> tels = new ArrayList<>();
 	private String address;
 	private String notes;
 
@@ -18,9 +18,9 @@ public class IdObj implements Serializable {
 		this.id = id;
 	}
 
-    public IdObj(){
+	public IdObj() {
 
-    }
+	}
 
 	public IdObj(int id, String name, String lPinYin, String sPinYin, String tel, String address, String notes) {
 		this.id = id;
@@ -35,6 +35,11 @@ public class IdObj implements Serializable {
 
 	public void setId(int id) {
 		this.id = id;
+	}
+
+	public IdObj(String name, String id) {
+		this.name = name;
+		this.id = Integer.parseInt(id);
 	}
 
 	public IdObj(String tel) {
@@ -85,17 +90,17 @@ public class IdObj implements Serializable {
 		return tel;
 	}
 
-    public ArrayList<String> getTels() {
-        return tels;
-    }
+	public ArrayList<String> getTels() {
+		return tels;
+	}
 
-    public void setTels(ArrayList<String> tels) {
-        this.tels = tels;
-    }
+	public void setTels(ArrayList<String> tels) {
+		this.tels = tels;
+	}
 
-    public void addTel(String tel){
-        tels.add(tel);
-    }
+	public void addTel(String tel) {
+		tels.add(tel);
+	}
 
 	public String getAddress() {
 		return address;
@@ -113,7 +118,7 @@ public class IdObj implements Serializable {
 				", lPinYin='" + lPinYin + '\'' +
 				", sPinYin='" + sPinYin + '\'' +
 				", tel='" + tel + '\'' +
-                ", tels='" +tels.toString() +'\'' +
+				", tels='" + tels.toString() + '\'' +
 				", address='" + address + '\'' +
 				", notes='" + notes + '\'' +
 				'}';

@@ -18,21 +18,21 @@ import gof.scut.cwh.models.object.IdObj;
 import gof.scut.cwh.models.object.LabelListObj;
 import gof.scut.wechatcontacts.R;
 
-/**
- * Created by cwh on 15-4-30.
- */
+
 public class ContactLabelAdapter extends BaseAdapter {
 	private Context context;
 	private Cursor cursor;
 	private LinearLayout layout;
 	private IdObj idObj;
 	private LabelListObj labelListObj;
+	LayoutInflater inflater;
 
 	public ContactLabelAdapter(Context context, Cursor cursor, IdObj idObj, LabelListObj labelListObj) {
 		this.context = context;
 		this.cursor = cursor;
 		this.idObj = idObj;
 		this.labelListObj = labelListObj;
+		inflater = LayoutInflater.from(context);
 	}
 
 	@Override
@@ -53,7 +53,7 @@ public class ContactLabelAdapter extends BaseAdapter {
 	@Override
 	public View getView(int position, View view, ViewGroup parent) {
 		cursor.moveToPosition(position);
-		LayoutInflater inflater = LayoutInflater.from(context);
+
 		//layout = (LinearLayout) inflater.inflate(R.layout.cell_label_grid, null);
 		layout = (LinearLayout) inflater.inflate(R.layout.cell_label_grid, parent, false);
 		ImageView labelIcon = (ImageView) layout.findViewById(R.id.label_icon);

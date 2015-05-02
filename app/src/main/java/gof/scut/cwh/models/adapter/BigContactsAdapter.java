@@ -16,9 +16,13 @@ import android.widget.ListView;
 import android.widget.PopupWindow;
 import android.widget.TextView;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import gof.scut.common.utils.ActivityUtils;
 import gof.scut.common.utils.BundleNames;
 import gof.scut.common.utils.database.TBMainConstants;
+import gof.scut.common.utils.database.TBTelConstants;
 import gof.scut.cwh.models.object.IdObj;
 import gof.scut.wechatcontacts.ContactInfoActivity;
 import gof.scut.wechatcontacts.R;
@@ -100,7 +104,7 @@ public class BigContactsAdapter extends BaseAdapter {
 		telChoiceWindow = new PopupWindow(telChoiceView,
 				ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT, true);
 
-		ColorDrawable dw = new ColorDrawable(-00000);
+		ColorDrawable dw = new ColorDrawable(0x00000000);
 		telChoiceView.setBackgroundDrawable(dw);
 
 		TextView telsTitle = (TextView) telChoiceView.findViewById(R.id.list_title);
@@ -108,7 +112,13 @@ public class BigContactsAdapter extends BaseAdapter {
 		else if (TelsAdapter.CHOICE_CALL == telOrMsg) telsTitle.setText("Call");
 
 		ListView telList = (ListView) telChoiceView.findViewById(R.id.phone_list);
-		TelsAdapter telsAdapter = new TelsAdapter(context, cursor, telOrMsg, telChoiceWindow);
+		List<String> tels = new ArrayList<>();
+		for (int i = 0; i < cursor.getCount(); i++) {
+			cursor.moveToPosition(i);
+			tels.add(cursor.getString(cursor.getColumnIndex(TBTelConstants.TEL)));
+		}
+		cursor.close();
+		TelsAdapter telsAdapter = new TelsAdapter(context, telOrMsg, telChoiceWindow, tels);
 		telList.setAdapter(telsAdapter);
 
 		telChoiceView.setFocusable(true);
