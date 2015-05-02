@@ -7,11 +7,15 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ListView;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import gof.scut.common.utils.ActivityUtils;
-import gof.scut.common.utils.database.CursorUtils;
 import gof.scut.common.utils.database.MainTableUtils;
+import gof.scut.common.utils.database.TBMainConstants;
 import gof.scut.cwh.models.adapter.ContactsAdapter;
 import gof.scut.cwh.models.object.ActivityConstants;
+import gof.scut.cwh.models.object.LightIdObj;
 import gof.scut.cwh.models.object.Signal;
 
 
@@ -27,7 +31,7 @@ public class MainActivity extends Activity implements View.OnClickListener {
 	//Constants
 
 	//Models
-	Cursor cursor;
+//	Cursor cursor;
 	MainTableUtils mainTableUtils;
 
 	//Controllers
@@ -76,9 +80,21 @@ public class MainActivity extends Activity implements View.OnClickListener {
 		//When clickOnNameAndTel, view
 		//When click on image, view label group
 		//edit when view
-		CursorUtils.closeExistsCursor(cursor);
-		cursor = mainTableUtils.selectAllIDName();
-		ContactsAdapter adapter = new ContactsAdapter(this, cursor);
+//		CursorUtils.closeExistsCursor(cursor);
+		Cursor cursor = mainTableUtils.selectAllIDName();
+
+		List<LightIdObj> contactList = new ArrayList<>();
+
+		for (int i = 0; i < cursor.getCount(); i++) {
+			cursor.moveToPosition(i);
+			contactList.add(new LightIdObj(cursor.getString(cursor.getColumnIndex(TBMainConstants.ID)),
+					cursor.getString(cursor.getColumnIndex(TBMainConstants.NAME))));
+		}
+
+		cursor.close();
+		mainTableUtils.closeDataBase();
+
+		ContactsAdapter adapter = new ContactsAdapter(this, contactList);
 		contacts.setAdapter(adapter);
 
 	}
@@ -118,23 +134,23 @@ public class MainActivity extends Activity implements View.OnClickListener {
 		initList();
 	}
 
-	@Override
-	protected void onPause() {
-		super.onPause();
-		CursorUtils.closeExistsCursor(cursor);
-		mainTableUtils.closeDataBase();
-	}
-
-	protected void onStop() {
-		super.onStop();
-		CursorUtils.closeExistsCursor(cursor);
-		mainTableUtils.closeDataBase();
-	}
-
-	@Override
-	protected void onDestroy() {
-		super.onDestroy();
-		CursorUtils.closeExistsCursor(cursor);
-		mainTableUtils.closeDataBase();
-	}
+//	@Override
+//	protected void onPause() {
+//		super.onPause();
+////		CursorUtils.closeExistsCursor(cursor);
+//		mainTableUtils.closeDataBase();
+//	}
+//
+//	protected void onStop() {
+//		super.onStop();
+////		CursorUtils.closeExistsCursor(cursor);
+//		mainTableUtils.closeDataBase();
+//	}
+//
+//	@Override
+//	protected void onDestroy() {
+//		super.onDestroy();
+////		CursorUtils.closeExistsCursor(cursor);
+//		mainTableUtils.closeDataBase();
+//	}
 }

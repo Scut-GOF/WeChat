@@ -9,15 +9,18 @@ import android.view.View;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import gof.scut.common.utils.ActivityUtils;
 import gof.scut.common.utils.BundleNames;
-import gof.scut.common.utils.database.CursorUtils;
 import gof.scut.common.utils.database.LabelTableUtils;
-import gof.scut.cwh.models.adapter.ContactLabelAdapter;
+import gof.scut.common.utils.database.TBLabelConstants;
 import gof.scut.cwh.models.adapter.LabelsAdapter;
 import gof.scut.cwh.models.object.ActivityConstants;
 import gof.scut.cwh.models.object.IdObj;
 import gof.scut.cwh.models.object.LabelListObj;
+import gof.scut.cwh.models.object.LabelObj;
 import gof.scut.cwh.models.object.Signal;
 
 
@@ -32,7 +35,7 @@ public class EditContactLabelActivity extends Activity implements View.OnClickLi
 	//	AllTableUtils allTableUtils;
 	Cursor cursorLabels;
 	//	Cursor cursorExistsLabels;
-	ContactLabelAdapter labelsAdapter;
+//	ContactLabelAdapter labelsAdapter;
 
 	IdObj contact;
 	LabelListObj selectedLabels;
@@ -111,9 +114,24 @@ public class EditContactLabelActivity extends Activity implements View.OnClickLi
 
 	void initList() {
 
-		CursorUtils.closeExistsCursor(cursorLabels);
+//		CursorUtils.closeExistsCursor(cursorLabels);
 		cursorLabels = labelTableUtils.selectAll();
-		LabelsAdapter labelsAdapter = new LabelsAdapter(this, cursorLabels, getFromActivity(), selectedLabels);
+		List<LabelObj> labels = new ArrayList<>();
+		for (int i = 0; i < cursorLabels.getCount(); i++) {
+			cursorLabels.moveToPosition(i);
+			labels.add(new LabelObj(
+					cursorLabels.getString(cursorLabels.getColumnIndex(TBLabelConstants.LABEL)),
+					cursorLabels.getString(cursorLabels.getColumnIndex(TBLabelConstants.LABEL_ICON)),
+					Integer.parseInt(cursorLabels.getString(cursorLabels.getColumnIndex(TBLabelConstants.MEMBER_COUNT)))
+			));
+		}
+		cursorLabels.close();
+		labelTableUtils.closeDataBase();
+		LabelsAdapter labelsAdapter = new LabelsAdapter(this, labels, getFromActivity(), selectedLabels);
+
+//		CursorUtils.closeExistsCursor(cursorLabels);
+//		cursorLabels = labelTableUtils.selectAll();
+//		LabelsAdapter labelsAdapter = new LabelsAdapter(this, cursorLabels, getFromActivity(), selectedLabels);
 		labelList.setAdapter(labelsAdapter);
 
 	}
@@ -125,7 +143,6 @@ public class EditContactLabelActivity extends Activity implements View.OnClickLi
 //				= new ContactLabelAdapter(this, cursorExistsLabels, contact,selectedLabels);
 //		existsLabels.setAdapter(labelsAdapter);
 //	}
-
 
 
 	@Override
@@ -149,33 +166,33 @@ public class EditContactLabelActivity extends Activity implements View.OnClickLi
 		}
 	}
 
-	protected void onPause() {
-		super.onPause();
-		//setEmptyResult();
-		CursorUtils.closeExistsCursor(cursorLabels);
-//		CursorUtils.closeExistsCursor(cursorExistsLabels);
-		labelTableUtils.closeDataBase();
-//		allTableUtils.closeDataBase();
-	}
-
-	protected void onStop() {
-		super.onStop();
-		//setEmptyResult();
-		CursorUtils.closeExistsCursor(cursorLabels);
-//		CursorUtils.closeExistsCursor(cursorExistsLabels);
-		labelTableUtils.closeDataBase();
-//		allTableUtils.closeDataBase();
-	}
-
-	@Override
-	protected void onDestroy() {
-		super.onDestroy();
-		//setEmptyResult();
-		CursorUtils.closeExistsCursor(cursorLabels);
-//		CursorUtils.closeExistsCursor(cursorExistsLabels);
-		labelTableUtils.closeDataBase();
-//		allTableUtils.closeDataBase();
-	}
+//	protected void onPause() {
+//		super.onPause();
+//		//setEmptyResult();
+////		CursorUtils.closeExistsCursor(cursorLabels);
+////		CursorUtils.closeExistsCursor(cursorExistsLabels);
+//		labelTableUtils.closeDataBase();
+////		allTableUtils.closeDataBase();
+//	}
+//
+//	protected void onStop() {
+//		super.onStop();
+//		//setEmptyResult();
+////		CursorUtils.closeExistsCursor(cursorLabels);
+////		CursorUtils.closeExistsCursor(cursorExistsLabels);
+//		labelTableUtils.closeDataBase();
+////		allTableUtils.closeDataBase();
+//	}
+//
+//	@Override
+//	protected void onDestroy() {
+//		super.onDestroy();
+//		//setEmptyResult();
+////		CursorUtils.closeExistsCursor(cursorLabels);
+////		CursorUtils.closeExistsCursor(cursorExistsLabels);
+//		labelTableUtils.closeDataBase();
+////		allTableUtils.closeDataBase();
+//	}
 
 	private void setEmptyResult() {
 //		if (getFromActivity() == ActivityConstants.ADD_CONTACTS_ACTIVITY)

@@ -1,7 +1,6 @@
 package gof.scut.cwh.models.adapter;
 
 import android.content.Context;
-import android.database.Cursor;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,11 +9,12 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import java.util.List;
+
 import gof.scut.common.utils.ActivityUtils;
 import gof.scut.common.utils.BitmapUtils;
 import gof.scut.common.utils.BundleNames;
 import gof.scut.common.utils.database.IDLabelTableUtils;
-import gof.scut.common.utils.database.TBLabelConstants;
 import gof.scut.cwh.models.object.ActivityConstants;
 import gof.scut.cwh.models.object.IdObj;
 import gof.scut.cwh.models.object.LabelListObj;
@@ -23,53 +23,56 @@ import gof.scut.wechatcontacts.LabelDetailActivity;
 import gof.scut.wechatcontacts.R;
 
 
-/**
- * Created by Administrator on 2015/4/10.
- */
 public class LabelsAdapter extends BaseAdapter {
 	private Context context;
-	private Cursor cursor;
+	//private Cursor cursor;
+	private List<LabelObj> labels;
 	private LinearLayout layout;
 	private int fromActivity;
-	private LabelListObj labels;
+	private LabelListObj selectedLabels;
 	private IdObj contact;
+	LayoutInflater inflater;
 //	private ContactLabelAdapter existsLabels;
 
-	public LabelsAdapter(Context context, Cursor cursor, int fromActivity) {
+	public LabelsAdapter(Context context, List<LabelObj> labels, int fromActivity) {
 		this.context = context;
-		this.cursor = cursor;
+		this.labels = labels;
 		this.fromActivity = fromActivity;
+		inflater = LayoutInflater.from(context);
 	}
 
-	public LabelsAdapter(Context context, Cursor cursor, int fromActivity, LabelListObj labels) {
+	public LabelsAdapter(Context context, List<LabelObj> labels, int fromActivity, LabelListObj selectedLabels) {
 		this.context = context;
-		this.cursor = cursor;
-		this.fromActivity = fromActivity;
 		this.labels = labels;
+		this.fromActivity = fromActivity;
+		this.selectedLabels = selectedLabels;
+		inflater = LayoutInflater.from(context);
 	}
 
-	public LabelsAdapter(Context context, Cursor cursor, int fromActivity, LabelListObj labels, IdObj contact) {
+	public LabelsAdapter(Context context, List<LabelObj> labels, int fromActivity, LabelListObj selectedLabels, IdObj contact) {
 		this.context = context;
-		this.cursor = cursor;
-		this.fromActivity = fromActivity;
 		this.labels = labels;
+		this.fromActivity = fromActivity;
+		this.selectedLabels = selectedLabels;
 		this.contact = contact;
+		inflater = LayoutInflater.from(context);
 	}
 
-	public LabelsAdapter(Context context, Cursor cursor) {
+	public LabelsAdapter(Context context, List<LabelObj> labels) {
 		fromActivity = ActivityConstants.MAIN_ACTIVITY;
 		this.context = context;
-		this.cursor = cursor;
+		this.labels = labels;
+		inflater = LayoutInflater.from(context);
 	}
 
 	@Override
 	public int getCount() {
-		return cursor.getCount();
+		return labels.size();
 	}
 
 	@Override
 	public Object getItem(int position) {
-		return cursor.getPosition();
+		return labels.get(position);
 	}
 
 	@Override
@@ -77,29 +80,47 @@ public class LabelsAdapter extends BaseAdapter {
 		return position;
 	}
 
+	static class ViewHolder {
+		ImageView labelIcon;
+		TextView labelName;
+		TextView memberCount;
+	}
+
 	@Override
 	public View getView(int position, View convertView, ViewGroup parent) {
-		cursor.moveToPosition(position);
-		LayoutInflater inflater = LayoutInflater.from(context);
+		LabelObj label = labels.get(position);
+		ViewHolder holder;
+		if (convertView == null) {
+			convertView = inflater.inflate(R.layout.cell_label_list, null);
+			holder = new ViewHolder();
+			holder.labelIcon = (ImageView) convertView.findViewById(R.id.label_icon);
+			holder.labelName = (TextView) convertView.findViewById(R.id.label_name);
+			holder.memberCount = (TextView) convertView.findViewById(R.id.member_count);
+			convertView.setTag(holder);
+		} else {
+			holder = (ViewHolder) convertView.getTag();
+		}
+
+		layout = (LinearLayout) convertView;
 		//layout = (LinearLayout) inflater.inflate(R.layout.cell_label_grid, null);
-		layout = (LinearLayout) inflater.inflate(R.layout.cell_label_list, parent, false);
-		final ImageView labelIcon = (ImageView) layout.findViewById(R.id.label_icon);
-		final TextView labelName = (TextView) layout.findViewById(R.id.label_name);
-		final TextView memberCount = (TextView) layout.findViewById(R.id.member_count);
+//		layout = (LinearLayout) inflater.inflate(R.layout.cell_label_list, parent, false);
+//		final ImageView labelIcon = (ImageView) layout.findViewById(R.id.label_icon);
+//		final TextView labelName = (TextView) layout.findViewById(R.id.label_name);
+//		final TextView memberCount = (TextView) layout.findViewById(R.id.member_count);
 
-		final String strLabelName = cursor.getString(cursor.getColumnIndex(TBLabelConstants.LABEL));
-		final String iconPath = cursor.getString(cursor.getColumnIndex(TBLabelConstants.LABEL_ICON));
-		final String strMemberCount = cursor.getString(cursor.getColumnIndex(TBLabelConstants.MEMBER_COUNT));
+		final String strLabelName = label.getLabelName();
+		final String iconPath = label.getIconPath();
+		final String strMemberCount = label.getMemCount() + "";
 
-		labelName.setText(strLabelName);
-		memberCount.setText("(" + strMemberCount + ")");
-		labelIcon.setBackgroundDrawable(null);
-		if (iconPath.equals("")) labelIcon.setBackgroundResource(R.drawable.label50);
-		else labelIcon.setImageBitmap(BitmapUtils.decodeBitmapFromPath(iconPath));
+		holder.labelName.setText(strLabelName);
+		holder.memberCount.setText("(" + strMemberCount + ")");
+		holder.labelIcon.setBackgroundDrawable(null);
+		if (iconPath.equals("")) holder.labelIcon.setBackgroundResource(R.drawable.label50);
+		else holder.labelIcon.setImageBitmap(BitmapUtils.decodeBitmapFromPath(iconPath));
 
 
 		if (fromActivity == ActivityConstants.ADD_CONTACTS_ACTIVITY || fromActivity == ActivityConstants.CONTACT_INFO_ACTIVITY) {
-			if (labels.inList(strLabelName)) {
+			if (selectedLabels.inList(strLabelName)) {
 				setLayoutBg(R.color.alice_blue);
 			} else {
 				setLayoutBg(R.color.white);
@@ -109,7 +130,7 @@ public class LabelsAdapter extends BaseAdapter {
 		layout.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				LabelObj label = new LabelObj(labelName.getText().toString(), iconPath,
+				LabelObj label = new LabelObj(strLabelName, iconPath,
 						Integer.parseInt(strMemberCount));
 				switch (fromActivity) {
 					case ActivityConstants.MAIN_ACTIVITY:
@@ -117,14 +138,14 @@ public class LabelsAdapter extends BaseAdapter {
 						break;
 					case ActivityConstants.CONTACT_INFO_ACTIVITY:
 						//TODO INSERT INTO DATABASE
-						if (!labels.inList(strLabelName)) {
+						if (!selectedLabels.inList(strLabelName)) {
 							IDLabelTableUtils idLabelTableUtils = new IDLabelTableUtils(context);
 							idLabelTableUtils.insertAll("" + contact.getId(), strLabelName);
-							labels.addLabel(strLabelName);
+							selectedLabels.addLabel(strLabelName);
 						} else {
 							IDLabelTableUtils idLabelTableUtils = new IDLabelTableUtils(context);
 							idLabelTableUtils.deleteWithID_Label("" + contact.getId(), strLabelName);
-							labels.removeLabel(strLabelName);
+							selectedLabels.removeLabel(strLabelName);
 						}
 						notifyDataSetInvalidated();
 						break;
@@ -133,10 +154,10 @@ public class LabelsAdapter extends BaseAdapter {
 //								(context, ActivityConstants.REQUEST_CODE_LABEL, BundleNames.LABEL_OBJ,
 //										new LabelObj(strLabelName, iconPath, Integer.parseInt(strMemberCount)));
 //						((Activity) context).finish();
-						if (!labels.inList(strLabelName)) {
-							labels.addLabel(strLabelName);
+						if (!selectedLabels.inList(strLabelName)) {
+							selectedLabels.addLabel(strLabelName);
 						} else {
-							labels.removeLabel(strLabelName);
+							selectedLabels.removeLabel(strLabelName);
 						}
 						notifyDataSetInvalidated();
 						break;
@@ -145,7 +166,7 @@ public class LabelsAdapter extends BaseAdapter {
 			}
 		});
 
-		return layout;
+		return convertView;
 	}
 
 	private void setLayoutBg(int colorId) {

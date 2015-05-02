@@ -13,6 +13,9 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import gof.scut.common.utils.ActivityUtils;
 import gof.scut.common.utils.BitmapUtils;
 import gof.scut.common.utils.BundleNames;
@@ -23,6 +26,7 @@ import gof.scut.common.utils.database.CursorUtils;
 import gof.scut.common.utils.database.IDLabelTableUtils;
 import gof.scut.common.utils.database.LabelTableUtils;
 import gof.scut.common.utils.database.TBLabelConstants;
+import gof.scut.common.utils.database.TBMainConstants;
 import gof.scut.common.utils.popup.PopConfirmUtils;
 import gof.scut.common.utils.popup.PopEditLabelUtils;
 import gof.scut.common.utils.popup.TodoOnResult;
@@ -31,6 +35,7 @@ import gof.scut.cwh.models.adapter.MemEditAdapter;
 import gof.scut.cwh.models.object.ActivityConstants;
 import gof.scut.cwh.models.object.IdObj;
 import gof.scut.cwh.models.object.LabelObj;
+import gof.scut.cwh.models.object.LightIdObj;
 import gof.scut.cwh.models.object.Signal;
 
 
@@ -189,10 +194,20 @@ public class LabelDetailActivity extends Activity implements View.OnClickListene
 
 	void initViewList() {
 		//cursor,contactsAdapter,labelMembers
-		CursorUtils.closeExistsCursor(cursorEdit);
-		CursorUtils.closeExistsCursor(cursorView);
+//		CursorUtils.closeExistsCursor(cursorEdit);
+//		CursorUtils.closeExistsCursor(cursorView);
 		cursorView = allTableUtils.selectAllIDNameOnLabel(labelObj.getLabelName());
-		ContactsAdapter adapter = new ContactsAdapter(this, cursorView);
+		List<LightIdObj> contactList = new ArrayList<>();
+		for (int i = 0; i < cursorView.getCount(); i++) {
+			cursorView.moveToPosition(i);
+			contactList.add(new LightIdObj(cursorView.getString(cursorView.getColumnIndex(TBMainConstants.ID)),
+					cursorView.getString(cursorView.getColumnIndex(TBMainConstants.NAME))));
+		}
+		cursorView.close();
+		ContactsAdapter adapter = new ContactsAdapter(this, contactList);
+
+//		cursorView = allTableUtils.selectAllIDNameOnLabel(labelObj.getLabelName());
+//		ContactsAdapter adapter = new ContactsAdapter(this, cursorView);
 		labelMembers.setAdapter(adapter);
 
 	}
@@ -200,10 +215,19 @@ public class LabelDetailActivity extends Activity implements View.OnClickListene
 	void initEditList() {
 		getLabelMemberCount();
 		//cursor,contactsAdapter,labelMembers
-		CursorUtils.closeExistsCursor(cursorEdit);
-		CursorUtils.closeExistsCursor(cursorView);
+//		CursorUtils.closeExistsCursor(cursorEdit);
+//		CursorUtils.closeExistsCursor(cursorView);
 		cursorEdit = allTableUtils.selectAllIDNameOnLabel(labelObj.getLabelName());
-		MemEditAdapter adapter = new MemEditAdapter(this, cursorEdit, labelObj.getLabelName());
+		List<LightIdObj> members = new ArrayList<>();
+		for (int i = 0; i < cursorEdit.getCount(); i++) {
+			cursorEdit.moveToPosition(i);
+			members.add(
+					new LightIdObj(cursorEdit.getString(cursorEdit.getColumnIndex(TBMainConstants.ID)),
+							cursorEdit.getString(cursorEdit.getColumnIndex(TBMainConstants.NAME))));
+		}
+		cursorEdit.close();
+		allTableUtils.closeDataBase();
+		MemEditAdapter adapter = new MemEditAdapter(this, labelObj.getLabelName(), members);
 		labelMembers.setAdapter(adapter);
 
 	}
@@ -294,27 +318,27 @@ public class LabelDetailActivity extends Activity implements View.OnClickListene
 
 	}
 
-	protected void onPause() {
-		super.onPause();
-		CursorUtils.closeExistsCursor(cursorEdit);
-		CursorUtils.closeExistsCursor(cursorView);
-		allTableUtils.closeDataBase();
-
-	}
-
-	protected void onStop() {
-		super.onStop();
-		CursorUtils.closeExistsCursor(cursorEdit);
-		CursorUtils.closeExistsCursor(cursorView);
-		allTableUtils.closeDataBase();
-	}
-
-	@Override
-	protected void onDestroy() {
-		super.onDestroy();
-		CursorUtils.closeExistsCursor(cursorEdit);
-		CursorUtils.closeExistsCursor(cursorView);
-		allTableUtils.closeDataBase();
-	}
+//	protected void onPause() {
+//		super.onPause();
+////		CursorUtils.closeExistsCursor(cursorEdit);
+////		CursorUtils.closeExistsCursor(cursorView);
+//		allTableUtils.closeDataBase();
+//
+//	}
+//
+//	protected void onStop() {
+//		super.onStop();
+////		CursorUtils.closeExistsCursor(cursorEdit);
+////		CursorUtils.closeExistsCursor(cursorView);
+//		allTableUtils.closeDataBase();
+//	}
+//
+//	@Override
+//	protected void onDestroy() {
+//		super.onDestroy();
+////		CursorUtils.closeExistsCursor(cursorEdit);
+////		CursorUtils.closeExistsCursor(cursorView);
+//		allTableUtils.closeDataBase();
+//	}
 
 }

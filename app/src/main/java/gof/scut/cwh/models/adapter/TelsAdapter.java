@@ -1,46 +1,47 @@
 package gof.scut.cwh.models.adapter;
 
 import android.content.Context;
-import android.database.Cursor;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.Button;
-import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 
+import java.util.List;
+
 import gof.scut.common.utils.UseSystemUtils;
-import gof.scut.common.utils.database.TBTelConstants;
 import gof.scut.wechatcontacts.R;
 
-/**
- * Created by Administrator on 2015/4/8.
- */
+
 public class TelsAdapter extends BaseAdapter {
 	private Context context;
-	private Cursor cursor;
-	private LinearLayout layout;
+	//	private Cursor cursor;
+	private List<String> telList;
+	private LayoutInflater inflater;
+
+
 	public final static int CHOICE_CALL = 0;
 	public final static int CHOICE_MSG = 1;
 	private int telOrMsg;
 	private PopupWindow parentWindow;
 
-	public TelsAdapter(Context context, Cursor cursor, int choice, PopupWindow parentWindow) {
+	public TelsAdapter(Context context, int choice, PopupWindow parentWindow, List<String> telList) {
 		this.context = context;
-		this.cursor = cursor;
+		this.telList = telList;
 		this.telOrMsg = choice;
 		this.parentWindow = parentWindow;
+		inflater = LayoutInflater.from(context);
 	}
 
 	@Override
 	public int getCount() {
-		return cursor.getCount();
+		return telList.size();
 	}
 
 	@Override
 	public Object getItem(int position) {
-		return cursor.getPosition();
+		return telList.get(position);
 	}
 
 	@Override
@@ -48,15 +49,29 @@ public class TelsAdapter extends BaseAdapter {
 		return position;
 	}
 
+	static class ViewHolder {
+		Button tel;
+	}
+
 	@Override
 	public View getView(int position, View convertView, final ViewGroup parent) {
-		LayoutInflater inflater = LayoutInflater.from(context);
-		layout = (LinearLayout) inflater.inflate(R.layout.cell_phone_chose_pop, null);
-		Button tel = (Button) layout.findViewById(R.id.tel_number);
-		cursor.moveToPosition(position);
-		final String cTel = cursor.getString(cursor.getColumnIndex(TBTelConstants.TEL));
-		tel.setText(cTel);
-		tel.setOnClickListener(new View.OnClickListener() {
+
+
+		ViewHolder holder;
+		if (convertView == null) {
+			convertView = inflater.inflate(R.layout.cell_phone_chose_pop, null);
+			holder = new ViewHolder();
+			holder.tel = (Button) convertView.findViewById(R.id.tel_number);
+
+			convertView.setTag(holder);
+		} else {
+			holder = (ViewHolder) convertView.getTag();
+		}
+
+
+		final String cTel = telList.get(position);
+		holder.tel.setText(cTel);
+		holder.tel.setOnClickListener(new View.OnClickListener() {
 
 
 			@Override
@@ -68,6 +83,6 @@ public class TelsAdapter extends BaseAdapter {
 			}
 		});
 
-		return layout;
+		return convertView;
 	}
 }

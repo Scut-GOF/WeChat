@@ -18,40 +18,43 @@ import android.widget.PopupWindow;
 import android.widget.TextView;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import gof.scut.common.utils.ActivityUtils;
 import gof.scut.common.utils.BundleNames;
+import gof.scut.common.utils.UseSystemUtils;
 import gof.scut.common.utils.database.CursorUtils;
-import gof.scut.common.utils.database.TBMainConstants;
 import gof.scut.common.utils.database.TBTelConstants;
 import gof.scut.common.utils.database.TelTableUtils;
-import gof.scut.common.utils.UseSystemUtils;
 import gof.scut.cwh.models.object.IdObj;
+import gof.scut.cwh.models.object.LightIdObj;
 import gof.scut.wechatcontacts.ContactInfoActivity;
 import gof.scut.wechatcontacts.R;
 
 
 public class ContactsAdapter extends BaseAdapter {
 	private Context context;
-	private Cursor cursor;
+	//	private Cursor cursor;
+	List<LightIdObj> contacts;
 	private LinearLayout layout;
 	PopupWindow telChoiceWindow = null;
 	View telChoiceView = null;
+	LayoutInflater inflater;
 
-	public ContactsAdapter(Context context, Cursor cursor) {
+	public ContactsAdapter(Context context, List<LightIdObj> contacts) {
 		this.context = context;
-		this.cursor = cursor;
-
+		this.contacts = contacts;
+		inflater = LayoutInflater.from(context);
 	}
 
 	@Override
 	public int getCount() {
-		return cursor.getCount();
+		return contacts.size();
 	}
 
 	@Override
 	public Object getItem(int position) {
-		return cursor.getPosition();
+		return contacts.get(position);
 	}
 
 	@Override
@@ -59,27 +62,43 @@ public class ContactsAdapter extends BaseAdapter {
 		return position;
 	}
 
+	static class ViewHolder {
+		TextView name;
+		Button msg;
+		Button call;
+	}
+
 	@Override
 	public View getView(int position, View convertView, final ViewGroup parent) {
-		LayoutInflater inflater = LayoutInflater.from(context);
-		layout = (LinearLayout) inflater.inflate(R.layout.cell_main_list, null);
+		ViewHolder holder;
+		if (convertView == null) {
+			convertView = inflater.inflate(R.layout.cell_main_list, null);
+			holder = new ViewHolder();
+			holder.name = (TextView) convertView.findViewById(R.id.name);
+			holder.msg = (Button) convertView.findViewById(R.id.send_msg);
+			holder.call = (Button) convertView.findViewById(R.id.call);
+			convertView.setTag(holder);
+		} else {
+			holder = (ViewHolder) convertView.getTag();
+		}
 
-		TextView name = (TextView) layout.findViewById(R.id.name);
+		layout = (LinearLayout) convertView;
+//
+//		TextView name = (TextView) convertView.findViewById(R.id.name);
+//
+//		Button msg = (Button) convertView.findViewById(R.id.send_msg);
+//		Button call = (Button) convertView.findViewById(R.id.call);
 
-		Button msg = (Button) layout.findViewById(R.id.send_msg);
-		Button call = (Button) layout.findViewById(R.id.call);
-
-		cursor.moveToPosition(position);
-
-		final String cName = cursor.getString(cursor.getColumnIndex(TBMainConstants.NAME));
-		final String id = cursor.getString(cursor.getColumnIndex(TBMainConstants.ID));
+		LightIdObj contact = contacts.get(position);
+		final String cName = contact.getName();
+		final String id = contact.getId();
 
 		//more details got when view
 		//....
 
-		name.setText(cName);
+		holder.name.setText(cName);
 
-		msg.setOnClickListener(new View.OnClickListener() {
+		holder.msg.setOnClickListener(new View.OnClickListener() {
 
 			@Override
 			public void onClick(View v) {
@@ -94,7 +113,7 @@ public class ContactsAdapter extends BaseAdapter {
 					initPopChoice(TelsAdapter.CHOICE_MSG, cTel, telTableUtil);
 					popPhoneSelector();
 				} else if (cTel.getCount() == 1) {
-					ArrayList<String> phoneList = new ArrayList<String>();
+					ArrayList<String> phoneList = new ArrayList<>();
 					CursorUtils.cursorToStringArray(cTel, phoneList, TBTelConstants.TEL);
 					UseSystemUtils.sendMsg(context, phoneList.get(0));
 				}
@@ -102,7 +121,7 @@ public class ContactsAdapter extends BaseAdapter {
 
 			}
 		});
-		call.setOnClickListener(new View.OnClickListener() {
+		holder.call.setOnClickListener(new View.OnClickListener() {
 
 			@Override
 			public void onClick(View v) {
@@ -125,15 +144,15 @@ public class ContactsAdapter extends BaseAdapter {
 
 			}
 		});
-		name.setClickable(true);
-		name.setFocusable(true);
-		name.setOnClickListener(new View.OnClickListener() {
+		holder.name.setClickable(true);
+		holder.name.setFocusable(true);
+		holder.name.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
 				onItemClick(Integer.parseInt(id));
 			}
 		});
-		return layout;
+		return convertView;
 	}
 
 	private void onItemClick(int id) {
@@ -162,7 +181,13 @@ public class ContactsAdapter extends BaseAdapter {
 		else if (TelsAdapter.CHOICE_CALL == telOrMsg) telsTitle.setText("Call");
 
 		ListView telList = (ListView) telChoiceView.findViewById(R.id.phone_list);
-		TelsAdapter telsAdapter = new TelsAdapter(context, cursor, telOrMsg, telChoiceWindow);
+		List<String> tels = new ArrayList<>();
+		for (int i = 0; i < cursor.getCount(); i++) {
+			cursor.moveToPosition(i);
+			tels.add(cursor.getString(cursor.getColumnIndex(TBTelConstants.TEL)));
+		}
+		cursor.close();
+		TelsAdapter telsAdapter = new TelsAdapter(context, telOrMsg, telChoiceWindow, tels);
 		telList.setAdapter(telsAdapter);
 
 		telChoiceView.setFocusable(true);
@@ -189,7 +214,7 @@ public class ContactsAdapter extends BaseAdapter {
 		telChoiceWindow.setOnDismissListener(new PopupWindow.OnDismissListener() {
 			@Override
 			public void onDismiss() {
-				cursor.close();
+
 				closeTelDataBase(telTableUtil);
 			}
 
