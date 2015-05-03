@@ -7,6 +7,7 @@ import android.database.sqlite.SQLiteDatabase;
 import java.util.ArrayList;
 import java.util.List;
 
+import gof.scut.common.utils.StringUtils;
 import gof.scut.cwh.models.object.LabelObj;
 import gof.scut.cwh.models.object.LightIdObj;
 
@@ -41,6 +42,7 @@ public class AllTableUtils {
 	public List<LightIdObj> selectLightIdObjOnLabel(String labelName) {
 		closeDataBase();
 		db = dataBaseHelper.getReadableDatabase();
+		labelName = StringUtils.splitChineseSingly(labelName);
 //		Cursor c1 = db.rawQuery("SELECT  _id,name FROM contacts WHERE _id IN ( SELECT _id FROM idLabel WHERE label = '" + labelName + "')", null);
 //		Cursor c2 = db.rawQuery("SELECT _id FROM idLabel WHERE label = '" + labelName + "'", null);
 //		Cursor c3 = db.rawQuery("SELECT _id FROM fts_id_label WHERE label = '" + labelName + "'", null);
@@ -56,7 +58,11 @@ public class AllTableUtils {
 			cursorEdit.moveToPosition(i);
 			members.add(
 					new LightIdObj(cursorEdit.getString(cursorEdit.getColumnIndex(TBMainConstants.ID)),
-							cursorEdit.getString(cursorEdit.getColumnIndex(TBMainConstants.NAME))));
+							StringUtils.recoverWordFromDB(
+									cursorEdit.getString(cursorEdit.getColumnIndex(TBMainConstants.NAME))
+							)
+					)
+			);
 		}
 		cursorEdit.close();
 		closeDataBase();
@@ -75,7 +81,9 @@ public class AllTableUtils {
 			cursorLabel.moveToPosition(i);
 			labels.add(
 					new LabelObj(
-							cursorLabel.getString(cursorLabel.getColumnIndex(TBLabelConstants.LABEL)),
+							StringUtils.recoverWordFromDB(
+									cursorLabel.getString(cursorLabel.getColumnIndex(TBLabelConstants.LABEL))
+							),
 							cursorLabel.getString(cursorLabel.getColumnIndex(TBLabelConstants.LABEL_ICON)),
 							cursorLabel.getInt(cursorLabel.getColumnIndex(TBLabelConstants.MEMBER_COUNT))
 					));
