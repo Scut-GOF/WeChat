@@ -1,18 +1,21 @@
 package gof.scut.common;
 
-import android.app.Application;
 import android.content.res.Configuration;
 import android.os.StrictMode;
 
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.Volley;
+import com.baidu.frontia.FrontiaApplication;
 import com.google.gson.Gson;
 
 /**
  *
  * Created by zm on 2015/4/20.
  */
-public class MyApplication extends Application {
+public class MyApplication extends FrontiaApplication {
+
+    public final static String API_KEY = "2VpI4GUI1OsbCgeXvGKo3nAQ";
+    public final static String SECRIT_KEY = "OdQjssW5QvWnHthLCyauWMA8YPjV43l5";
 
 	private static MyApplication myApplication;
 	public static RequestQueue requestQueue;
