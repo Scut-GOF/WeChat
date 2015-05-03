@@ -81,9 +81,13 @@ public class StringUtils {
 
 	public static String splitChineseSingly(String str) {
 		StringBuilder sb = new StringBuilder();
-		str = str.replace(" ", "㊣");
-		for (int i = 0; i < str.length(); i++) {
-
+		str = str.replace(" ", "龘");
+		//avoid check chinese every time
+		sb.append(str.charAt(0));
+		if (isChinese(str.charAt(0))) {
+			sb.append(" ");
+		}
+		for (int i = 1; i < str.length(); i++) {
 			if (isChinese(str.charAt(i))) {
 				sb.append(" ");
 				sb.append(str.charAt(i));
@@ -95,7 +99,7 @@ public class StringUtils {
 
 	public static String recoverWordFromDB(String str) {
 		str = str.replace(" ", "");
-		str = str.replace("㊣", " ");
+		str = str.replace("龘", " ");
 		return str;
 	}
 

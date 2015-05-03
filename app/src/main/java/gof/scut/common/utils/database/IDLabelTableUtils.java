@@ -8,6 +8,8 @@ import android.database.sqlite.SQLiteDatabase;
 import java.util.ArrayList;
 import java.util.List;
 
+import gof.scut.common.utils.StringUtils;
+
 
 public class IDLabelTableUtils {
 	private static DataBaseHelper dataBaseHelper;
@@ -26,8 +28,10 @@ public class IDLabelTableUtils {
 		closeDataBase();
 		ContentValues value = new ContentValues();
 		value.put(TBIDLabelConstants.ID, id);
+		labelName = StringUtils.splitChineseSingly(labelName);
 		value.put(TBIDLabelConstants.LABEL, labelName);
 		db = dataBaseHelper.getWritableDatabase();
+
 		long status;
 		try {
 			status = db.insert(TBIDLabelConstants.TABLE_NAME, null, value);
@@ -56,6 +60,7 @@ public class IDLabelTableUtils {
 	public int deleteWithLabel(String label) {
 		closeDataBase();
 		db = dataBaseHelper.getWritableDatabase();
+		label = StringUtils.splitChineseSingly(label);
 		int status;
 		try {
 			status = db.delete(TBIDLabelConstants.TABLE_NAME,
@@ -70,6 +75,7 @@ public class IDLabelTableUtils {
 	public int deleteWithID_Label(String id, String label) {
 		closeDataBase();
 		db = dataBaseHelper.getWritableDatabase();
+		label = StringUtils.splitChineseSingly(label);
 		int status;
 		try {
 			status = db.delete(TBIDLabelConstants.TABLE_NAME,
@@ -85,6 +91,7 @@ public class IDLabelTableUtils {
 	//update ALL
 	public long updateLabelWithID(String label,
 	                              String byID) {
+		label = StringUtils.splitChineseSingly(label);
 		closeDataBase();
 		db = dataBaseHelper.getWritableDatabase();
 		ContentValues value = new ContentValues();
@@ -105,6 +112,8 @@ public class IDLabelTableUtils {
 	public long updateLabelWithID_Label(String label,
 	                                    String byID, String byLabel) {
 		closeDataBase();
+		label = StringUtils.splitChineseSingly(label);
+		byLabel = StringUtils.splitChineseSingly(byLabel);
 		db = dataBaseHelper.getWritableDatabase();
 		ContentValues value = new ContentValues();
 		value.put(TBIDLabelConstants.LABEL, label);
@@ -134,7 +143,10 @@ public class IDLabelTableUtils {
 		List<String> labelNames = new ArrayList<>();
 		for (int i = 0; i < cursorLabels.getCount(); i++) {
 			cursorLabels.moveToPosition(i);
-			labelNames.add(cursorLabels.getString(cursorLabels.getColumnIndex(TBIDLabelConstants.LABEL)));
+			labelNames.add(StringUtils.recoverWordFromDB(
+							cursorLabels.getString(cursorLabels.getColumnIndex(TBIDLabelConstants.LABEL))
+					)
+			);
 		}
 		cursorLabels.close();
 		closeDataBase();
