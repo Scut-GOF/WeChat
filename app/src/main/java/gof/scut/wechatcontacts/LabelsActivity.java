@@ -23,13 +23,11 @@ import android.widget.PopupWindow;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import gof.scut.common.utils.ActivityUtils;
 import gof.scut.common.utils.Log;
 import gof.scut.common.utils.database.LabelTableUtils;
-import gof.scut.common.utils.database.TBLabelConstants;
 import gof.scut.cwh.models.adapter.LabelsAdapter;
 import gof.scut.cwh.models.object.LabelObj;
 
@@ -90,25 +88,11 @@ public class LabelsActivity extends Activity implements View.OnClickListener {
 	}
 
 	void initList() {
-		Cursor cursorLabels;
-//		CursorUtils.closeExistsCursor(cursorLabels);
-		cursorLabels = labelTableUtils.selectAll();
-		List<LabelObj> labels = new ArrayList<>();
-		for (int i = 0; i < cursorLabels.getCount(); i++) {
-			cursorLabels.moveToPosition(i);
-			labels.add(new LabelObj(
-					cursorLabels.getString(cursorLabels.getColumnIndex(TBLabelConstants.LABEL)),
-					cursorLabels.getString(cursorLabels.getColumnIndex(TBLabelConstants.LABEL_ICON)),
-					Integer.parseInt(cursorLabels.getString(cursorLabels.getColumnIndex(TBLabelConstants.MEMBER_COUNT)))
-			));
-		}
-		cursorLabels.close();
-		labelTableUtils.closeDataBase();
+		List<LabelObj> labels = labelTableUtils.selectAll();
 		LabelsAdapter labelsAdapter = new LabelsAdapter(this, labels);
 		labelList.setAdapter(labelsAdapter);
 
 	}
-
 
 
 	void initPopAddLabel() {
@@ -139,15 +123,12 @@ public class LabelsActivity extends Activity implements View.OnClickListener {
 				addLabelIcon = pathSelectedToAdd;
 
 				//check if label exists
-				Cursor labelsWithName = labelTableUtils.selectAllOnLabel(addLabelName);
-				if (labelsWithName.getCount() != 0) {
+				int labelCount = labelTableUtils.selectMemCount(addLabelName);
+				if (labelCount >= 0) {
 					Toast.makeText(LabelsActivity.this, "标签已存在，请指定其他标签名", Toast.LENGTH_LONG).show();
-					labelsWithName.close();
-					labelTableUtils.closeDataBase();
 					return;
 				}
-				labelsWithName.close();
-				labelTableUtils.closeDataBase();
+
 
 				long state = labelTableUtils.insertAll(addLabelName, addLabelIcon);
 				if (state < 0) Log.e("LabelsActivity", "add label failed");

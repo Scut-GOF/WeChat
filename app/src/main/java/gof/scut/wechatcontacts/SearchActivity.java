@@ -1,7 +1,6 @@
 package gof.scut.wechatcontacts;
 
 import android.app.Activity;
-import android.database.Cursor;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -10,18 +9,13 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.Semaphore;
 
 import gof.scut.common.utils.ActivityUtils;
 import gof.scut.common.utils.BundleNames;
 import gof.scut.common.utils.StringUtils;
-import gof.scut.common.utils.database.CursorUtils;
 import gof.scut.common.utils.database.MainTableUtils;
-import gof.scut.common.utils.database.TBLabelConstants;
-import gof.scut.common.utils.database.TBMainConstants;
-import gof.scut.common.utils.database.TBTelConstants;
 import gof.scut.cwh.models.adapter.SearchResultAdapter;
 import gof.scut.cwh.models.object.ActivityConstants;
 import gof.scut.cwh.models.object.IdObj;
@@ -36,12 +30,11 @@ public class SearchActivity extends Activity implements View.OnClickListener {
 	private Button cancel;
 	private ListView searchResult;
 	private MainTableUtils mainTableUtils;
-	private Cursor cursorResult;
+	//	private Cursor cursorResult;
+	List<SearchObj> results;
 
 
 	final Semaphore semaphore = new Semaphore(1, true);
-
-	String keyword;
 
 
 	@Override
@@ -103,16 +96,12 @@ public class SearchActivity extends Activity implements View.OnClickListener {
 			@Override
 			public void afterTextChanged(Editable s) {
 
-				keyword = s.toString();
+				final String keyword = s.toString();
 				new Thread() {
 					public void run() {
-
 						fullTextSearch(keyword);
-
 					}
 				}.start();
-
-
 			}
 		});
 		cancel.setOnClickListener(this);
@@ -128,46 +117,24 @@ public class SearchActivity extends Activity implements View.OnClickListener {
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
-		CursorUtils.closeExistsCursor(cursorResult);
+//		CursorUtils.closeExistsCursor(cursorResult);
 		//非数字不搜索电话
 		if (!StringUtils.isNumber(keyword))
-			cursorResult = mainTableUtils.fullTextSearchWithWord(keyword);
-		else cursorResult = mainTableUtils.fullTextSearchWithNumOrWord(keyword);
+			results = mainTableUtils.fullTextSearchWithWord(keyword);
+		else results = mainTableUtils.fullTextSearchWithNumOrWord(keyword);
 
-		if (cursorResult.getCount() == 0) semaphore.release();
-
+		if (results.size() == 0) semaphore.release();
+		final String kwToUI = keyword;
 		runOnUiThread(new Runnable() {
 			@Override
 			public void run() {
-				fullTextSearchSetUI();
+				fullTextSearchSetUI(kwToUI);
 			}
 		});
 
 	}
 
-	void fullTextSearchSetUI() {
-		if (keyword.equals("")) {
-			return;
-		}
-		List<SearchObj> results = new ArrayList<>();
-		try {
-
-			for (int i = 0; i < cursorResult.getCount(); i++) {
-				cursorResult.moveToPosition(i);
-				results.add(new SearchObj(
-						cursorResult.getString(cursorResult.getColumnIndex(TBMainConstants.ID)),
-						cursorResult.getString(cursorResult.getColumnIndex(TBMainConstants.NAME)),
-						cursorResult.getString(cursorResult.getColumnIndex(TBMainConstants.L_PINYIN)),
-						cursorResult.getString(cursorResult.getColumnIndex(TBMainConstants.S_PINYIN)),
-						cursorResult.getString(cursorResult.getColumnIndex(TBMainConstants.ADDRESS)),
-						cursorResult.getString(cursorResult.getColumnIndex(TBMainConstants.NOTES)),
-						cursorResult.getString(cursorResult.getColumnIndex(TBLabelConstants.LABEL)),
-						cursorResult.getString(cursorResult.getColumnIndex(TBTelConstants.TEL))
-				));
-			}
-		} finally {
-			CursorUtils.closeExistsCursor(cursorResult);
-		}
+	void fullTextSearchSetUI(String keyword) {
 		SearchResultAdapter searchResultAdapter
 				= new SearchResultAdapter(this, results, keyword, getFromActivity());
 		searchResult.setAdapter(searchResultAdapter);
@@ -175,24 +142,23 @@ public class SearchActivity extends Activity implements View.OnClickListener {
 
 	}
 
-	@Override
-	protected void onPause() {
-		super.onPause();
-		CursorUtils.closeExistsCursor(cursorResult);
-		mainTableUtils.closeDataBase();
-	}
-
-	protected void onStop() {
-		super.onStop();
-		CursorUtils.closeExistsCursor(cursorResult);
-		mainTableUtils.closeDataBase();
-	}
-
+	//	@Override
+//	protected void onPause() {
+//		super.onPause();
+//		CursorUtils.closeExistsCursor(cursorResult);
+//		mainTableUtils.closeDataBase();
+//	}
+//
+//	protected void onStop() {
+//		super.onStop();
+//		CursorUtils.closeExistsCursor(cursorResult);
+//		mainTableUtils.closeDataBase();
+//	}
+//
 	@Override
 	protected void onDestroy() {
 		super.onDestroy();
-		CursorUtils.closeExistsCursor(cursorResult);
-		mainTableUtils.closeDataBase();
+		semaphore.release();
 	}
 
 	@Override

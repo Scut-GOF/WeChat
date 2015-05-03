@@ -2,20 +2,17 @@ package gof.scut.wechatcontacts;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.database.Cursor;
 import android.os.Bundle;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import gof.scut.common.utils.ActivityUtils;
 import gof.scut.common.utils.BundleNames;
 import gof.scut.common.utils.database.LabelTableUtils;
-import gof.scut.common.utils.database.TBLabelConstants;
 import gof.scut.cwh.models.adapter.LabelsAdapter;
 import gof.scut.cwh.models.object.ActivityConstants;
 import gof.scut.cwh.models.object.IdObj;
@@ -27,15 +24,10 @@ import gof.scut.cwh.models.object.Signal;
 public class EditContactLabelActivity extends Activity implements View.OnClickListener {
 
 	TextView labelsBack;
-	//	GridView existsLabels;
 	ListView labelList;
 	TextView tvSure;
 
 	LabelTableUtils labelTableUtils;
-	//	AllTableUtils allTableUtils;
-	Cursor cursorLabels;
-	//	Cursor cursorExistsLabels;
-//	ContactLabelAdapter labelsAdapter;
 
 	IdObj contact;
 	LabelListObj selectedLabels;
@@ -62,17 +54,11 @@ public class EditContactLabelActivity extends Activity implements View.OnClickLi
 	@Override
 	protected void onResume() {
 		super.onResume();
-//		if (fromActivity == ActivityConstants.CONTACT_INFO_ACTIVITY)
-//			existsLabels.setVisibility(View.VISIBLE);
-//		else
-//			existsLabels.setVisibility(View.GONE);
-//		if (fromActivity == ActivityConstants.CONTACT_INFO_ACTIVITY) initGrid();
 		initList();
 	}
 
 	void initDatabase() {
 		labelTableUtils = new LabelTableUtils(this);
-//		allTableUtils = new AllTableUtils(this);
 	}
 
 	void init() {
@@ -113,36 +99,10 @@ public class EditContactLabelActivity extends Activity implements View.OnClickLi
 	}
 
 	void initList() {
-
-//		CursorUtils.closeExistsCursor(cursorLabels);
-		cursorLabels = labelTableUtils.selectAll();
-		List<LabelObj> labels = new ArrayList<>();
-		for (int i = 0; i < cursorLabels.getCount(); i++) {
-			cursorLabels.moveToPosition(i);
-			labels.add(new LabelObj(
-					cursorLabels.getString(cursorLabels.getColumnIndex(TBLabelConstants.LABEL)),
-					cursorLabels.getString(cursorLabels.getColumnIndex(TBLabelConstants.LABEL_ICON)),
-					Integer.parseInt(cursorLabels.getString(cursorLabels.getColumnIndex(TBLabelConstants.MEMBER_COUNT)))
-			));
-		}
-		cursorLabels.close();
-		labelTableUtils.closeDataBase();
+		List<LabelObj> labels = labelTableUtils.selectAll();
 		LabelsAdapter labelsAdapter = new LabelsAdapter(this, labels, getFromActivity(), selectedLabels);
-
-//		CursorUtils.closeExistsCursor(cursorLabels);
-//		cursorLabels = labelTableUtils.selectAll();
-//		LabelsAdapter labelsAdapter = new LabelsAdapter(this, cursorLabels, getFromActivity(), selectedLabels);
 		labelList.setAdapter(labelsAdapter);
-
 	}
-
-//	void initGrid() {
-//		CursorUtils.closeExistsCursor(cursorExistsLabels);
-//		cursorLabels = allTableUtils.selectLabelDetailForID(contact.getId() + "");
-//		labelsAdapter
-//				= new ContactLabelAdapter(this, cursorExistsLabels, contact,selectedLabels);
-//		existsLabels.setAdapter(labelsAdapter);
-//	}
 
 
 	@Override
@@ -195,10 +155,6 @@ public class EditContactLabelActivity extends Activity implements View.OnClickLi
 //	}
 
 	private void setEmptyResult() {
-//		if (getFromActivity() == ActivityConstants.ADD_CONTACTS_ACTIVITY)
-//			ActivityUtils.setActivityResult
-//					(this, ActivityConstants.REQUEST_CODE_LABEL, BundleNames.LABEL_OBJ,
-//							new LabelObj("", "", 0));
 		selectedLabels.removeAllMember();
 		if (getFromActivity() == ActivityConstants.ADD_CONTACTS_ACTIVITY)
 			ActivityUtils.setActivityResult

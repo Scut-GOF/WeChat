@@ -5,6 +5,13 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import gof.scut.cwh.models.object.IdObj;
+import gof.scut.cwh.models.object.LightIdObj;
+import gof.scut.cwh.models.object.SearchObj;
+
 
 public class MainTableUtils {
 	private static DataBaseHelper dataBaseHelper;
@@ -89,7 +96,7 @@ public class MainTableUtils {
 		return status;
 	}
 
-
+	//TODO SUGGESTION: RETURN LIST FOR QUERY BUT NOT CURSOR,SO YOU CAN CLOSE THE CURSOR AND DB AT ONCE
 	//query
 	public Cursor selectAll() {
 		closeDataBase();
@@ -99,18 +106,23 @@ public class MainTableUtils {
 		return c;
 	}
 
-	public Cursor selectAllIDName() {
+	public List<LightIdObj> selectAllIDName() {
 		closeDataBase();
 		db = dataBaseHelper.getReadableDatabase();
-		Cursor c;
-//		c = db.query(TBMainConstants.TABLE_NAME, new String[]{TBMainConstants.ID, TBMainConstants.NAME},
-//				null, null, null, null, TBMainConstants.NAME);
-		//db.close();
-		c = db.rawQuery("select " + TBMainConstants.ID + "," + TBMainConstants.NAME + " from "
+		Cursor cursorContacts;
+		cursorContacts = db.rawQuery("select " + TBMainConstants.ID + "," + TBMainConstants.NAME + " from "
 				+ TBMainConstants.FTS_TABLE_NAME + " order by " + TBMainConstants.NAME, null);
-//		c = db.query(TBMainConstants.FTS_TABLE_NAME, new String[]{TBMainConstants.ID, TBMainConstants.NAME},
-//				null, null, null, null, TBMainConstants.FTS_TABLE_NAME);
-		return c;
+		List<LightIdObj> contacts = new ArrayList<>();
+		for (int i = 0; i < cursorContacts.getCount(); i++) {
+			cursorContacts.moveToPosition(i);
+			contacts.add(new LightIdObj(
+					cursorContacts.getString(cursorContacts.getColumnIndex(TBMainConstants.ID)),
+					cursorContacts.getString(cursorContacts.getColumnIndex(TBMainConstants.NAME))
+			));
+		}
+		cursorContacts.close();
+		closeDataBase();
+		return contacts;
 	}
 
 
@@ -133,20 +145,29 @@ public class MainTableUtils {
 		return c;
 	}
 
-	public Cursor selectAllWithID(String id) {
+	public IdObj selectAllWithID(String id) {
 		closeDataBase();
 		db = dataBaseHelper.getReadableDatabase();
-		Cursor c;
-//		c = db.query(TBMainConstants.TABLE_NAME,
-//				new String[]{TBMainConstants.NAME, TBMainConstants.L_PINYIN,
-//						TBMainConstants.S_PINYIN, TBMainConstants.ADDRESS, TBMainConstants.NOTES},
-//				TBMainConstants.ID + " LIKE ?", new String[]{id}, null, null, null);
-
-		c = db.rawQuery("select * from " + TBMainConstants.FTS_TABLE_NAME + " where "
+		Cursor cursor;
+		cursor = db.rawQuery("select * from " + TBMainConstants.FTS_TABLE_NAME + " where "
 						+ TBMainConstants.ID + " match ?",
 				new String[]{"'" + id + "'"});//  SHOULDN'T BE PUT IN SINGE COBRA
+		if (cursor.getCount() == 0) {
+			return new IdObj(-1);
+		}
+		cursor.moveToPosition(0);
+		IdObj contact = new IdObj(
+				cursor.getInt(cursor.getColumnIndex(TBMainConstants.ID)),
+				cursor.getString(cursor.getColumnIndex(TBMainConstants.NAME)),
+				cursor.getString(cursor.getColumnIndex(TBMainConstants.L_PINYIN)),
+				cursor.getString(cursor.getColumnIndex(TBMainConstants.S_PINYIN)),
+				cursor.getString(cursor.getColumnIndex(TBMainConstants.ADDRESS)),
+				cursor.getString(cursor.getColumnIndex(TBMainConstants.NOTES))
+		);
+		cursor.close();
+		closeDataBase();
 		//db.close();
-		return c;
+		return contact;
 	}
 
 
@@ -166,40 +187,10 @@ public class MainTableUtils {
 	}
 
 
-	public Cursor selectAllWithAddress(String address) {
+	synchronized public List<SearchObj> fullTextSearchWithWord(String word) {
 		closeDataBase();
 		db = dataBaseHelper.getReadableDatabase();
-		Cursor c;
-		c = db.rawQuery("select * from " + TBMainConstants.FTS_TABLE_NAME + " where "
-						+ TBMainConstants.ADDRESS + " match ?",
-				new String[]{"'" + address + "'"});
-//		c= db.query(TBMainConstants.TABLE_NAME,
-//				new String[]{TBMainConstants.NAME, TBMainConstants.L_PINYIN,
-//						TBMainConstants.S_PINYIN, TBMainConstants.ADDRESS, TBMainConstants.NOTES},
-//				TBMainConstants.ADDRESS + " LIKE ?", new String[]{address}, null, null, null);
-		//db.close();
-		return c;
-	}
-
-	public Cursor selectAllWithNotes(String notes) {
-		closeDataBase();
-		db = dataBaseHelper.getReadableDatabase();
-		Cursor c;
-		c = db.rawQuery("select * from " + TBMainConstants.FTS_TABLE_NAME + " where "
-						+ TBMainConstants.NOTES + " match ?",
-				new String[]{"'" + notes + "'"});
-//		c = db.query(TBMainConstants.TABLE_NAME,
-//				new String[]{TBMainConstants.NAME, TBMainConstants.L_PINYIN,
-//						TBMainConstants.S_PINYIN, TBMainConstants.ADDRESS, TBMainConstants.NOTES},
-//				TBMainConstants.NOTES + " LIKE ?", new String[]{notes}, null, null, null);
-		//db.close();
-		return c;
-	}
-
-	public Cursor fullTextSearchWithWord(String word) {
-		closeDataBase();
-		db = dataBaseHelper.getReadableDatabase();
-		Cursor c;
+		Cursor cursorResult;
 //		select * from (
 //				select *,'' label,'' tel from fts_contacts
 //				where fts_contacts match 'l*' group by _id
@@ -208,7 +199,7 @@ public class MainTableUtils {
 //				(select _id lid,label from fts_id_label where fts_id_label match 'l*')  left join fts_contacts
 //		on fts_contacts._id = lid)group by lid
 //		) group by _id;
-		c = db.rawQuery("select * from ( "
+		cursorResult = db.rawQuery("select * from ( "
 						+ "select *,'' " + TBIDLabelConstants.LABEL + ",'' " + TBTelConstants.TEL
 						+ " from " + TBMainConstants.FTS_TABLE_NAME
 						+ " where " + TBMainConstants.FTS_TABLE_NAME
@@ -221,6 +212,26 @@ public class MainTableUtils {
 						+ " on " + TBMainConstants.FTS_TABLE_NAME + "." + TBMainConstants.ID + "= lid group by lid"
 						+ " )group by " + TBMainConstants.ID,
 				new String[]{"'" + word + "*'", "'" + word + "*'"});
+		List<SearchObj> results = new ArrayList<>();
+		try {
+
+			for (int i = 0; i < cursorResult.getCount(); i++) {
+				cursorResult.moveToPosition(i);
+				results.add(new SearchObj(
+						cursorResult.getString(cursorResult.getColumnIndex(TBMainConstants.ID)),
+						cursorResult.getString(cursorResult.getColumnIndex(TBMainConstants.NAME)),
+						cursorResult.getString(cursorResult.getColumnIndex(TBMainConstants.L_PINYIN)),
+						cursorResult.getString(cursorResult.getColumnIndex(TBMainConstants.S_PINYIN)),
+						cursorResult.getString(cursorResult.getColumnIndex(TBMainConstants.ADDRESS)),
+						cursorResult.getString(cursorResult.getColumnIndex(TBMainConstants.NOTES)),
+						cursorResult.getString(cursorResult.getColumnIndex(TBLabelConstants.LABEL)),
+						cursorResult.getString(cursorResult.getColumnIndex(TBTelConstants.TEL))
+				));
+			}
+		} finally {
+			CursorUtils.closeExistsCursor(cursorResult);
+			closeDataBase();
+		}
 		//repeated rows
 //		c = db.rawQuery("select * from ( "
 //				+ TBMainConstants.FTS_TABLE_NAME + " join " + TBIDLabelConstants.FTS_TABLE_NAME
@@ -258,19 +269,19 @@ public class MainTableUtils {
 //				+ " where "
 //				+ TBMainConstants.FTS_TABLE_NAME + " match ? or " + TBIDLabelConstants.FTS_TABLE_NAME + " match ?"
 //				, new String[]{"'*" + word + "*'", "'*" + word + "*'"});
-		return c;
+		return results;
 	}
 
-	public Cursor fullTextSearchWithNumOrWord(String word) {
+	synchronized public List<SearchObj> fullTextSearchWithNumOrWord(String word) {
 		closeDataBase();
 		db = dataBaseHelper.getReadableDatabase();
-		Cursor c;
-		//TODO NOT USE OR
+		Cursor cursorResult;
+
 //		c=db.rawQuery("select * from contacts",null);
 //		c=db.rawQuery("select * from label",null);
 //		c=db.rawQuery("select * from idlabel",null);
 //		c=db.rawQuery("select * from tel",null);
-		c = db.rawQuery("select * from ( "
+		cursorResult = db.rawQuery("select * from ( "
 				+ "select *,'' " + TBIDLabelConstants.LABEL + ",'' " + TBTelConstants.TEL
 				+ " from " + TBMainConstants.FTS_TABLE_NAME
 				+ " where " + TBMainConstants.FTS_TABLE_NAME
@@ -290,6 +301,26 @@ public class MainTableUtils {
 				+ " on " + TBMainConstants.FTS_TABLE_NAME + "." + TBMainConstants.ID + "= tid"
 				+ " group by tid)"
 				+ " group by " + TBMainConstants.ID, new String[]{"'" + word + "*'", "'" + word + "*'", "'" + word + "*'"});
+		List<SearchObj> results = new ArrayList<>();
+		try {
+
+			for (int i = 0; i < cursorResult.getCount(); i++) {
+				cursorResult.moveToPosition(i);
+				results.add(new SearchObj(
+						cursorResult.getString(cursorResult.getColumnIndex(TBMainConstants.ID)),
+						cursorResult.getString(cursorResult.getColumnIndex(TBMainConstants.NAME)),
+						cursorResult.getString(cursorResult.getColumnIndex(TBMainConstants.L_PINYIN)),
+						cursorResult.getString(cursorResult.getColumnIndex(TBMainConstants.S_PINYIN)),
+						cursorResult.getString(cursorResult.getColumnIndex(TBMainConstants.ADDRESS)),
+						cursorResult.getString(cursorResult.getColumnIndex(TBMainConstants.NOTES)),
+						cursorResult.getString(cursorResult.getColumnIndex(TBLabelConstants.LABEL)),
+						cursorResult.getString(cursorResult.getColumnIndex(TBTelConstants.TEL))
+				));
+			}
+		} finally {
+			CursorUtils.closeExistsCursor(cursorResult);
+			closeDataBase();
+		}
 //		c = db.rawQuery("select * from ((("
 //				+ " select * from " + TBMainConstants.FTS_TABLE_NAME
 //				+ " where "
@@ -306,7 +337,7 @@ public class MainTableUtils {
 //				+ TBTelConstants.FTS_TABLE_NAME + " match ?) on "
 //				+ TBMainConstants.ID + "= TID) group by " + TBMainConstants.ID
 //				, new String[]{"'" + word + "*'", "'" + word + "*'", "'" + word + "*'"});
-		return c;
+		return results;
 	}
 
 
