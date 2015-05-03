@@ -5,6 +5,9 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import gof.scut.cwh.models.object.LabelObj;
 
 
@@ -181,6 +184,7 @@ public class LabelTableUtils {
 		return status;
 	}
 
+	//TODO SUGGESTION: RETURN LIST FOR QUERY BUT NOT CURSOR,SO YOU CAN CLOSE THE CURSOR AND DB AT ONCE
 	//query
 	public Cursor selectLabel(String label) {
 		closeDataBase();
@@ -202,35 +206,68 @@ public class LabelTableUtils {
 	}
 
 	//query
-	public Cursor selectMemCount(String label) {
+	public int selectMemCount(String label) {
 		closeDataBase();
 		db = dataBaseHelper.getReadableDatabase();
-		Cursor c = db.query(TBLabelConstants.TABLE_NAME, new String[]{TBLabelConstants.MEMBER_COUNT},
+		Cursor cursorCount = db.query(TBLabelConstants.TABLE_NAME, new String[]{TBLabelConstants.MEMBER_COUNT},
 				TBLabelConstants.LABEL + " = ?", new String[]{label}, null, null, null);
+		if (cursorCount.getCount() == 0) {
+			cursorCount.close();
+			closeDataBase();
+			return -1;
+		}
+		cursorCount.moveToPosition(0);
+		int count = cursorCount.getInt(cursorCount.getColumnIndex(TBLabelConstants.MEMBER_COUNT));
+		cursorCount.close();
+		closeDataBase();
 		//db.close();
-		return c;
+		return count;
 	}
 
 	//query
-	public Cursor selectAllOnLabel(String label) {
+	public LabelObj selectAllOnLabel(String label) {
 		closeDataBase();
 		db = dataBaseHelper.getReadableDatabase();
-		Cursor c;
-		c = db.query(TBLabelConstants.TABLE_NAME, new String[]{TBLabelConstants.LABEL},
+		Cursor cursorLabel;
+		cursorLabel = db.query(TBLabelConstants.TABLE_NAME, new String[]{TBLabelConstants.LABEL},
 				TBLabelConstants.LABEL + " = ?", new String[]{label}, null, null, null);
+		if (cursorLabel.getCount() == 0) {
+			cursorLabel.close();
+			closeDataBase();
+			return new LabelObj("", "", -1);
+		}
+		cursorLabel.moveToPosition(0);
+		LabelObj labelObj = new LabelObj(
+				cursorLabel.getString(cursorLabel.getColumnIndex(TBLabelConstants.LABEL)),
+				cursorLabel.getString(cursorLabel.getColumnIndex(TBLabelConstants.LABEL_ICON)),
+				cursorLabel.getInt(cursorLabel.getColumnIndex(TBLabelConstants.MEMBER_COUNT))
+		);
+		cursorLabel.close();
+		closeDataBase();
 		//db.close();
-		return c;
+		return labelObj;
 	}
 
 	//query
-	public Cursor selectAll() {
+	public List<LabelObj> selectAll() {
 		closeDataBase();
 		db = dataBaseHelper.getReadableDatabase();
 //		String name = dataBaseHelper.getDatabaseName();
-		Cursor c = db.query(TBLabelConstants.TABLE_NAME, null,
+		Cursor cursorLabels = db.query(TBLabelConstants.TABLE_NAME, null,
 				null, null, null, null, null);
+		List<LabelObj> labels = new ArrayList<>();
+		for (int i = 0; i < cursorLabels.getCount(); i++) {
+			cursorLabels.moveToPosition(i);
+			labels.add(new LabelObj(
+					cursorLabels.getString(cursorLabels.getColumnIndex(TBLabelConstants.LABEL)),
+					cursorLabels.getString(cursorLabels.getColumnIndex(TBLabelConstants.LABEL_ICON)),
+					cursorLabels.getInt(cursorLabels.getColumnIndex(TBLabelConstants.MEMBER_COUNT))
+			));
+		}
+		cursorLabels.close();
+		closeDataBase();
 		//db.close();
-		return c;
+		return labels;
 	}
 
 	public void closeDataBase() {

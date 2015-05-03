@@ -5,6 +5,9 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
+import java.util.ArrayList;
+import java.util.List;
+
 
 public class IDLabelTableUtils {
 	private static DataBaseHelper dataBaseHelper;
@@ -120,18 +123,22 @@ public class IDLabelTableUtils {
 	}
 
 	//query
-	public Cursor selectLabelWithID(String ID) {
+	public List<String> selectLabelWithID(String ID) {
 		closeDataBase();
 		db = dataBaseHelper.getReadableDatabase();
 
-		Cursor c;
-		c = db.rawQuery("select " + TBIDLabelConstants.LABEL + " from "
+		Cursor cursorLabels;
+		cursorLabels = db.rawQuery("select " + TBIDLabelConstants.LABEL + " from "
 						+ TBIDLabelConstants.FTS_TABLE_NAME + " where " + TBIDLabelConstants.ID + " match ?",
 				new String[]{"'" + ID + "'"});
-//		c = db.query(TBIDLabelConstants.FTS_TABLE_NAME, new String[]{TBIDLabelConstants.LABEL},
-//				TBIDLabelConstants.ID + " = ?", new String[]{ID}, null, null, null);
-		//db.close();
-		return c;
+		List<String> labelNames = new ArrayList<>();
+		for (int i = 0; i < cursorLabels.getCount(); i++) {
+			cursorLabels.moveToPosition(i);
+			labelNames.add(cursorLabels.getString(cursorLabels.getColumnIndex(TBIDLabelConstants.LABEL)));
+		}
+		cursorLabels.close();
+		closeDataBase();
+		return labelNames;
 	}
 
 	public void closeDataBase() {
