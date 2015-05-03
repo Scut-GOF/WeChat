@@ -7,10 +7,10 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import gof.scut.common.utils.database.CursorUtils;
 import gof.scut.common.utils.database.MainTableUtils;
-import gof.scut.common.utils.database.TBMainConstants;
 import gof.scut.common.utils.database.TelTableUtils;
 import gof.scut.cwh.models.object.IdObj;
 import gof.scut.fental.models.adapter.PhonesAdapter;
@@ -40,13 +40,14 @@ public class ContactInfoActivity extends Activity {
 		id = ((IdObj) bundle.getSerializable("IdObj")).getId();
 
 		MainTableUtils mainTableUtils = new MainTableUtils(this);
-		Cursor allInfoCursor = mainTableUtils.selectAllWithID("" + id);
-		allInfoCursor.moveToNext();
-		String name = allInfoCursor.getString(allInfoCursor.getColumnIndex(TBMainConstants.NAME));
-		String address = allInfoCursor.getString(allInfoCursor.getColumnIndex(TBMainConstants.ADDRESS));
-		String notes = allInfoCursor.getString(allInfoCursor.getColumnIndex(TBMainConstants.NOTES));
-		allInfoCursor.close();
-		mainTableUtils.closeDataBase();
+		IdObj contact = mainTableUtils.selectAllWithID("" + id);
+		if (contact.getId() < 0) {
+			Toast.makeText(ContactInfoActivity.this, "联系人不存在！", Toast.LENGTH_LONG).show();
+			return;
+		}
+		String name = contact.getName();
+		String address = contact.getAddress();
+		String notes = contact.getNotes();
 		tvName.setText(name);
 		tvAddress.setText(address);
 		tvNotes.setText(notes);

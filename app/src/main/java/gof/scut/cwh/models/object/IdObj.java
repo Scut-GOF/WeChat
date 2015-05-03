@@ -22,6 +22,17 @@ public class IdObj implements Serializable {
 
 	}
 
+	public IdObj(int id, String name, String lPinYin, String sPinYin, String address, String notes) {
+		this.id = id;
+		this.name = name;
+		this.lPinYin = lPinYin;
+		this.sPinYin = sPinYin;
+
+		this.tel = tel;
+		this.address = address;
+		this.notes = notes;
+	}
+
 	public IdObj(int id, String name, String lPinYin, String sPinYin, String tel, String address, String notes) {
 		this.id = id;
 		this.name = name;

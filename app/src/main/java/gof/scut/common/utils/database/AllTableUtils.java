@@ -4,6 +4,12 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import gof.scut.cwh.models.object.LabelObj;
+import gof.scut.cwh.models.object.LightIdObj;
+
 public class AllTableUtils {
 	private static DataBaseHelper dataBaseHelper;
 	SQLiteDatabase db;
@@ -16,7 +22,23 @@ public class AllTableUtils {
         }*/
 	}
 
-	public Cursor selectAllIDNameOnLabel(String labelName) {
+	//	public Cursor selectAllIDNameOnLabel(String labelName) {
+//		closeDataBase();
+//		db = dataBaseHelper.getReadableDatabase();
+////		Cursor c1 = db.rawQuery("SELECT  _id,name FROM contacts WHERE _id IN ( SELECT _id FROM idLabel WHERE label = '" + labelName + "')", null);
+////		Cursor c2 = db.rawQuery("SELECT _id FROM idLabel WHERE label = '" + labelName + "'", null);
+////		Cursor c3 = db.rawQuery("SELECT _id FROM fts_id_label WHERE label = '" + labelName + "'", null);
+////		Cursor c4 = db.rawQuery("SELECT _id FROM fts_id_label ", null);
+//
+//		//SELECT  _id,name FROM contacts WHERE _id IN ( SELECT _id FROM idLabel WHERE label = '" + labelName + "')"
+//		Cursor c = db.rawQuery("SELECT " + TBMainConstants.ID + "," + TBMainConstants.NAME
+//				+ " FROM " + TBMainConstants.FTS_TABLE_NAME + " WHERE " + TBMainConstants.ID
+//				+ " IN ( SELECT " + TBMainConstants.ID + " FROM " + TBIDLabelConstants.FTS_TABLE_NAME
+//				+ " WHERE " + TBIDLabelConstants.LABEL + " match ? )", new String[]{"'" + labelName + "'"});
+//
+//		return c;
+//	}
+	public List<LightIdObj> selectLightIdObjOnLabel(String labelName) {
 		closeDataBase();
 		db = dataBaseHelper.getReadableDatabase();
 //		Cursor c1 = db.rawQuery("SELECT  _id,name FROM contacts WHERE _id IN ( SELECT _id FROM idLabel WHERE label = '" + labelName + "')", null);
@@ -25,22 +47,42 @@ public class AllTableUtils {
 //		Cursor c4 = db.rawQuery("SELECT _id FROM fts_id_label ", null);
 
 		//SELECT  _id,name FROM contacts WHERE _id IN ( SELECT _id FROM idLabel WHERE label = '" + labelName + "')"
-		Cursor c = db.rawQuery("SELECT " + TBMainConstants.ID + "," + TBMainConstants.NAME
+		Cursor cursorEdit = db.rawQuery("SELECT " + TBMainConstants.ID + "," + TBMainConstants.NAME
 				+ " FROM " + TBMainConstants.FTS_TABLE_NAME + " WHERE " + TBMainConstants.ID
 				+ " IN ( SELECT " + TBMainConstants.ID + " FROM " + TBIDLabelConstants.FTS_TABLE_NAME
 				+ " WHERE " + TBIDLabelConstants.LABEL + " match ? )", new String[]{"'" + labelName + "'"});
-
-		return c;
+		List<LightIdObj> members = new ArrayList<>();
+		for (int i = 0; i < cursorEdit.getCount(); i++) {
+			cursorEdit.moveToPosition(i);
+			members.add(
+					new LightIdObj(cursorEdit.getString(cursorEdit.getColumnIndex(TBMainConstants.ID)),
+							cursorEdit.getString(cursorEdit.getColumnIndex(TBMainConstants.NAME))));
+		}
+		cursorEdit.close();
+		closeDataBase();
+		return members;
 	}
 
-	public Cursor selectLabelDetailForID(String id) {
+	public List<LabelObj> selectLabelDetailForID(String id) {
 		closeDataBase();
 		//select *from label where label in (select label from fts_idlabel where id match id);
-		Cursor c = db.rawQuery("select * from " + TBLabelConstants.TABLE_NAME
+		Cursor cursorLabel = db.rawQuery("select * from " + TBLabelConstants.TABLE_NAME
 				+ " where " + TBLabelConstants.LABEL + " in ( select " + TBIDLabelConstants.LABEL + " from "
 				+ TBIDLabelConstants.FTS_TABLE_NAME + " where " + TBIDLabelConstants.ID + " match ?)"
 				, new String[]{"'" + id + "'"});
-		return c;
+		List<LabelObj> labels = new ArrayList<>();
+		for (int i = 0; i < cursorLabel.getCount(); i++) {
+			cursorLabel.moveToPosition(i);
+			labels.add(
+					new LabelObj(
+							cursorLabel.getString(cursorLabel.getColumnIndex(TBLabelConstants.LABEL)),
+							cursorLabel.getString(cursorLabel.getColumnIndex(TBLabelConstants.LABEL_ICON)),
+							cursorLabel.getInt(cursorLabel.getColumnIndex(TBLabelConstants.MEMBER_COUNT))
+					));
+		}
+		cursorLabel.close();
+		closeDataBase();
+		return labels;
 	}
 
 	public void closeDataBase() {

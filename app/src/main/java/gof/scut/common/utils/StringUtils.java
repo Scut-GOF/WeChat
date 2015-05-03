@@ -63,8 +63,41 @@ public class StringUtils {
 		}
 		return phrase;
 	}
-//	example
+
+	//	example
 //	Log.d("SPLIT",StringUtils.splitChinese("IK Analyzer是一个开源的，基于java语言" );
+	public static final boolean isChinese(char c) {
+		Character.UnicodeBlock ub = Character.UnicodeBlock.of(c);
+		if (ub == Character.UnicodeBlock.CJK_UNIFIED_IDEOGRAPHS
+				|| ub == Character.UnicodeBlock.CJK_COMPATIBILITY_IDEOGRAPHS
+				|| ub == Character.UnicodeBlock.CJK_UNIFIED_IDEOGRAPHS_EXTENSION_A
+				|| ub == Character.UnicodeBlock.GENERAL_PUNCTUATION
+				|| ub == Character.UnicodeBlock.CJK_SYMBOLS_AND_PUNCTUATION
+				|| ub == Character.UnicodeBlock.HALFWIDTH_AND_FULLWIDTH_FORMS) {
+			return true;
+		}
+		return false;
+	}
+
+	public static String splitChineseSingly(String str) {
+		StringBuilder sb = new StringBuilder();
+		str = str.replace(" ", "㊣");
+		for (int i = 0; i < str.length(); i++) {
+
+			if (isChinese(str.charAt(i))) {
+				sb.append(" ");
+				sb.append(str.charAt(i));
+				sb.append(" ");
+			} else sb.append(str.charAt(i));
+		}
+		return sb.toString();
+	}
+
+	public static String recoverWordFromDB(String str) {
+		str = str.replace(" ", "");
+		str = str.replace("㊣", " ");
+		return str;
+	}
 
 	public static boolean isNumber(String str) {
 		char[] s = str.toCharArray();
@@ -87,7 +120,7 @@ public class StringUtils {
 	}
 
 	public static Spanned simpleHighLight(String keyword, String str, String highColor, String generalColor) {
-		String result = "";
+		StringBuilder result = new StringBuilder();
 		//keyword should be lower case
 		int kwLength = keyword.length();
 		if (kwLength == 0)
@@ -95,13 +128,28 @@ public class StringUtils {
 		for (int i = 0; i < str.length(); i++) {
 			if ((str.charAt(i) == keyword.charAt(0) || str.charAt(i) == (keyword.charAt(0) - 32)) && (StringCmp(str.toLowerCase(), keyword, i))) {
 
-				for (int j = 0; j < kwLength; j++)
-					result += ("<font color=\"#" + highColor + "\">" + str.charAt(i + j) + "</font>");
+				for (int j = 0; j < kwLength; j++) {
+					result.append("<font color=\"#");
+					result.append(highColor);
+					result.append("\">");
+					result.append(str.charAt(i + j));
+					result.append("</font>");
+				}
+
 				i += (kwLength - 1);
 
 
-			} else result += ("<font color=\"#" + generalColor + "\">" + str.charAt(i) + "</font>");
+			} else {
+				result.append("<font color=\"#");
+				result.append(generalColor);
+				result.append("\">");
+				result.append(str.charAt(i));
+				result.append("</font>");
+
+			}
 		}
-		return Html.fromHtml(result);
+		return Html.fromHtml(result.toString());
 	}
+
+
 }

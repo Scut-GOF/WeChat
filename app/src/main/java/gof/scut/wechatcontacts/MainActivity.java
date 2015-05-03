@@ -1,18 +1,15 @@
 package gof.scut.wechatcontacts;
 
 import android.app.Activity;
-import android.database.Cursor;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ListView;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import gof.scut.common.utils.ActivityUtils;
 import gof.scut.common.utils.database.MainTableUtils;
-import gof.scut.common.utils.database.TBMainConstants;
 import gof.scut.cwh.models.adapter.ContactsAdapter;
 import gof.scut.cwh.models.object.ActivityConstants;
 import gof.scut.cwh.models.object.LightIdObj;
@@ -80,20 +77,7 @@ public class MainActivity extends Activity implements View.OnClickListener {
 		//When clickOnNameAndTel, view
 		//When click on image, view label group
 		//edit when view
-//		CursorUtils.closeExistsCursor(cursor);
-		Cursor cursor = mainTableUtils.selectAllIDName();
-
-		List<LightIdObj> contactList = new ArrayList<>();
-
-		for (int i = 0; i < cursor.getCount(); i++) {
-			cursor.moveToPosition(i);
-			contactList.add(new LightIdObj(cursor.getString(cursor.getColumnIndex(TBMainConstants.ID)),
-					cursor.getString(cursor.getColumnIndex(TBMainConstants.NAME))));
-		}
-
-		cursor.close();
-		mainTableUtils.closeDataBase();
-
+		List<LightIdObj> contactList = mainTableUtils.selectAllIDName();
 		ContactsAdapter adapter = new ContactsAdapter(this, contactList);
 		contacts.setAdapter(adapter);
 

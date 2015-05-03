@@ -3,7 +3,6 @@ package gof.scut.wechatcontacts;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.database.Cursor;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -13,7 +12,6 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import gof.scut.common.utils.ActivityUtils;
@@ -22,11 +20,8 @@ import gof.scut.common.utils.BundleNames;
 import gof.scut.common.utils.Log;
 import gof.scut.common.utils.StringUtils;
 import gof.scut.common.utils.database.AllTableUtils;
-import gof.scut.common.utils.database.CursorUtils;
 import gof.scut.common.utils.database.IDLabelTableUtils;
 import gof.scut.common.utils.database.LabelTableUtils;
-import gof.scut.common.utils.database.TBLabelConstants;
-import gof.scut.common.utils.database.TBMainConstants;
 import gof.scut.common.utils.popup.PopConfirmUtils;
 import gof.scut.common.utils.popup.PopEditLabelUtils;
 import gof.scut.common.utils.popup.TodoOnResult;
@@ -47,8 +42,8 @@ public class LabelDetailActivity extends Activity implements View.OnClickListene
 	AllTableUtils allTableUtils;
 	LabelTableUtils labelTableUtils;
 	IDLabelTableUtils idLabelTableUtils;
-	Cursor cursorEdit;
-	Cursor cursorView;
+	List<LightIdObj> members;
+	List<LightIdObj> contactList;
 
 	TextView labelsBack;
 	TextView editLabel;
@@ -119,16 +114,6 @@ public class LabelDetailActivity extends Activity implements View.OnClickListene
 				//add label id
 				labelObj.setLabelName(params[0]);
 				labelObj.setIconPath(params[1]);
-				//check if label exists
-//				Cursor labelsWithName = labelTableUtils.selectAllOnLabel(labelObj.getLabelName());
-//				if (labelsWithName.getCount() != 0) {
-//					Toast.makeText(LabelDetailActivity.this, "标签已存在，请指定其他标签名", Toast.LENGTH_LONG).show();
-//					labelsWithName.close();
-//					labelTableUtils.closeDataBase();
-//					return;
-//				}
-//				labelsWithName.close();
-//				labelTableUtils.closeDataBase();
 
 				long state = labelTableUtils.updateAllWithLabel(labelObj, labelName.getText().toString());
 				if (state < 0) Log.e("LabelsActivity", "update label failed");
@@ -193,55 +178,23 @@ public class LabelDetailActivity extends Activity implements View.OnClickListene
 	}
 
 	void initViewList() {
-		//cursor,contactsAdapter,labelMembers
-//		CursorUtils.closeExistsCursor(cursorEdit);
-//		CursorUtils.closeExistsCursor(cursorView);
-		cursorView = allTableUtils.selectAllIDNameOnLabel(labelObj.getLabelName());
-		List<LightIdObj> contactList = new ArrayList<>();
-		for (int i = 0; i < cursorView.getCount(); i++) {
-			cursorView.moveToPosition(i);
-			contactList.add(new LightIdObj(cursorView.getString(cursorView.getColumnIndex(TBMainConstants.ID)),
-					cursorView.getString(cursorView.getColumnIndex(TBMainConstants.NAME))));
-		}
-		cursorView.close();
+		contactList = allTableUtils.selectLightIdObjOnLabel(labelObj.getLabelName());
 		ContactsAdapter adapter = new ContactsAdapter(this, contactList);
-
-//		cursorView = allTableUtils.selectAllIDNameOnLabel(labelObj.getLabelName());
-//		ContactsAdapter adapter = new ContactsAdapter(this, cursorView);
 		labelMembers.setAdapter(adapter);
 
 	}
 
 	void initEditList() {
 		getLabelMemberCount();
-		//cursor,contactsAdapter,labelMembers
-//		CursorUtils.closeExistsCursor(cursorEdit);
-//		CursorUtils.closeExistsCursor(cursorView);
-		cursorEdit = allTableUtils.selectAllIDNameOnLabel(labelObj.getLabelName());
-		List<LightIdObj> members = new ArrayList<>();
-		for (int i = 0; i < cursorEdit.getCount(); i++) {
-			cursorEdit.moveToPosition(i);
-			members.add(
-					new LightIdObj(cursorEdit.getString(cursorEdit.getColumnIndex(TBMainConstants.ID)),
-							cursorEdit.getString(cursorEdit.getColumnIndex(TBMainConstants.NAME))));
-		}
-		cursorEdit.close();
-		allTableUtils.closeDataBase();
+		members = allTableUtils.selectLightIdObjOnLabel(labelObj.getLabelName());
 		MemEditAdapter adapter = new MemEditAdapter(this, labelObj.getLabelName(), members);
 		labelMembers.setAdapter(adapter);
 
 	}
 
 	private void getLabelMemberCount() {
-		Cursor cursorCount = labelTableUtils.selectMemCount(labelObj.getLabelName());
-		try {
-			cursorCount.moveToNext();
-			String count = cursorCount.getString(cursorCount.getColumnIndex(TBLabelConstants.MEMBER_COUNT));
-			memberCount.setText(StringUtils.addBrackets(count));
-		} finally {
-			CursorUtils.closeExistsCursor(cursorCount);
-			labelTableUtils.closeDataBase();
-		}
+		String count = labelTableUtils.selectMemCount(labelObj.getLabelName()) + "";
+		memberCount.setText(StringUtils.addBrackets(count));
 	}
 
 	@Override
@@ -256,11 +209,6 @@ public class LabelDetailActivity extends Activity implements View.OnClickListene
 				checkState();
 				break;
 			case R.id.add_member:
-
-//				allTableUtils.insertAll("1", labelObj.getLabelName());
-//
-//				initEditList();
-//				break;
 			case R.id.add_member_layout:
 
 				ActivityUtils.startActivityWithObjectForResult
