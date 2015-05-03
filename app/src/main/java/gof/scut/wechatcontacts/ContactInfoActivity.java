@@ -1,27 +1,31 @@
 package gof.scut.wechatcontacts;
 
+import android.app.Activity;
 import android.database.Cursor;
-import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import gof.scut.common.utils.database.CursorUtils;
 import gof.scut.common.utils.database.MainTableUtils;
-import gof.scut.common.utils.database.TBMainConstants;
 import gof.scut.common.utils.database.TelTableUtils;
 import gof.scut.cwh.models.object.IdObj;
 import gof.scut.fental.models.adapter.PhonesAdapter;
 
 
-public class ContactInfoActivity extends ActionBarActivity {
+public class ContactInfoActivity extends Activity {
 
 	private TextView tvName;
 	private TextView tvAddress;
 	private TextView tvNotes;
 	private ListView lvTels;
 	private int id;
+
+	Cursor cursorTels;
+	TelTableUtils telTableUtils;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -36,23 +40,25 @@ public class ContactInfoActivity extends ActionBarActivity {
 		id = ((IdObj) bundle.getSerializable("IdObj")).getId();
 
 		MainTableUtils mainTableUtils = new MainTableUtils(this);
-		Cursor allInfoCursor = mainTableUtils.selectAllWithID("" + id);
-		allInfoCursor.moveToNext();
-		String name = allInfoCursor.getString(allInfoCursor.getColumnIndex(TBMainConstants.NAME));
-		String address = allInfoCursor.getString(allInfoCursor.getColumnIndex(TBMainConstants.ADDRESS));
-		String notes = allInfoCursor.getString(allInfoCursor.getColumnIndex(TBMainConstants.NOTES));
-
-
+		IdObj contact = mainTableUtils.selectAllWithID("" + id);
+		if (contact.getId() < 0) {
+			Toast.makeText(ContactInfoActivity.this, "联系人不存在！", Toast.LENGTH_LONG).show();
+			return;
+		}
+		String name = contact.getName();
+		String address = contact.getAddress();
+		String notes = contact.getNotes();
 		tvName.setText(name);
 		tvAddress.setText(address);
 		tvNotes.setText(notes);
 	}
 
 	private void initList() {
-		TelTableUtils telTableUtils = new TelTableUtils(this);
-		Cursor cursorTels = telTableUtils.selectTelWithID("" + id);
+		telTableUtils = new TelTableUtils(this);
+		cursorTels = telTableUtils.selectTelWithID("" + id);
 		PhonesAdapter phonesAdapter = new PhonesAdapter(this, cursorTels);
 		lvTels.setAdapter(phonesAdapter);
+
 	}
 
 	@Override
@@ -81,4 +87,24 @@ public class ContactInfoActivity extends ActionBarActivity {
 		super.onResume();
 		initList();
 	}
+
+	protected void onPause() {
+		super.onPause();
+		if (cursorTels != null) cursorTels.close();
+		telTableUtils.closeDataBase();
+	}
+
+	protected void onStop() {
+		super.onStop();
+		if (cursorTels != null) cursorTels.close();
+		telTableUtils.closeDataBase();
+	}
+
+	@Override
+	protected void onDestroy() {
+		super.onDestroy();
+		CursorUtils.closeExistsCursor(cursorTels);
+		telTableUtils.closeDataBase();
+	}
+
 }

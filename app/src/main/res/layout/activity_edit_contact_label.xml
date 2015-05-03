@@ -1,0 +1,53 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:background="@color/white"
+              android:orientation="vertical"
+              android:id="@+id/label_layout">
+
+    <RelativeLayout
+        android:id="@+id/title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/my_blue">
+
+        <TextView
+            android:id="@+id/cancel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/all_contact"
+            style="@style/simple_back_button"
+            android:clickable="true"/>
+
+        <TextView
+            android:id="@+id/bt_sure"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+
+            android:layout_centerVertical="true"
+            android:text="@string/sure"
+            android:textSize="22sp"
+            android:textColor="@color/white"
+            android:clickable="true"
+            android:layout_marginRight="@dimen/vertical_margin"/>
+
+    </RelativeLayout>
+
+    <GridView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/exists_labels"
+        android:numColumns="3"
+        android:stretchMode="columnWidth"
+        android:verticalSpacing="5dp"
+        android:horizontalSpacing="0dp"/>
+
+    <ListView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/label_list"
+        android:padding="2dp"
+        android:divider="@null"
+        android:layout_margin="2dp"/>
+</LinearLayout>

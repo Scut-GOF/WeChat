@@ -3,7 +3,6 @@ package gof.scut.wechatcontacts;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.database.Cursor;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -11,6 +10,9 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import java.util.List;
 
 import gof.scut.common.utils.ActivityUtils;
 import gof.scut.common.utils.BitmapUtils;
@@ -25,7 +27,11 @@ import gof.scut.common.utils.popup.PopEditLabelUtils;
 import gof.scut.common.utils.popup.TodoOnResult;
 import gof.scut.cwh.models.adapter.ContactsAdapter;
 import gof.scut.cwh.models.adapter.MemEditAdapter;
+import gof.scut.cwh.models.object.ActivityConstants;
+import gof.scut.cwh.models.object.IdObj;
 import gof.scut.cwh.models.object.LabelObj;
+import gof.scut.cwh.models.object.LightIdObj;
+import gof.scut.cwh.models.object.Signal;
 
 
 public class LabelDetailActivity extends Activity implements View.OnClickListener {
@@ -36,6 +42,8 @@ public class LabelDetailActivity extends Activity implements View.OnClickListene
 	AllTableUtils allTableUtils;
 	LabelTableUtils labelTableUtils;
 	IDLabelTableUtils idLabelTableUtils;
+	List<LightIdObj> members;
+	List<LightIdObj> contactList;
 
 	TextView labelsBack;
 	TextView editLabel;
@@ -64,7 +72,7 @@ public class LabelDetailActivity extends Activity implements View.OnClickListene
 	@Override
 	protected void onResume() {
 		super.onResume();
-		initViewList();
+		checkState();
 	}
 
 	void init() {
@@ -93,7 +101,11 @@ public class LabelDetailActivity extends Activity implements View.OnClickListene
 	void initComponent() {
 		labelName.setText(labelObj.getLabelName());
 		labelIcon.setBackgroundDrawable(null);
-		labelIcon.setImageBitmap(BitmapUtils.decodeBitmapFromPath(labelObj.getIconPath()));
+		if (labelObj.getIconPath().equals("")) {
+			labelIcon.setBackgroundResource(R.drawable.label50);
+		} else {
+			labelIcon.setImageBitmap(BitmapUtils.decodeBitmapFromPath(labelObj.getIconPath()));
+		}
 		memberCount.setText(StringUtils.addBrackets(labelObj.getMemCount() + ""));
 		popEditLabelUtils = new PopEditLabelUtils();
 		popEditLabelUtils.initPopAddLabel(this, new TodoOnResult() {
@@ -102,18 +114,20 @@ public class LabelDetailActivity extends Activity implements View.OnClickListene
 				//add label id
 				labelObj.setLabelName(params[0]);
 				labelObj.setIconPath(params[1]);
+
 				long state = labelTableUtils.updateAllWithLabel(labelObj, labelName.getText().toString());
 				if (state < 0) Log.e("LabelsActivity", "update label failed");
 				labelIcon.setImageBitmap(BitmapUtils.decodeBitmapFromPath(labelObj.getIconPath()));
 				labelName.setText(labelObj.getLabelName());
+				popEditLabelUtils.dismissWindow();
 			}
 
 			@Override
 			public void doOnNegResult(String[] params) {
 
 			}
-		}, "编辑标签", R.id.label_detail_layout);
-		findViewById(R.id.barRelativeLayout).setEnabled(true);
+		}, "编辑标签", R.id.label_detail_layout, labelObj);
+		findViewById(R.id.title).setEnabled(true);
 		setListener();
 
 	}
@@ -141,7 +155,9 @@ public class LabelDetailActivity extends Activity implements View.OnClickListene
 		deleteLabel.setOnClickListener(this);
 		addMember.setOnClickListener(this);
 		labelIcon.setOnClickListener(this);
+		labelName.setOnClickListener(this);
 		addMemberLayout.setOnClickListener(this);
+
 	}
 
 	void saveEditResult() {
@@ -162,20 +178,24 @@ public class LabelDetailActivity extends Activity implements View.OnClickListene
 	}
 
 	void initViewList() {
-		//cursor,contactsAdapter,labelMembers
-		Cursor cursor = allTableUtils.selectAllIDNameOnLabel(labelObj.getLabelName());
-		ContactsAdapter adapter = new ContactsAdapter(this, cursor);
+		contactList = allTableUtils.selectLightIdObjOnLabel(labelObj.getLabelName());
+		ContactsAdapter adapter = new ContactsAdapter(this, contactList);
 		labelMembers.setAdapter(adapter);
+
 	}
 
 	void initEditList() {
-
-		//cursor,contactsAdapter,labelMembers
-		Cursor cursor = allTableUtils.selectAllIDNameOnLabel(labelObj.getLabelName());
-		MemEditAdapter adapter = new MemEditAdapter(this, cursor, labelObj.getLabelName());
+		getLabelMemberCount();
+		members = allTableUtils.selectLightIdObjOnLabel(labelObj.getLabelName());
+		MemEditAdapter adapter = new MemEditAdapter(this, labelObj.getLabelName(), members);
 		labelMembers.setAdapter(adapter);
+
 	}
 
+	private void getLabelMemberCount() {
+		String count = labelTableUtils.selectMemCount(labelObj.getLabelName()) + "";
+		memberCount.setText(StringUtils.addBrackets(count));
+	}
 
 	@Override
 	public void onClick(View v) {
@@ -189,10 +209,14 @@ public class LabelDetailActivity extends Activity implements View.OnClickListene
 				checkState();
 				break;
 			case R.id.add_member:
-				//TODO it's a test
-				idLabelTableUtils.insertAll("1", labelObj.getLabelName());
-				initEditList();
+			case R.id.add_member_layout:
+
+				ActivityUtils.startActivityWithObjectForResult
+						(this, SearchActivity.class, Signal.NAME,
+								new Signal(ActivityConstants.LABEL_DETAIL_ACTIVITY, ActivityConstants.SEARCH_ACTIVITY),
+								ActivityConstants.RESULT_ADD_MEMBER);
 				break;
+
 			case R.id.delete_label:
 				PopConfirmUtils popConfirmUtils = new PopConfirmUtils();
 				popConfirmUtils.prepare(this, R.layout.pop_confirm);
@@ -202,7 +226,7 @@ public class LabelDetailActivity extends Activity implements View.OnClickListene
 					@Override
 					public void doOnPosResult(String[] params) {
 						labelTableUtils.deleteWithLabel(labelObj.getLabelName());
-						//TODO add trigger to delete id-label relation
+						getLabelMemberCount();
 						finish();
 					}
 
@@ -213,10 +237,9 @@ public class LabelDetailActivity extends Activity implements View.OnClickListene
 				});
 				popConfirmUtils.popWindowAtCenter(R.id.member_list, R.id.confirm_title);
 				break;
-			case R.id.add_member_layout:
-				ActivityUtils.ActivitySkip(this, SearchActivity.class);
-				break;
+
 			case R.id.label_icon:
+			case R.id.label_name:
 				popEditLabelUtils.popEditLabel();
 				break;
 		}
@@ -225,7 +248,45 @@ public class LabelDetailActivity extends Activity implements View.OnClickListene
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 		super.onActivityResult(requestCode, resultCode, data);
-		popEditLabelUtils.handleResult(requestCode, resultCode, data);
+		switch (requestCode) {
+			case ActivityConstants.RESULT_LOAD_IMAGE:
+				popEditLabelUtils.handleResult(requestCode, resultCode, data);
+				break;
+			case ActivityConstants.RESULT_ADD_MEMBER:
+				Bundle bundle = data.getExtras();
+				int id = ((IdObj) bundle.getSerializable(BundleNames.ID_OBJ)).getId();
+				if (id != 0) {
+					long status = idLabelTableUtils.insertAll("" + id, labelObj.getLabelName());
+					if (status < 0)
+						Toast.makeText(this, "添加联系人标签失败，\n是否已经在标签中？", Toast.LENGTH_LONG).show();
+					initEditList();
+				}
+				break;
+		}
+
 	}
+
+//	protected void onPause() {
+//		super.onPause();
+////		CursorUtils.closeExistsCursor(cursorEdit);
+////		CursorUtils.closeExistsCursor(cursorView);
+//		allTableUtils.closeDataBase();
+//
+//	}
+//
+//	protected void onStop() {
+//		super.onStop();
+////		CursorUtils.closeExistsCursor(cursorEdit);
+////		CursorUtils.closeExistsCursor(cursorView);
+//		allTableUtils.closeDataBase();
+//	}
+//
+//	@Override
+//	protected void onDestroy() {
+//		super.onDestroy();
+////		CursorUtils.closeExistsCursor(cursorEdit);
+////		CursorUtils.closeExistsCursor(cursorView);
+//		allTableUtils.closeDataBase();
+//	}
 
 }

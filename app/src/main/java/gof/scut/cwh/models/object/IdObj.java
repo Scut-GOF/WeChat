@@ -1,6 +1,7 @@
 package gof.scut.cwh.models.object;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 
 
 public class IdObj implements Serializable {
@@ -9,15 +10,27 @@ public class IdObj implements Serializable {
 	private String lPinYin;
 	private String sPinYin;
 	private String tel;
+	private ArrayList<String> tels = new ArrayList<>();
 	private String address;
 	private String notes;
-
 
 	public IdObj(int id) {
 		this.id = id;
 	}
 
 	public IdObj() {
+
+	}
+
+	public IdObj(int id, String name, String lPinYin, String sPinYin, String address, String notes) {
+		this.id = id;
+		this.name = name;
+		this.lPinYin = lPinYin;
+		this.sPinYin = sPinYin;
+
+		this.tel = tel;
+		this.address = address;
+		this.notes = notes;
 	}
 
 	public IdObj(int id, String name, String lPinYin, String sPinYin, String tel, String address, String notes) {
@@ -25,6 +38,7 @@ public class IdObj implements Serializable {
 		this.name = name;
 		this.lPinYin = lPinYin;
 		this.sPinYin = sPinYin;
+
 		this.tel = tel;
 		this.address = address;
 		this.notes = notes;
@@ -32,6 +46,17 @@ public class IdObj implements Serializable {
 
 	public void setId(int id) {
 		this.id = id;
+	}
+
+	public IdObj(String name, String address, String notes) {
+		this.name = name;
+		this.address = address;
+		this.notes = notes;
+	}
+
+	public IdObj(String name, String id) {
+		this.name = name;
+		this.id = Integer.parseInt(id);
 	}
 
 	public IdObj(String tel) {
@@ -82,6 +107,18 @@ public class IdObj implements Serializable {
 		return tel;
 	}
 
+	public ArrayList<String> getTels() {
+		return tels;
+	}
+
+	public void setTels(ArrayList<String> tels) {
+		this.tels = tels;
+	}
+
+	public void addTel(String tel) {
+		tels.add(tel);
+	}
+
 	public String getAddress() {
 		return address;
 	}
@@ -98,6 +135,7 @@ public class IdObj implements Serializable {
 				", lPinYin='" + lPinYin + '\'' +
 				", sPinYin='" + sPinYin + '\'' +
 				", tel='" + tel + '\'' +
+				", tels='" + tels.toString() + '\'' +
 				", address='" + address + '\'' +
 				", notes='" + notes + '\'' +
 				'}';

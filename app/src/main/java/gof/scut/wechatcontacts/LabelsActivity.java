@@ -21,11 +21,15 @@ import android.widget.GridView;
 import android.widget.ListView;
 import android.widget.PopupWindow;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import java.util.List;
 
 import gof.scut.common.utils.ActivityUtils;
 import gof.scut.common.utils.Log;
 import gof.scut.common.utils.database.LabelTableUtils;
 import gof.scut.cwh.models.adapter.LabelsAdapter;
+import gof.scut.cwh.models.object.LabelObj;
 
 
 public class LabelsActivity extends Activity implements View.OnClickListener {
@@ -41,6 +45,7 @@ public class LabelsActivity extends Activity implements View.OnClickListener {
 	final int RESULT_LOAD_IMAGE = 1;
 	String pathSelectedToAdd = "";
 
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -52,7 +57,7 @@ public class LabelsActivity extends Activity implements View.OnClickListener {
 	@Override
 	protected void onResume() {
 		super.onResume();
-		initGrids();
+		//initGrids();
 		initList();
 	}
 
@@ -69,6 +74,7 @@ public class LabelsActivity extends Activity implements View.OnClickListener {
 
 	}
 
+
 	void setListener() {
 		addLabel.setOnClickListener(this);
 		labelsBack.setOnClickListener(this);
@@ -78,20 +84,16 @@ public class LabelsActivity extends Activity implements View.OnClickListener {
 		addLabel = (TextView) findViewById(R.id.add_label);
 		labels = (GridView) findViewById(R.id.labels);
 		labelList = (ListView) findViewById(R.id.label_list);
-		labelsBack = (TextView) findViewById(R.id.labels_back);
+		labelsBack = (TextView) findViewById(R.id.cancel);
 	}
 
 	void initList() {
-		Cursor cursorLabels = labelTableUtils.selectAll();
-		LabelsAdapter labelsAdapter = new LabelsAdapter(this, cursorLabels);
+		List<LabelObj> labels = labelTableUtils.selectAll();
+		LabelsAdapter labelsAdapter = new LabelsAdapter(this, labels);
 		labelList.setAdapter(labelsAdapter);
+
 	}
 
-	void initGrids() {
-		Cursor cursorLabels = labelTableUtils.selectAll();
-		LabelsAdapter labelsAdapter = new LabelsAdapter(this, cursorLabels);
-		labels.setAdapter(labelsAdapter);
-	}
 
 	void initPopAddLabel() {
 
@@ -119,10 +121,19 @@ public class LabelsActivity extends Activity implements View.OnClickListener {
 				final String addLabelName, addLabelIcon;
 				addLabelName = labelName.getText().toString();
 				addLabelIcon = pathSelectedToAdd;
+
+				//check if label exists
+				int labelCount = labelTableUtils.selectMemCount(addLabelName);
+				if (labelCount >= 0) {
+					Toast.makeText(LabelsActivity.this, "标签已存在，请指定其他标签名", Toast.LENGTH_LONG).show();
+					return;
+				}
+
+
 				long state = labelTableUtils.insertAll(addLabelName, addLabelIcon);
 				if (state < 0) Log.e("LabelsActivity", "add label failed");
 				addLabelWindow.dismiss();
-				initGrids();
+				//initGrids();
 				initList();
 			}
 		});
@@ -185,7 +196,7 @@ public class LabelsActivity extends Activity implements View.OnClickListener {
 	@Override
 	public void onClick(View v) {
 		switch (v.getId()) {
-			case R.id.labels_back:
+			case R.id.cancel:
 				finish();
 				break;
 			case R.id.add_label:
@@ -193,4 +204,23 @@ public class LabelsActivity extends Activity implements View.OnClickListener {
 				break;
 		}
 	}
+
+//	protected void onPause() {
+//		super.onPause();
+////		CursorUtils.closeExistsCursor(cursorLabels);
+//		labelTableUtils.closeDataBase();
+//	}
+//
+//	protected void onStop() {
+//		super.onStop();
+////		CursorUtils.closeExistsCursor(cursorLabels);
+//		labelTableUtils.closeDataBase();
+//	}
+//
+//	@Override
+//	protected void onDestroy() {
+//		super.onDestroy();
+////		CursorUtils.closeExistsCursor(cursorLabels);
+//		labelTableUtils.closeDataBase();
+//	}
 }

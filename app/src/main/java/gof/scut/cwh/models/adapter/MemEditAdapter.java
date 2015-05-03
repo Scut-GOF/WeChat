@@ -1,7 +1,6 @@
 package gof.scut.cwh.models.adapter;
 
 import android.content.Context;
-import android.database.Cursor;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,35 +8,37 @@ import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.TextView;
 
-import gof.scut.common.utils.database.AllTableUtils;
+import java.util.List;
+
 import gof.scut.common.utils.database.IDLabelTableUtils;
-import gof.scut.common.utils.database.TBMainConstants;
 import gof.scut.common.utils.popup.PopConfirmUtils;
 import gof.scut.common.utils.popup.TodoOnResult;
+import gof.scut.cwh.models.object.LightIdObj;
 import gof.scut.wechatcontacts.R;
 
-/**
- * Created by Administrator on 2015/4/18.
- */
+
 public class MemEditAdapter extends BaseAdapter {
 	private Context context;
-	private Cursor cursor;
+	//	private Cursor cursor;
+	List<LightIdObj> members;
 	private String labelName;
+	LayoutInflater inflater;
 
-	public MemEditAdapter(Context context, Cursor cursor, String labelName) {
+	public MemEditAdapter(Context context, String labelName, List<LightIdObj> members) {
 		this.context = context;
-		this.cursor = cursor;
+		this.members = members;
 		this.labelName = labelName;
+		inflater = LayoutInflater.from(context);
 	}
 
 	@Override
 	public int getCount() {
-		return cursor.getCount();
+		return members.size();
 	}
 
 	@Override
 	public Object getItem(int position) {
-		return cursor.getPosition();
+		return members.get(position);
 	}
 
 	@Override
@@ -45,20 +46,32 @@ public class MemEditAdapter extends BaseAdapter {
 		return position;
 	}
 
-	@Override
-	public View getView(int position, View layout, ViewGroup parent) {
-		cursor.moveToPosition(position);
-		LayoutInflater inflater = LayoutInflater.from(context);
-		//layout = (LinearLayout) inflater.inflate(R.layout.cell_label_grid, null);
-		layout = inflater.inflate(R.layout.cell_edit_member_list, parent, false);
+	static class ViewHolder {
 		Button removeMember;
 		TextView memberName;
-		removeMember = (Button) layout.findViewById(R.id.remove_member);
-		memberName = (TextView) layout.findViewById(R.id.name);
-		final String strMemberName = cursor.getString(cursor.getColumnIndex(TBMainConstants.NAME));
-		final String strMemberID = cursor.getString(cursor.getColumnIndex(TBMainConstants.ID));
-		memberName.setText(strMemberName);
-		removeMember.setOnClickListener(new View.OnClickListener() {
+	}
+
+	@Override
+	public View getView(final int position, View convertView, ViewGroup parent) {
+		LightIdObj memeber = members.get(position);
+		ViewHolder holder;
+		if (convertView == null) {
+			convertView = inflater.inflate(R.layout.cell_edit_member_list, null);
+			holder = new ViewHolder();
+			holder.removeMember = (Button) convertView.findViewById(R.id.remove_member);
+			holder.memberName = (TextView) convertView.findViewById(R.id.name);
+			convertView.setTag(holder);
+		} else {
+			holder = (ViewHolder) convertView.getTag();
+		}
+
+
+		holder.removeMember = (Button) convertView.findViewById(R.id.remove_member);
+		holder.memberName = (TextView) convertView.findViewById(R.id.name);
+		final String strMemberName = memeber.getName();
+		final String strMemberID = memeber.getId();
+		holder.memberName.setText(strMemberName);
+		holder.removeMember.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
 				PopConfirmUtils popConfirmUtils = new PopConfirmUtils();
@@ -70,8 +83,7 @@ public class MemEditAdapter extends BaseAdapter {
 					public void doOnPosResult(String[] params) {
 						IDLabelTableUtils idLabelTableUtils = new IDLabelTableUtils(context);
 						idLabelTableUtils.deleteWithID_Label(strMemberID, labelName);
-						AllTableUtils allTableUtils = new AllTableUtils(context);
-						cursor = allTableUtils.selectAllIDNameOnLabel(labelName);
+						members.remove(position);
 						MemEditAdapter.this.notifyDataSetChanged();
 					}
 
@@ -84,7 +96,7 @@ public class MemEditAdapter extends BaseAdapter {
 
 			}
 		});
-		return layout;
+		return convertView;
 	}
 
 }

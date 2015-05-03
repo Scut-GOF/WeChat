@@ -1,0 +1,158 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              xmlns:tools="http://schemas.android.com/tools"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:id="@+id/label_detail_layout"
+              android:background="@color/white"
+              android:orientation="vertical">
+
+
+    <RelativeLayout
+        android:id="@+id/title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/my_blue">
+
+        <TextView
+            android:id="@+id/labels_back"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/all_label"
+            style="@style/simple_back_button"
+            android:clickable="true"/>
+
+        <TextView
+            android:id="@+id/edit_label"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="5dp"
+            android:layout_centerVertical="true"
+            android:text="@string/save"
+            android:textSize="22sp"
+            android:textColor="@color/white"
+            android:clickable="true"/>
+    </RelativeLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:layout_marginLeft="@dimen/vertical_margin"
+        android:layout_marginRight="@dimen/vertical_margin">
+
+        <RelativeLayout
+            android:orientation="horizontal"
+            android:padding="2dp"
+            android:gravity="center"
+            android:layout_margin="2dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+            <ImageView
+                android:layout_width="65dp"
+                android:layout_height="65dp"
+                android:layout_margin="5dp"
+                android:background="@drawable/change_photo100"
+                android:scaleType="fitCenter"
+                android:id="@+id/change_label_icon"/>
+
+            <EditText
+                android:layout_toRightOf="@id/change_label_icon"
+                android:layout_alignBottom="@id/change_label_icon"
+                android:id="@+id/edit_label_name"
+                android:text="Label"
+                android:background="@null"
+                android:textStyle="bold"
+                android:textColor="@color/black"
+                android:layout_marginLeft="6dp"
+                android:layout_marginStart="6dp"
+                android:layout_marginTop="2dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="22sp"
+                android:paddingLeft="10dp"/>
+
+            <TextView
+                android:layout_below="@id/change_label_icon"
+                android:layout_toRightOf="@id/change_label_icon"
+                style="@style/bar"
+                android:layout_marginLeft="10dp"/>
+
+
+        </RelativeLayout>
+        t>
+
+        <TextView
+            style="@style/purple_title"
+            android:text="@string/members"
+            android:layout_margin="5dp"/>
+
+
+        <LinearLayout
+            android:visibility="gone"
+            android:id="@+id/add_member_layout"
+            android:clickable="true"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/add_member"
+                android:layout_width="25dp"
+                android:layout_height="25dp"
+                android:layout_marginStart="15dp"
+                android:layout_marginLeft="15dp"
+                android:background="@drawable/cwh_white_button_selector"
+                android:textColor="@drawable/light_orange_button_text_selector"
+                android:textSize="18sp"
+                android:text="@string/add"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="19sp"
+                android:textColor="@color/bright_grey"
+                android:layout_marginLeft="5dp"
+                android:layout_marginStart="5dp"
+                android:text="@string/add_member"/>
+        </LinearLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <ImageButton
+                style="@style/simple_button"
+                android:background="@drawable/add_detail50"
+                android:id="@+id/add_label_member"/>
+
+            <TextView
+                android:layout_toRightOf="@id/add_label_member"
+                android:text="@string/add_member"
+                style="@style/un_written"/>
+
+        </RelativeLayout>
+
+        <ListView
+            android:id="@+id/member_list"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:divider="@null"/>
+
+        <View style="@style/bar"/>
+
+        <Button
+            android:layout_marginTop="20dp"
+            android:id="@+id/delete_label"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="22sp"
+            android:background="@drawable/cwh_green_button_selector"
+            android:textColor="@drawable/cwh_blue_button_text_selector"
+            android:text="@string/delete"/>
+    </LinearLayout>
+
+</LinearLayout>

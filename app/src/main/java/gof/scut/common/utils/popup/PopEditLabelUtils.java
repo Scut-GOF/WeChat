@@ -20,8 +20,7 @@ import android.widget.PopupWindow;
 import android.widget.TextView;
 
 import gof.scut.common.utils.ActivityUtils;
-import gof.scut.common.utils.Log;
-import gof.scut.common.utils.database.LabelTableUtils;
+import gof.scut.cwh.models.object.LabelObj;
 import gof.scut.wechatcontacts.R;
 
 /**
@@ -39,12 +38,14 @@ public class PopEditLabelUtils {
 
 	int parentId;
 
-	public void initPopAddLabel(Context context, TodoOnResult todoOnResult, String popTitleStr, int parentId) {
+	public void initPopAddLabel(Context context, TodoOnResult todoOnResult, String popTitleStr, int parentId, LabelObj labelObj) {
 		this.context = context;
 		this.todoOnResult = todoOnResult;
 		this.parentId = parentId;
 		addLabelView = LayoutInflater.from(context).inflate(
 				R.layout.pop_add_label, (ViewGroup) ActivityUtils.getRootView((Activity) context), false);
+
+
 		TextView popTitle = (TextView) addLabelView.findViewById(R.id.pop_title);
 		popTitle.setText(popTitleStr);
 		addLabelWindow = new PopupWindow(addLabelView,
@@ -55,8 +56,12 @@ public class PopEditLabelUtils {
 
 		final Context innerContext = context;
 		final EditText labelName = (EditText) addLabelView.findViewById(R.id.add_label_name);
+		labelName.setText(labelObj.getLabelName());
+		pathSelectedToAdd = labelObj.getIconPath();
+
 		Button labelIcon = (Button) addLabelView.findViewById(R.id.add_label_icon);
 		Button confirm = (Button) addLabelView.findViewById(R.id.btn_confirm);
+
 		labelIcon.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
@@ -70,7 +75,7 @@ public class PopEditLabelUtils {
 				addLabelName = labelName.getText().toString();
 				addLabelIcon = pathSelectedToAdd;
 				doOnConfirm(new String[]{addLabelName, addLabelIcon});
-				addLabelWindow.dismiss();
+//				addLabelWindow.dismiss();
 
 			}
 		});
@@ -107,6 +112,7 @@ public class PopEditLabelUtils {
 
 	public void doOnConfirm(String[] params) {
 		todoOnResult.doOnPosResult(params);
+		//addLabelWindow.dismiss();
 	}
 
 	public void handleResult(int requestCode, int resultCode, Intent data) {
@@ -116,11 +122,15 @@ public class PopEditLabelUtils {
 
 			Cursor cursor = context.getContentResolver().query(selectedImage,
 					filePathColumn, null, null, null);
-			cursor.moveToFirst();
+			try {
+				cursor.moveToFirst();
+				int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
+				pathSelectedToAdd = cursor.getString(columnIndex);
+			} finally {
+				cursor.close();
+			}
 
-			int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
-			pathSelectedToAdd = cursor.getString(columnIndex);
-			cursor.close();
+
 		}
 	}
 
@@ -129,5 +139,9 @@ public class PopEditLabelUtils {
 		addLabelWindow.showAtLocation(((Activity) context).findViewById(parentId), Gravity.CENTER, 0, 0);
 		Animation anim1 = AnimationUtils.loadAnimation(context, R.anim.scale_center_enter);
 		addLabelView.findViewById(R.id.add_label_name).startAnimation(anim1);
+	}
+
+	public void dismissWindow() {
+		addLabelWindow.dismiss();
 	}
 }

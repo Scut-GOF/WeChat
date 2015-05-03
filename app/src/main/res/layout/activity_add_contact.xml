@@ -1,20 +1,22 @@
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#ffe1e0de">
+    android:background="@color/white"
+    android:orientation="vertical">
 
     <RelativeLayout
         android:id="@+id/title"
         android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:background="@color/light_blue">
+        android:layout_height="wrap_content"
+        android:background="@color/my_blue">
 
         <TextView
             android:id="@+id/cancel"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/cancel"
-            style="@style/simple_back_button"
+            android:text="@string/all_contact"
+            style="@style/simple_title"
+            android:layout_alignParentLeft="true"
             android:clickable="true" />
 
         <TextView
@@ -23,237 +25,228 @@
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
             android:layout_marginRight="5dp"
-            android:layout_centerVertical="true"
             android:text="@string/save"
-            android:textSize="22sp"
-            android:textColor="@color/white"
+            style="@style/simple_title"
             android:clickable="true" />
     </RelativeLayout>
 
-    <RelativeLayout
+    <LinearLayout
         android:id="@+id/scan_layout"
         android:layout_below="@id/title"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@color/cwh_orange">
+        android:layout_height="50dp"
+        android:orientation="horizontal"
+        style="@style/simple_green_button_background"
+        android:clickable="true">
 
         <ImageView
-            android:id="@+id/scan"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:layout_centerHorizontal="true"
-            android:background="@drawable/scan"
-            android:layout_marginLeft="20dp" />
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:layout_marginLeft="@dimen/vertical_margin"
+            android:layout_gravity="center_vertical"
+            android:background="@drawable/binerycode50"/>
 
         <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerVertical="true"
-            android:layout_below="@id/scan"
-            android:layout_centerHorizontal="true"
-            android:text="Scan Binary Code"
-            android:textSize="22sp"
-            android:textColor="@color/white" />
-    </RelativeLayout>
-
-    <LinearLayout
-        android:layout_below="@id/scan_layout"
-        android:layout_marginLeft="10dp"
-        android:layout_marginRight="10dp"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical">
-
-        <LinearLayout
+            style="@style/simple_green_button"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical">
-
-            <TextView
-                android:id="@+id/name"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:padding="10dp"
-                android:text="name"
-                android:textSize="22sp"
-                android:textColor="@color/gray" />
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:padding="2dp"
-                android:textSize="22sp"
-                android:background="@color/gray" />
-
-        </LinearLayout>
-
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical">
-
-            <TextView
-                android:id="@+id/Phone_text"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:padding="10dp"
-                android:text="Phone"
-                android:textSize="22sp"
-                android:textStyle="bold"
-                android:textColor="@color/blue" />
-
-            <ImageView
-                android:layout_below="@id/Phone_text"
-                android:layout_width="40dp"
-                android:layout_height="40dp"
-                android:layout_marginLeft="10dp"
-                android:background="@drawable/add" />
-
-            <TextView
-                android:id="@+id/phone"
-                android:layout_below="@id/Phone_text"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerHorizontal="true"
-                android:padding="10dp"
-                android:text="new phone"
-                android:textSize="22sp"
-                android:textColor="@color/gray" />
-
-            <TextView
-                android:layout_below="@id/phone"
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:padding="2dp"
-                android:textSize="22sp"
-                android:background="@color/gray" />
-
-        </RelativeLayout>
-
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical">
-
-            <TextView
-                android:id="@+id/Label_text"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:padding="10dp"
-                android:text="Label"
-                android:textSize="22sp"
-                android:textStyle="bold"
-                android:textColor="@color/blue" />
-
-            <ImageView
-                android:layout_below="@id/Label_text"
-                android:layout_width="40dp"
-                android:layout_height="40dp"
-                android:layout_marginLeft="10dp"
-                android:background="@drawable/add" />
-
-            <TextView
-                android:id="@+id/label"
-                android:layout_below="@id/Label_text"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerHorizontal="true"
-                android:padding="10dp"
-                android:text="New Label>"
-                android:textSize="22sp"
-                android:textColor="@color/gray" />
-
-            <TextView
-                android:layout_below="@id/label"
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:padding="2dp"
-                android:textSize="22sp"
-                android:background="@color/gray" />
-
-        </RelativeLayout>
-
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
-
-            <TextView
-                android:id="@+id/address_text"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:padding="10dp"
-                android:text="Address"
-                android:textSize="22sp"
-                android:textStyle="bold"
-                android:textColor="@color/blue" />
-
-            <TextView
-                android:id="@+id/address"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerHorizontal="true"
-                android:padding="10dp"
-                android:text="add address"
-                android:textSize="22sp"
-                android:textColor="@color/gray" />
-
-            <TextView
-                android:layout_toRightOf="@id/address_text"
-                android:layout_below="@id/address"
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:padding="2dp"
-                android:textSize="22sp"
-                android:background="@color/gray" />
-
-        </RelativeLayout>
-
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
-
-            <TextView
-                android:id="@+id/addition_text"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:padding="10dp"
-                android:text="Addition"
-                android:textSize="22sp"
-                android:textStyle="bold"
-                android:textColor="@color/blue" />
-
-            <TextView
-                android:id="@+id/addition"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerHorizontal="true"
-                android:padding="10dp"
-                android:text="add addition"
-                android:textSize="22sp"
-                android:textColor="@color/gray" />
-
-            <TextView
-                android:layout_toRightOf="@id/addition_text"
-                android:layout_below="@id/addition"
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:padding="2dp"
-                android:textSize="22sp"
-                android:background="@color/gray" />
-
-            <ImageView
-                android:id="@+id/imageView"
-                android:layout_width="100dp"
-                android:layout_height="100dp"
-                android:layout_below="@id/addition"
-                android:layout_centerHorizontal="true"
-                android:background="@drawable/abc_ic_ab_back_mtrl_am_alpha" />
-
-        </RelativeLayout>
+            android:layout_height="match_parent"
+            android:focusable="true"
+            android:focusableInTouchMode="true"
+            android:text="Scan Binary Code"/>
 
     </LinearLayout>
 
 
-</RelativeLayout>
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:layout_below="@id/scan_layout"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:orientation="vertical"
+                >
+
+                <EditText
+                    android:id="@+id/name"
+                    style="@style/un_written"
+                    android:singleLine="true"
+                    android:hint="name"
+                    android:background="@null"
+                    />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:padding="2dp"
+                    android:textSize="22sp"
+                    android:background="@color/my_dark_grey"/>
+
+            </LinearLayout>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:id="@+id/Phone_text"
+                    style="@style/purple_title"
+                    android:text="Phone"/>
+
+                <ListView
+                    android:layout_below="@id/Phone_text"
+                    android:id="@+id/phoneList"
+                    android:layout_width="match_parent"
+                    android:layout_height="80dp"
+                    android:scrollbars="none"
+                    android:divider="@null"
+                    android:dividerHeight="1dp">
+
+                </ListView>
+
+                <ImageView
+                    android:layout_below="@id/phoneList"
+                    android:id="@+id/add_phone_button"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:layout_marginLeft="10dp"
+                    android:background="@drawable/add_detail50"/>
+
+                <EditText
+                    android:id="@+id/phone"
+                    android:layout_below="@id/phoneList"
+                    android:layout_toRightOf="@+id/add_phone_button"
+                    style="@style/un_written"
+                    android:padding="10dp"
+                    android:hint="new phone"
+                    android:inputType="phone"
+                    android:background="@null"/>
+
+                <TextView
+                    android:layout_below="@id/phone"
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:padding="2dp"
+                    android:background="@color/my_dark_grey"/>
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/Label_text"
+                    style="@style/purple_title"
+                    android:text="Label"/>
+
+                <ListView
+                    android:layout_below="@id/Label_text"
+                    android:id="@+id/labelList"
+                    android:layout_width="match_parent"
+                    android:layout_height="80dp"
+                    android:scrollbars="none"
+                    android:divider="@null"
+                    android:dividerHeight="1dp">
+                </ListView>
+
+                <ImageView
+                    android:layout_below="@id/labelList"
+                    android:id="@+id/new_label_button"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:layout_marginLeft="10dp"
+                    android:background="@drawable/add_detail50"/>
+
+                <TextView
+                    android:id="@+id/label"
+                    android:layout_below="@id/labelList"
+                    android:layout_toRightOf="@+id/new_label_button"
+                    style="@style/un_written"
+                    android:text="New Label>"
+                    android:padding="10dp"
+                    android:textColor="@color/black"/>
+
+                <TextView
+                    android:layout_below="@id/label"
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:padding="2dp"
+                    android:textSize="22sp"
+                    android:background="@color/my_dark_grey"/>
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/address_title"
+                    style="@style/purple_title"
+                    android:text="Address"
+
+                    />
+
+                <EditText
+                    android:id="@+id/address"
+                    style="@style/un_written"
+                    android:layout_toRightOf="@+id/address_title"
+                    android:hint="add address"
+                    android:background="@null"/>
+
+                <TextView
+                    android:layout_toRightOf="@id/address_title"
+                    android:layout_below="@id/address"
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:padding="2dp"
+                    android:textSize="22sp"
+                    android:background="@color/my_dark_grey"/>
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <TextView
+                    style="@style/purple_title"
+                    android:text="Addition"
+                    android:id="@+id/addition_title"/>
+
+                <EditText
+                    android:id="@+id/addition"
+                    style="@style/un_written"
+                    android:layout_toRightOf="@+id/addition_title"
+                    android:hint="add addition"
+                    android:background="@null"/>
+
+                <TextView
+                    android:layout_toRightOf="@id/addition_title"
+                    android:layout_below="@id/addition"
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:padding="2dp"
+                    android:textSize="22sp"
+                    android:background="@color/my_dark_grey"/>
+
+            </RelativeLayout>
+
+        </LinearLayout>
+
+    </ScrollView>
+
+</LinearLayout>

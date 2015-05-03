@@ -1,125 +1,276 @@
 package gof.scut.wechatcontacts;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Bitmap;
 import android.os.Bundle;
+import android.text.TextUtils;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
+import android.widget.BaseAdapter;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.ListView;
+import android.widget.TextView;
+import android.widget.Toast;
 
-import com.google.zxing.BarcodeFormat;
-import com.google.zxing.EncodeHintType;
-import com.google.zxing.WriterException;
-import com.google.zxing.common.BitMatrix;
-import com.google.zxing.qrcode.QRCodeWriter;
 import com.google.gson.Gson;
 
-import java.util.Hashtable;
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.inject.Inject;
 
 import gof.scut.common.MyApplication;
+import gof.scut.common.utils.BundleNames;
 import gof.scut.common.utils.Log;
 import gof.scut.common.utils.database.MainTableUtils;
+import gof.scut.cwh.models.object.ActivityConstants;
 import gof.scut.cwh.models.object.IdObj;
+import gof.scut.cwh.models.object.LabelListObj;
+import gof.scut.cwh.models.object.Signal;
+import roboguice.activity.RoboActivity;
+import roboguice.inject.InjectView;
 
-public class AddContactActivity extends Activity {
+public class AddContactActivity extends RoboActivity {
 
-	private static final String TAG = AddContactActivity.class.getSimpleName();
+	//constant
 	private final Context mContext = AddContactActivity.this;
+	private final static int REQUEST_CODE_SCAN = 1;
+	private final static int REQUEST_CODE_LABEL = 2;
 
-	private final static int SCANNIN_GREQUEST_CODE = 1;
 	private MainTableUtils mainTableUtils;
 	private Gson gson;
+	@Inject
+	InputMethodManager imm;
 
-	//view
-	private ImageView imageView;
+	//views
+	@InjectView(R.id.cancel)
+	TextView cancel;
+	@InjectView(R.id.save)
+	TextView save;
+	@InjectView(R.id.name)
+	EditText name;
+	@InjectView(R.id.add_phone_button)
+	ImageView addPhone;
+	@InjectView(R.id.phone)
+	EditText phone;
+	@InjectView(R.id.phoneList)
+	ListView phoneListView;
+	@InjectView(R.id.new_label_button)
+	ImageView addLable;
+	@InjectView(R.id.labelList)
+	ListView labelListView;
+	@InjectView(R.id.address)
+	EditText address;
+	@InjectView(R.id.addition)
+	EditText addition;
+
+	//values
+	private List<String> phoneList;
+	private List<String> labelList;
+	private MyAdapter phoneAdapter;
+	private MyAdapter labelAdapter;
+
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_add_contact);
 
+		init();
+
 		initView();
+	}
+
+	private void init() {
+		mainTableUtils = new MainTableUtils(mContext);
+		gson = MyApplication.getGson();
+
+		phoneList = new ArrayList<>();
+		phoneAdapter = new MyAdapter(phoneList);
+		phoneListView.setAdapter(phoneAdapter);
+
+		labelList = new ArrayList<>();
+		labelAdapter = new MyAdapter(labelList);
+		labelListView.setAdapter(labelAdapter);
 	}
 
 	private void initView() {
 		//点击按钮跳转到二维码扫描界面，这里用的是startActivityForResult跳转
 		//扫描完了之后调到该界面
-		findViewById(R.id.scan).setOnClickListener(new View.OnClickListener() {
+		findViewById(R.id.scan_layout).setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
 				Intent intent = new Intent();
 				intent.setClass(AddContactActivity.this, gof.scut.common.zixng.codescan.MipcaActivityCapture.class);
 				intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-				startActivityForResult(intent, SCANNIN_GREQUEST_CODE);
+				startActivityForResult(intent, REQUEST_CODE_SCAN);
 			}
 		});
 
-		mainTableUtils = new MainTableUtils(mContext);
-		gson = MyApplication.getGson();
+		cancel.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				finish();
+			}
+		});
 
+		//保存至数据库
+		save.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+                    mainTableUtils.insertAll(
+                            name.getText().toString(),
+                            "object.getlPinYin()",
+                            "object.getsPinYin()",
+                            address.getText().toString(),
+                            addition.getText().toString()
+                    );
+			}
+		});
 
-		imageView = (ImageView) findViewById(R.id.imageView);
+		//add phone number
+		addPhone.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				String phoneNumber = phone.getText().toString();
+                if(checkPhone(phoneNumber)){
+                    phoneList.add(phoneNumber);
+                    phoneAdapter.notifyDataSetChanged();
+                    phone.setText("");
+                }
+			}
+		});
+		//add label number
+		addLable.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+//                Intent intent = new Intent();
+//                intent.setClass(mContext, LabelsActivity.class);
+//                startActivityForResult(intent, REQUEST_CODE_LABEL);
+				Intent intent = new Intent();
+				intent.setClass(mContext, EditContactLabelActivity.class);
+				Bundle bundle = new Bundle();
+				Signal signal = new Signal(ActivityConstants.ADD_CONTACTS_ACTIVITY, ActivityConstants.EditContactLabelActivity);
+				bundle.putSerializable(Signal.NAME, signal);
+				//bundle.putSerializable(BundleNames.ID_OBJ, new IdObj(0));
+				intent.putExtras(bundle);
+				startActivityForResult(intent, REQUEST_CODE_LABEL);
 
-		IdObj obj = new IdObj(101, "周萌", "zhoumeng", "zm", "13660567470", "华工", "no");
-		createQRImage(gson.toJson(obj, IdObj.class));
-
+			}
+		});
 	}
 
-	public void createQRImage(String url) {
-		int QR_WIDTH = 1000;
-		int QR_HEIGHT = 1000;
-		try {
-			//判断URL合法性
-			if (url == null || "".equals(url) || url.length() < 1) {
-				return;
-			}
-			Hashtable<EncodeHintType, String> hints = new Hashtable<EncodeHintType, String>();
-			hints.put(EncodeHintType.CHARACTER_SET, "utf-8");
-			//图像数据转换，使用了矩阵转换
-			BitMatrix bitMatrix = new QRCodeWriter().encode(url, BarcodeFormat.QR_CODE, QR_WIDTH, QR_HEIGHT, hints);
-			int[] pixels = new int[QR_WIDTH * QR_HEIGHT];
-			//下面这里按照二维码的算法，逐个生成二维码的图片，
-			//两个for循环是图片横列扫描的结果
-			for (int y = 0; y < QR_HEIGHT; y++) {
-				for (int x = 0; x < QR_WIDTH; x++) {
-					if (bitMatrix.get(x, y)) {
-						pixels[y * QR_WIDTH + x] = 0xff000000;
-					} else {
-						pixels[y * QR_WIDTH + x] = 0xffffffff;
-					}
-				}
-			}
-			//生成二维码图片的格式，使用ARGB_8888
-			Bitmap bitmap = Bitmap.createBitmap(QR_WIDTH, QR_HEIGHT, Bitmap.Config.ARGB_8888);
-			bitmap.setPixels(pixels, 0, QR_WIDTH, 0, 0, QR_WIDTH, QR_HEIGHT);
-			//显示到一个ImageView上面
-			imageView.setImageBitmap(bitmap);
-		} catch (WriterException e) {
-			e.printStackTrace();
-		}
-	}
+    //检查手机号码格式
+    private boolean checkPhone(String phoneNumber){
+        String telRegex = "[1]\\d{10}";//第一位是1，后10位为0-9任意数字，共计11位；
+        
+        if(TextUtils.isEmpty(phoneNumber))
+            return false;
+
+        if (!phoneNumber.matches(telRegex)){
+            Toast.makeText(mContext, "手机号码格式错误!",Toast.LENGTH_SHORT).show();
+            return false;
+        }
+
+        return true;
+    }
 
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 		super.onActivityResult(requestCode, resultCode, data);
+
 		switch (requestCode) {
-			case SCANNIN_GREQUEST_CODE:
+			case REQUEST_CODE_SCAN:
 				if (resultCode == RESULT_OK) {
 					Bundle bundle = data.getExtras();
-					//显示
-//                    mImageView.setImageBitmap((Bitmap) data.getParcelableExtra("bitmap"));
-
 					String resultString = bundle.getString("result");
-
 					IdObj object = gson.fromJson(resultString, IdObj.class);
-					mainTableUtils.insertAll(object.getName(),
-							object.getlPinYin(), object.getsPinYin(), object.getAddress()
-							, object.getNotes());
-
 					Log.d(null, object.toString());
+
+					name.setText(object.getName());
+					address.setText(object.getAddress());
+					addition.setText(object.getNotes());
+					phoneList.addAll(object.getTels());
+					phoneAdapter.notifyDataSetChanged();
 				}
+				break;
+			case REQUEST_CODE_LABEL:
+
+				Bundle bundle = data.getExtras();
+				LabelListObj labelListObj = (LabelListObj) bundle.getSerializable(BundleNames.LABEL_LIST);
+
+				// do nothing if no label chose
+				//on edit contacts, change database in editlabel activity,
+				//so when back to edit contact activity, refresh database isn't needed;
+				// but on new contacts, only change string list in editlabel activity
+				// so when back to add contact activity, refresh database is needed;
+				if (labelListObj.getLabels().size() != 0) {
+					Toast.makeText(this, labelListObj.toString(), Toast.LENGTH_LONG).show();
+					//TODO REFRESH LABEL LIST, and finally insert id_label records into database
+				}
+
+				break;
+			default:
 				break;
 		}
 	}
+
+	private class MyAdapter extends BaseAdapter {
+
+		private List<String> data;
+
+		public MyAdapter(List<String> datas) {
+			data = datas;
+		}
+
+		@Override
+		public int getCount() {
+			return data.size();
+		}
+
+		@Override
+		public Object getItem(int position) {
+			return data.get(position);
+		}
+
+		@Override
+		public long getItemId(int position) {
+			return position;
+		}
+
+		@Override
+		public View getView(final int position, View convertView, ViewGroup parent) {
+			ViewHolder holder;
+			if (convertView == null) {
+				holder = new ViewHolder();
+				convertView = LayoutInflater.from(mContext).inflate(R.layout.cell_edit_member_list, parent, false);
+				holder.name = (TextView) convertView.findViewById(R.id.name);
+				holder.remove = (Button) convertView.findViewById(R.id.remove_member);
+				convertView.setTag(holder);
+			} else {
+				holder = (ViewHolder) convertView.getTag();
+			}
+
+			holder.name.setText(data.get(position));
+			holder.remove.setOnClickListener(new View.OnClickListener() {
+				@Override
+				public void onClick(View v) {
+					data.remove(position);
+					MyAdapter.this.notifyDataSetChanged();
+				}
+			});
+
+			return convertView;
+		}
+	}
+
+	static class ViewHolder {
+		Button remove;
+		TextView name;
+	}
+
 }

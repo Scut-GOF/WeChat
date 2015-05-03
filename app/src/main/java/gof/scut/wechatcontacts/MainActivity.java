@@ -1,22 +1,25 @@
 package gof.scut.wechatcontacts;
 
 import android.app.Activity;
-import android.database.Cursor;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
-import android.widget.LinearLayout;
 import android.widget.ListView;
+
+import java.util.List;
 
 import gof.scut.common.utils.ActivityUtils;
 import gof.scut.common.utils.database.MainTableUtils;
 import gof.scut.cwh.models.adapter.ContactsAdapter;
+import gof.scut.cwh.models.object.ActivityConstants;
+import gof.scut.cwh.models.object.LightIdObj;
+import gof.scut.cwh.models.object.Signal;
 
 
 public class MainActivity extends Activity implements View.OnClickListener {
 
 	//Views
-	private Button btSearch, btMenu;
+	private Button btSearch;
 
 	private ListView contacts;
 	private Button btAdd, btGroup, btMe;
@@ -25,6 +28,7 @@ public class MainActivity extends Activity implements View.OnClickListener {
 	//Constants
 
 	//Models
+//	Cursor cursor;
 	MainTableUtils mainTableUtils;
 
 	//Controllers
@@ -53,7 +57,7 @@ public class MainActivity extends Activity implements View.OnClickListener {
 
 	private void findViews() {
 		btSearch = (Button) findViewById(R.id.bt_search);
-		btMenu = (Button) findViewById(R.id.bt_menu);
+
 
 		contacts = (ListView) findViewById(R.id.search_list);
 		btAdd = (Button) findViewById(R.id.bt_add);
@@ -62,9 +66,6 @@ public class MainActivity extends Activity implements View.OnClickListener {
 	}
 
 	private void eventHandler() {
-		btSearch.setOnClickListener(this);
-		btMenu.setOnClickListener(this);
-
 		btSearch.setOnClickListener(this);
 		btAdd.setOnClickListener(this);
 		btGroup.setOnClickListener(this);
@@ -76,9 +77,10 @@ public class MainActivity extends Activity implements View.OnClickListener {
 		//When clickOnNameAndTel, view
 		//When click on image, view label group
 		//edit when view
-		Cursor cursor = mainTableUtils.selectAllIDName();
-		ContactsAdapter adapter = new ContactsAdapter(this, cursor);
+		List<LightIdObj> contactList = mainTableUtils.selectAllIDName();
+		ContactsAdapter adapter = new ContactsAdapter(this, contactList);
 		contacts.setAdapter(adapter);
+
 	}
 
 	@Override
@@ -86,12 +88,9 @@ public class MainActivity extends Activity implements View.OnClickListener {
 
 		switch (v.getId()) {
 			case R.id.bt_search:
-				ActivityUtils.ActivitySkip(this, SearchActivity.class);
+				ActivityUtils.ActivitySkipWithObject(this, SearchActivity.class, Signal.NAME,
+						new Signal(ActivityConstants.MAIN_ACTIVITY, ActivityConstants.SEARCH_ACTIVITY));
 
-				break;
-			case R.id.bt_menu:
-				//A MENU WITH SETTING IN IT
-				ActivityUtils.ActivitySkip(this, SettingActivity.class);
 				break;
 			case R.id.bt_add:
 				//TO ADD CONTACTS ACTIVITY
@@ -108,9 +107,34 @@ public class MainActivity extends Activity implements View.OnClickListener {
 		}
 	}
 
+	//	@Override
+//	protected void onRestart(){
+//		super.onRestart();
+//		initList();
+//	}
 	@Override
 	protected void onResume() {
 		super.onResume();
 		initList();
 	}
+
+//	@Override
+//	protected void onPause() {
+//		super.onPause();
+////		CursorUtils.closeExistsCursor(cursor);
+//		mainTableUtils.closeDataBase();
+//	}
+//
+//	protected void onStop() {
+//		super.onStop();
+////		CursorUtils.closeExistsCursor(cursor);
+//		mainTableUtils.closeDataBase();
+//	}
+//
+//	@Override
+//	protected void onDestroy() {
+//		super.onDestroy();
+////		CursorUtils.closeExistsCursor(cursor);
+//		mainTableUtils.closeDataBase();
+//	}
 }
