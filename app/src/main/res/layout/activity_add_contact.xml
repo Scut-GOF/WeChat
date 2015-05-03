@@ -80,7 +80,9 @@
                     android:id="@+id/name"
                     style="@style/un_written"
                     android:singleLine="true"
-                    android:hint="name"/>
+                    android:hint="name"
+                    android:background="@null"
+                    />
 
                 <TextView
                     android:layout_width="match_parent"
@@ -104,7 +106,10 @@
                     android:layout_below="@id/Phone_text"
                     android:id="@+id/phoneList"
                     android:layout_width="match_parent"
-                    android:layout_height="80dp">
+                    android:layout_height="80dp"
+                    android:scrollbars="none"
+                    android:divider="@null"
+                    android:dividerHeight="1dp">
 
                 </ListView>
 
@@ -123,7 +128,8 @@
                     style="@style/un_written"
                     android:padding="10dp"
                     android:hint="new phone"
-                    android:inputType="phone"/>
+                    android:inputType="phone"
+                    android:background="@null"/>
 
                 <TextView
                     android:layout_below="@id/phone"
@@ -148,7 +154,10 @@
                     android:layout_below="@id/Label_text"
                     android:id="@+id/labelList"
                     android:layout_width="match_parent"
-                    android:layout_height="80dp">
+                    android:layout_height="80dp"
+                    android:scrollbars="none"
+                    android:divider="@null"
+                    android:dividerHeight="1dp">
                 </ListView>
 
                 <ImageView
@@ -194,7 +203,8 @@
                     android:id="@+id/address"
                     style="@style/un_written"
                     android:layout_toRightOf="@+id/address_title"
-                    android:hint="add address"/>
+                    android:hint="add address"
+                    android:background="@null"/>
 
                 <TextView
                     android:layout_toRightOf="@id/address_title"
@@ -221,7 +231,8 @@
                     android:id="@+id/addition"
                     style="@style/un_written"
                     android:layout_toRightOf="@+id/addition_title"
-                    android:hint="add addition"/>
+                    android:hint="add addition"
+                    android:background="@null"/>
 
                 <TextView
                     android:layout_toRightOf="@id/addition_title"
