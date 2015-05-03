@@ -1,6 +1,7 @@
-﻿<resources>
-    <string name="app_name">Connect</string>
+﻿<?xml version="1.0" encoding="utf-8"?>
+<resources>
 
+    <string name="app_name">Connect</string>
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
     <string name="title_activity_self_info">SelfInfoActivity</string>
@@ -18,7 +19,6 @@
     <string name="backToMain"><![CDATA[<AllContacts]]></string>
     <string name="add">+</string>
     <string name="cancel">Cancel</string>
-
     <string name="save">Save</string>
     <string name="members">Members</string>
     <string name="add_member">add member</string>
@@ -36,5 +36,6 @@
     <string name="all_label"><![CDATA[<All Label]]></string>
     <string name="title_activity_edit_contact_label">EditContactLabelActivity</string>
     <string name="sure">Sure</string>
+    <string name="title_activity_push_demo">PushDemoActivity</string>
 
 </resources>

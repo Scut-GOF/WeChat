@@ -1,6 +1,7 @@
 package gof.scut.wechatcontacts;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.view.View;
@@ -17,6 +18,7 @@ import java.util.ArrayList;
 import java.util.Hashtable;
 
 import gof.scut.common.MyApplication;
+import gof.scut.common.push.PushDemoActivity;
 import gof.scut.common.utils.Log;
 import gof.scut.cwh.models.object.IdObj;
 
@@ -54,6 +56,13 @@ public class SelfInfoActivity extends Activity {
         createQRImage(gson.toJson(obj, IdObj.class));
 
         Log.d(null,gson.toJson(obj, IdObj.class));
+
+        findViewById(R.id.push).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(SelfInfoActivity.this, PushDemoActivity.class));
+            }
+        });
 
         findViewById(R.id.cancel).setOnClickListener(new View.OnClickListener() {
             @Override
