@@ -15,6 +15,7 @@ import java.io.StringReader;
 import java.util.ArrayList;
 import java.util.StringTokenizer;
 
+
 public class StringUtils {
 	public static String addBrackets(String rawString) {
 		return "(" + rawString + ")";
@@ -79,9 +80,30 @@ public class StringUtils {
 		return false;
 	}
 
+	public static boolean containChinese(String str) {
+
+		return str.getBytes().length != str.length();
+	}
 	public static String splitChineseSingly(String str) {
 		StringBuilder sb = new StringBuilder();
 		str = str.replace(" ", "龘");
+		//avoid check chinese every time
+		sb.append(str.charAt(0));
+		if (isChinese(str.charAt(0))) {
+			sb.append(" ");
+		}
+		for (int i = 1; i < str.length(); i++) {
+			if (isChinese(str.charAt(i))) {
+				sb.append(" ");
+				sb.append(str.charAt(i));
+				sb.append(" ");
+			} else sb.append(str.charAt(i));
+		}
+		return sb.toString();
+	}
+
+	public static String splitNoBlankChineseSingly(String str) {
+		StringBuilder sb = new StringBuilder();
 		//avoid check chinese every time
 		sb.append(str.charAt(0));
 		if (isChinese(str.charAt(0))) {
@@ -155,5 +177,19 @@ public class StringUtils {
 		return Html.fromHtml(result.toString());
 	}
 
+	public static String getStringPinYin(String str) {
+		PinyinUtils pinyin = new PinyinUtils();
+		return pinyin.getStringPinYin(str);
+	}
+
+	public static String getPurePinYinBlankLy(String str) {
+		PinyinUtils pinyin = new PinyinUtils();
+		return pinyin.getPurePinYinBlankLy(str);
+	}
+
+	public static String getPureSPinYinBlankLy(String str) {
+		PinyinUtils pinyin = new PinyinUtils();
+		return pinyin.getPureSPinYinBlankLy(str);
+	}
 
 }

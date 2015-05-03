@@ -29,4 +29,5 @@ dependencies {
     //    compile files('libs/roboguice-3.0.1.jar')
     provided 'org.roboguice:roboblender:3.+'
     compile files('libs/pushservice-4.4.0.71.jar')
+    compile files('libs/pinyin4j-2.5.0.jar')
 }

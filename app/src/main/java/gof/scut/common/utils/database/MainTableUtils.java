@@ -8,6 +8,7 @@ import android.database.sqlite.SQLiteDatabase;
 import java.util.ArrayList;
 import java.util.List;
 
+import gof.scut.common.utils.PinyinUtils;
 import gof.scut.common.utils.StringUtils;
 import gof.scut.cwh.models.object.IdObj;
 import gof.scut.cwh.models.object.LightIdObj;
@@ -22,9 +23,9 @@ public class MainTableUtils {
 		dataBaseHelper = new DataBaseHelper(context);
 		//TODO insert several data
 		for (int i = 0; i < 10; i++) {
-			insertAll("Barry Allen" + i, "L" + i, "S" + i, "ADDR" + i, "NOTE" + i);
-			insertAll("陈伟航" + i, "L" + i, "S" + i, "ADDR" + i, "NOTE" + i);
-			insertAll("Cwh" + i, "L" + i, "S" + i, "ADDR" + i, "NOTE" + i);
+			insertAll("Barry Allen" + i, "ADDR" + i, "NOTE" + i);
+			insertAll("陈伟航" + i, "ADDR" + i, "NOTE" + i);
+			insertAll("陈伟航 Cwh" + i, "ADDR" + i, "NOTE" + i);
 
 		}
 
@@ -37,6 +38,42 @@ public class MainTableUtils {
 		name = StringUtils.splitChineseSingly(name);
 		address = StringUtils.splitChineseSingly(address);
 		notes = StringUtils.splitChineseSingly(notes);
+
+		closeDataBase();
+		ContentValues value = new ContentValues();
+		value.put(TBMainConstants.NAME, name);
+		value.put(TBMainConstants.L_PINYIN, lPinYin);
+		value.put(TBMainConstants.S_PINYIN, sPinYin);
+		value.put(TBMainConstants.ADDRESS, address);
+		value.put(TBMainConstants.NOTES, notes);
+		db = dataBaseHelper.getWritableDatabase();
+		long status;
+		try {
+			status = db.insert(TBMainConstants.TABLE_NAME, null, value);
+		} finally {
+			db.close();
+		}
+//		value.put(TBMainConstants.ID, notes);
+//		db = dataBaseHelper.getWritableDatabase();
+//		status += db.insert(TBMainConstants.FTS_TABLE_NAME, null, value);
+//		db.close();
+		return status;
+	}
+
+	//insert
+	public long insertAll(String name, String address, String notes) {
+
+		String lPinYin = "", sPinYin = "";
+		if (StringUtils.containChinese(name)) {
+			lPinYin = PinyinUtils.testPurePinYinBlankLy(name);
+			//Log.d("PINYIN", lPinYin);
+			sPinYin = PinyinUtils.testPureSPinYinBlankLy(name);
+			//Log.d("PINYIN", sPinYin);
+		}
+		name = StringUtils.splitChineseSingly(name);
+		address = StringUtils.splitChineseSingly(address);
+		notes = StringUtils.splitChineseSingly(notes);
+
 
 		closeDataBase();
 		ContentValues value = new ContentValues();
@@ -181,6 +218,7 @@ public class MainTableUtils {
 	synchronized public List<SearchObj> fullTextSearchWithWord(String word) {
 		closeDataBase();
 		db = dataBaseHelper.getReadableDatabase();
+		word = StringUtils.splitNoBlankChineseSingly(word);
 		Cursor cursorResult;
 //		select * from (
 //				select *,'' label,'' tel from fts_contacts
@@ -267,7 +305,7 @@ public class MainTableUtils {
 		closeDataBase();
 		db = dataBaseHelper.getReadableDatabase();
 		Cursor cursorResult;
-
+		word = StringUtils.splitNoBlankChineseSingly(word);
 //		c=db.rawQuery("select * from contacts",null);
 //		c=db.rawQuery("select * from label",null);
 //		c=db.rawQuery("select * from idlabel",null);
