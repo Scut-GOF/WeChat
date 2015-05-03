@@ -4,15 +4,16 @@ import android.content.Context;
 import android.content.Intent;
 import android.text.TextUtils;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.baidu.frontia.api.FrontiaPushMessageReceiver;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.List;
+
+import gof.scut.common.AppConfig;
 
 /**
  * Push消息处理receiver。请编写您需要的回调函数， 一般来说： onBind是必须的，用来处理startWork返回值；
@@ -38,8 +39,7 @@ import java.util.List;
  */
 public class MyPushMessageReceiver extends FrontiaPushMessageReceiver {
     /** TAG to Log */
-    public static final String TAG = MyPushMessageReceiver.class
-            .getSimpleName();
+    public static final String TAG = MyPushMessageReceiver.class.getSimpleName();
 
     /**
      * 调用PushManager.startWork后，sdk将对push
@@ -66,14 +66,18 @@ public class MyPushMessageReceiver extends FrontiaPushMessageReceiver {
         String responseString = "onBind errorCode=" + errorCode + " appid="
                 + appid + " userId=" + userId + " channelId=" + channelId
                 + " requestId=" + requestId;
+
         Log.d(TAG, responseString);
 
         // 绑定成功，设置已绑定flag，可以有效的减少不必要的绑定请求
         if (errorCode == 0) {
-            Utils.setBind(context, true);
+            AppConfig.appid = appid;
+            AppConfig.userId = userId;
+            AppConfig.channelId = channelId;
+            AppConfig.requestId = requestId;
+        }else{
+            Toast.makeText(context, "百度云推送绑定失败！", Toast.LENGTH_SHORT).show();
         }
-        // Demo更新界面展示代码，应用请在这里加入自己的处理逻辑
-        updateContent(context, responseString);
     }
 
     /**
@@ -89,8 +93,8 @@ public class MyPushMessageReceiver extends FrontiaPushMessageReceiver {
     @Override
     public void onMessage(Context context, String message,
             String customContentString) {
-        String messageString = "透传消息 message=\"" + message
-                + "\" customContentString=" + customContentString;
+        String messageString =
+                "透传消息 message=\"" + message + "\" customContentString=" + customContentString;
         Log.d(TAG, messageString);
 
         // 自定义内容获取方式，mykey和myvalue对应透传消息推送时自定义内容中设置的键和值
@@ -241,25 +245,17 @@ public class MyPushMessageReceiver extends FrontiaPushMessageReceiver {
 
         // 解绑定成功，设置未绑定flag，
         if (errorCode == 0) {
-            Utils.setBind(context, false);
+            AppConfig.appid = null;
+            AppConfig.userId = null;
+            AppConfig.channelId = null;
+            AppConfig.requestId = null;
+        }else{
+            Toast.makeText(context,"百度云推送解绑失败！",Toast.LENGTH_SHORT).show();
         }
-        // Demo更新界面展示代码，应用请在这里加入自己的处理逻辑
-        updateContent(context, responseString);
     }
 
     private void updateContent(Context context, String content) {
         Log.d(TAG, "updateContent");
-        String logText = "" + Utils.logStringCache;
-
-        if (!logText.equals("")) {
-            logText += "\n";
-        }
-
-        SimpleDateFormat sDateFormat = new SimpleDateFormat("HH-mm-ss");
-        logText += sDateFormat.format(new Date()) + ": ";
-        logText += content;
-
-        Utils.logStringCache = logText;
 
         Intent intent = new Intent();
         intent.setClass(context.getApplicationContext(), PushDemoActivity.class);

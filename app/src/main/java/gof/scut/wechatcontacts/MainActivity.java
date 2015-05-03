@@ -8,6 +8,7 @@ import android.widget.ListView;
 
 import java.util.List;
 
+import gof.scut.common.push.BaiduPush;
 import gof.scut.common.utils.ActivityUtils;
 import gof.scut.common.utils.database.MainTableUtils;
 import gof.scut.cwh.models.adapter.ContactsAdapter;
@@ -37,6 +38,7 @@ public class MainActivity extends Activity implements View.OnClickListener {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+        BaiduPush.StartWork(this);
 		setContentView(R.layout.activity_main);
 		init();
 	}
