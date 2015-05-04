@@ -73,13 +73,14 @@ public class SearchResultAdapter extends BaseAdapter {
 		}
 
 
-		String name = result.getName();
-		if (!StringUtils.containChinese(name)) {
-			name = StringUtils.recoverWordFromDB(name);
-			holder.tvName.setText(StringUtils.simpleHighLight(keyword.replace(" ", ""), name, "A4005B", "636362"));
+//		String name = result.getName();
+		String recoverName = StringUtils.recoverWordFromDB(result.getName());
+		if (!StringUtils.containChinese(recoverName)) {
+
+			holder.tvName.setText(StringUtils.simpleHighLight(keyword.replace(" ", ""), recoverName, "A4005B", "636362"));
 		} else {
-			name = StringUtils.recoverWordFromDB(name);
-			holder.tvName.setText(StringUtils.simpleHighLight(keyword.replace(" ", ""), name, "A4005B", "636362"));
+
+			holder.tvName.setText(StringUtils.simpleHighLightByPinyin(keyword, recoverName, "A4005B", "636362"));
 		}
 		holder.searchDetail.setText(getFirstMatchInfo(position, keyword.replace(" ", "")));
 		if (holder.searchDetail.getText().toString().equals(""))
