@@ -40,7 +40,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".SelfInfoActivity"
+            android:name=".MyInfoActivity"
             android:label="@string/title_activity_self_info" />
         <activity
             android:name=".ContactInfoActivity"
