@@ -13,7 +13,7 @@ import org.json.JSONObject;
 
 import java.util.List;
 
-import gof.scut.common.AppConfig;
+import gof.scut.cwh.models.object.UserInfo;
 
 /**
  * Push消息处理receiver。请编写您需要的回调函数， 一般来说： onBind是必须的，用来处理startWork返回值；
@@ -71,10 +71,7 @@ public class MyPushMessageReceiver extends FrontiaPushMessageReceiver {
 
         // 绑定成功，设置已绑定flag，可以有效的减少不必要的绑定请求
         if (errorCode == 0) {
-            AppConfig.appid = appid;
-            AppConfig.userId = userId;
-            AppConfig.channelId = channelId;
-            AppConfig.requestId = requestId;
+            UserInfo.getInstance().setUserId(userId);
         }else{
             Toast.makeText(context, "百度云推送绑定失败！", Toast.LENGTH_SHORT).show();
         }
@@ -245,10 +242,7 @@ public class MyPushMessageReceiver extends FrontiaPushMessageReceiver {
 
         // 解绑定成功，设置未绑定flag，
         if (errorCode == 0) {
-            AppConfig.appid = null;
-            AppConfig.userId = null;
-            AppConfig.channelId = null;
-            AppConfig.requestId = null;
+
         }else{
             Toast.makeText(context,"百度云推送解绑失败！",Toast.LENGTH_SHORT).show();
         }

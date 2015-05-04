@@ -104,7 +104,7 @@ public class MainActivity extends Activity implements View.OnClickListener {
 				break;
 			case R.id.bt_me:
 				//TO SELF ACTIVITY
-				ActivityUtils.ActivitySkip(this, SelfInfoActivity.class);
+				ActivityUtils.ActivitySkip(this, MyInfoActivity.class);
 				break;
 		}
 	}

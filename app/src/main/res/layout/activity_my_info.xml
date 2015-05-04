@@ -1,0 +1,186 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:background="@color/white"
+              android:orientation="vertical"
+              android:id="@+id/label_layout">
+
+    <RelativeLayout
+        android:id="@+id/title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/my_blue">
+
+        <TextView
+            android:id="@+id/cancel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/all_contact"
+            style="@style/simple_back_button"
+            android:clickable="true"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textStyle="bold"
+            android:text="@string/save"
+            android:clickable="true"
+            android:textSize="22sp"
+            android:padding="10dp"
+            android:textColor="@color/white"
+            android:background="@color/transparent"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true"
+            android:layout_marginEnd="10dp"
+            android:layout_marginRight="10dp"
+            android:id="@+id/save"/>
+    </RelativeLayout>
+
+    <ImageView
+        android:id="@+id/my_binary_code"
+        android:layout_marginTop="60dp"
+        android:layout_width="150dp"
+        android:layout_height="150dp"
+        android:layout_centerHorizontal="true"
+        android:background="@color/gray"
+        android:focusable="true"
+        android:focusableInTouchMode="true"
+        />
+
+    <ScrollView
+        android:layout_below="@id/my_binary_code"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:orientation="vertical"
+                >
+
+                <EditText
+                    android:id="@+id/name"
+                    style="@style/un_written"
+                    android:singleLine="true"
+                    android:hint="name"
+                    android:background="@null"
+                    />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:padding="2dp"
+                    android:textSize="22sp"
+                    android:background="@color/my_dark_grey"/>
+
+            </LinearLayout>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:id="@+id/Phone_text"
+                    style="@style/purple_title"
+                    android:text="Phone"/>
+
+                <ListView
+                    android:layout_below="@id/Phone_text"
+                    android:id="@+id/phoneList"
+                    android:layout_width="match_parent"
+                    android:layout_height="80dp"
+                    android:scrollbars="none"
+                    android:divider="@null"
+                    android:dividerHeight="1dp">
+
+                </ListView>
+
+                <ImageView
+                    android:layout_below="@id/phoneList"
+                    android:id="@+id/add_phone_button"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:layout_marginLeft="10dp"
+                    android:background="@drawable/add_detail50"/>
+
+                <EditText
+                    android:id="@+id/phone"
+                    android:layout_below="@id/phoneList"
+                    android:layout_toRightOf="@+id/add_phone_button"
+                    style="@style/un_written"
+                    android:padding="10dp"
+                    android:hint="new phone"
+                    android:inputType="phone"
+                    android:background="@null"/>
+
+                <TextView
+                    android:layout_below="@id/phone"
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:padding="2dp"
+                    android:background="@color/my_dark_grey"/>
+
+            </RelativeLayout>
+
+            <LinearLayout
+                android:id="@+id/address_layout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <TextView
+                    style="@style/purple_title"
+                    android:text="Address"
+                    />
+
+                <EditText
+                    android:id="@+id/address"
+                    style="@style/un_written"
+                    android:hint="add address"
+                    android:background="@null"/>
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:padding="2dp"
+                    android:textSize="22sp"
+                    android:background="@color/my_dark_grey"/>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <TextView
+                    style="@style/purple_title"
+                    android:text="Addition"/>
+
+                <EditText
+                    android:id="@+id/addition"
+                    style="@style/un_written"
+                    android:hint="add addition"
+                    android:background="@null"/>
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:padding="2dp"
+                    android:textSize="22sp"
+                    android:background="@color/my_dark_grey"/>
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+    </ScrollView>
+
+</RelativeLayout>

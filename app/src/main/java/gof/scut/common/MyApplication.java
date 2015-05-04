@@ -9,6 +9,7 @@ import com.baidu.frontia.FrontiaApplication;
 import com.google.gson.Gson;
 
 import gof.scut.common.push.BaiduPush;
+import gof.scut.cwh.models.object.UserInfo;
 
 /**
  *
@@ -59,6 +60,8 @@ public class MyApplication extends FrontiaApplication {
         mBaiduPushServer = new BaiduPush(BaiduPush.HTTP_METHOD_POST,
                 SECRIT_KEY, API_KEY);
         BaiduPush.PushInit(getApplicationContext());
+
+        UserInfo.init(this);
 	}
 
 	public synchronized static MyApplication getInstance() {

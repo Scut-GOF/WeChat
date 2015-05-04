@@ -1,13 +1,11 @@
 package gof.scut.common.utils;
 
-import gof.scut.common.AppConfig;
-
 /**
  * Created by zm on 2015/3/31.
  */
 
 public class Log {
-	private static boolean LOG_SHOW = AppConfig.LOG_SHOW;//show Log
+	private static boolean LOG_SHOW = true;//show Log
 	private static boolean DEBUG = false;
 
 	public static void e(String TAG, String message) {

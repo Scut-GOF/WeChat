@@ -40,7 +40,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".SelfInfoActivity"
+            android:name=".MyInfoActivity"
             android:label="@string/title_activity_self_info" />
         <activity
             android:name=".ContactInfoActivity"
@@ -64,9 +64,6 @@
         <activity
             android:name=".AddContactActivity"
             android:label="@string/title_activity_add_contact" />
-        <activity
-            android:name=".SettingActivity"
-            android:label="@string/title_activity_setting" />
         <activity
             android:name="gof.scut.common.zixng.codescan.MipcaActivityCapture"
             android:configChanges="orientation|keyboardHidden"
