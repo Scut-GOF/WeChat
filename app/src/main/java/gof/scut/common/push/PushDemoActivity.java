@@ -5,9 +5,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.View;
 
-import gof.scut.common.AppConfig;
 import gof.scut.common.MyApplication;
-import gof.scut.common.utils.Log;
 import gof.scut.wechatcontacts.R;
 
 public class PushDemoActivity extends Activity {
@@ -37,15 +35,6 @@ public class PushDemoActivity extends Activity {
             return MyApplication.getInstance().getBaiduPush().
                     PushNotify("来自周萌的问候", "伟航小婊砸", "599685947433395315", 111);
         }
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        Log.d(TAG,"AppConfig.appid" + AppConfig.appid);
-        Log.d(TAG,"AppConfig.requestId" + AppConfig.requestId);
-        Log.d(TAG,"AppConfig.channelId" +  AppConfig.channelId);
-        Log.d(TAG,"AppConfig.userId" +  AppConfig.userId);
     }
 
 }

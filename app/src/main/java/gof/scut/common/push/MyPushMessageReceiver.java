@@ -13,7 +13,6 @@ import org.json.JSONObject;
 
 import java.util.List;
 
-import gof.scut.common.AppConfig;
 import gof.scut.cwh.models.object.UserInfo;
 
 /**
@@ -243,10 +242,7 @@ public class MyPushMessageReceiver extends FrontiaPushMessageReceiver {
 
         // 解绑定成功，设置未绑定flag，
         if (errorCode == 0) {
-            AppConfig.appid = null;
-            AppConfig.userId = null;
-            AppConfig.channelId = null;
-            AppConfig.requestId = null;
+
         }else{
             Toast.makeText(context,"百度云推送解绑失败！",Toast.LENGTH_SHORT).show();
         }

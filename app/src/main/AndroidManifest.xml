@@ -65,9 +65,6 @@
             android:name=".AddContactActivity"
             android:label="@string/title_activity_add_contact" />
         <activity
-            android:name=".SettingActivity"
-            android:label="@string/title_activity_setting" />
-        <activity
             android:name="gof.scut.common.zixng.codescan.MipcaActivityCapture"
             android:configChanges="orientation|keyboardHidden"
             android:screenOrientation="portrait"
