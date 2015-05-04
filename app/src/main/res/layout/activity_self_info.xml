@@ -18,6 +18,12 @@
             android:text="@string/all_contact"
             style="@style/simple_back_button"
             android:clickable="true"/>
+        <Button
+            android:id="@+id/push"
+            android:layout_width="50dp"
+            android:layout_height="wrap_content"
+            android:text="push"
+            android:layout_centerHorizontal="true"/>
 
         <TextView
             android:layout_width="wrap_content"
