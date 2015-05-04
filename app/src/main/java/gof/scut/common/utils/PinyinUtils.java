@@ -47,14 +47,63 @@ public class PinyinUtils {
 	}
 
 	//转换一个字符串
-	public String getPurePinYinBlankLy(String str) {
+	public String getPinYinBlankLy(String str) {
 		StringBuilder sb = new StringBuilder();
 		String tempPinyin = null;
+		boolean startCharFlag = true;
 		for (int i = 0; i < str.length(); ++i) {
 			tempPinyin = getCharacterPinYin(str.charAt(i));
 			if (tempPinyin != null) {
 				sb.append(tempPinyin);
 				sb.append(" ");
+				startCharFlag = true;
+			} else {
+				if (str.charAt(i) == ' ') startCharFlag = true;
+				if (startCharFlag) {
+					sb.append(str.charAt(i));
+					sb.append(" ");
+					if (str.charAt(i) != ' ') startCharFlag = false;
+				}
+			}
+		}
+		return sb.toString();
+	}
+
+	//转换一个字符串
+	public String getSPinYinBlankLy(String str) {
+		StringBuilder sb = new StringBuilder();
+		String tempPinyin = null;
+		boolean startCharFlag = true;
+		for (int i = 0; i < str.length(); ++i) {
+			tempPinyin = getCharacterPinYin(str.charAt(i));
+			if (tempPinyin != null) {
+				sb.append(tempPinyin.charAt(0));
+				sb.append(" ");
+				startCharFlag = true;
+			} else {
+				if (str.charAt(i) == ' ') startCharFlag = true;
+				if (startCharFlag) {
+					sb.append(str.charAt(i));
+					sb.append(" ");
+					if (str.charAt(i) != ' ') startCharFlag = false;
+				}
+
+			}
+		}
+		return sb.toString();
+	}
+
+	//转换一个字符串
+	public String getPurePinYinBlankLy(String str) {
+		StringBuilder sb = new StringBuilder();
+		String tempPinyin = null;
+
+		for (int i = 0; i < str.length(); ++i) {
+			tempPinyin = getCharacterPinYin(str.charAt(i));
+			if (tempPinyin != null) {
+				sb.append(tempPinyin);
+				sb.append(" ");
+
 			}
 		}
 		return sb.toString();
@@ -64,6 +113,7 @@ public class PinyinUtils {
 	public String getPureSPinYinBlankLy(String str) {
 		StringBuilder sb = new StringBuilder();
 		String tempPinyin = null;
+
 		for (int i = 0; i < str.length(); ++i) {
 			tempPinyin = getCharacterPinYin(str.charAt(i));
 			if (tempPinyin != null) {
@@ -73,6 +123,7 @@ public class PinyinUtils {
 		}
 		return sb.toString();
 	}
+
 
 	public static String testStringPinYin(String str) {
 		PinyinUtils pinyin = new PinyinUtils();

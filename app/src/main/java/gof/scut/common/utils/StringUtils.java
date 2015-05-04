@@ -127,8 +127,8 @@ public class StringUtils {
 
 	public static boolean isNumber(String str) {
 		char[] s = str.toCharArray();
-		for (int i = 0; i < s.length; i++) {
-			if (!Character.isDigit(s[i]))
+		for (char value : s) {
+			if (!Character.isDigit(value))
 				return false;
 		}
 		return true;
@@ -145,6 +145,54 @@ public class StringUtils {
 		return true;
 	}
 
+	public static Spanned simpleHighLightByPinyin(String keyword, String str, String highColor, String generalColor) {
+		StringBuilder result = new StringBuilder();
+		//keyword should be lower case
+		int kwLength = keyword.length();
+		if (kwLength == 0)
+			return Html.fromHtml("<font color=\"#" + generalColor + "\">" + str + "</font>");
+		for (int i = 0; i < str.length(); i++) {
+			if ((str.charAt(i) == keyword.charAt(0) || str.charAt(i) == (keyword.charAt(0) - 32)) && (StringCmp(str.toLowerCase(), keyword, i))) {
+
+				for (int j = 0; j < kwLength; j++) {
+					result.append("<font color=\"#");
+					result.append(highColor);
+					result.append("\">");
+					result.append(str.charAt(i + j));
+					result.append("</font>");
+				}
+
+				i += (kwLength - 1);
+
+
+			} else {
+				if (StringUtils.isChinese(str.charAt(i))) {
+					String pinyin = new PinyinUtils().getCharacterPinYin(str.charAt(i));
+					if (pinyin.contains(keyword) || keyword.contains(pinyin)
+							|| keyword.contains(pinyin.charAt(0) + "")) {
+						result.append("<font color=\"#");
+						result.append(highColor);
+						result.append("\">");
+						result.append(str.charAt(i));
+						result.append("</font>");
+					} else {
+						result.append("<font color=\"#");
+						result.append(generalColor);
+						result.append("\">");
+						result.append(str.charAt(i));
+						result.append("</font>");
+					}
+				} else {
+					result.append("<font color=\"#");
+					result.append(generalColor);
+					result.append("\">");
+					result.append(str.charAt(i));
+					result.append("</font>");
+				}
+			}
+		}
+		return Html.fromHtml(result.toString());
+	}
 	public static Spanned simpleHighLight(String keyword, String str, String highColor, String generalColor) {
 		StringBuilder result = new StringBuilder();
 		//keyword should be lower case
@@ -176,7 +224,6 @@ public class StringUtils {
 		}
 		return Html.fromHtml(result.toString());
 	}
-
 	public static String getStringPinYin(String str) {
 		PinyinUtils pinyin = new PinyinUtils();
 		return pinyin.getStringPinYin(str);
@@ -192,4 +239,13 @@ public class StringUtils {
 		return pinyin.getPureSPinYinBlankLy(str);
 	}
 
+	public static ArrayList<String> splitToArray(String str) {
+		StringTokenizer stringTokenizer = new StringTokenizer(str, " ");
+		ArrayList<String> strings = new ArrayList<>();
+		while (stringTokenizer.hasMoreTokens()) {
+			String splitStr = stringTokenizer.nextToken();
+			strings.add(splitStr);
+		}
+		return strings;
+	}
 }

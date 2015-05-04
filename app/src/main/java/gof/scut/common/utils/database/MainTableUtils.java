@@ -8,6 +8,7 @@ import android.database.sqlite.SQLiteDatabase;
 import java.util.ArrayList;
 import java.util.List;
 
+import gof.scut.common.utils.Log;
 import gof.scut.common.utils.PinyinUtils;
 import gof.scut.common.utils.StringUtils;
 import gof.scut.cwh.models.object.IdObj;
@@ -25,7 +26,7 @@ public class MainTableUtils {
 		for (int i = 0; i < 10; i++) {
 			insertAll("Barry Allen" + i, "ADDR" + i, "NOTE" + i);
 			insertAll("陈伟航" + i, "ADDR" + i, "NOTE" + i);
-			insertAll("陈伟航 Cwh" + i, "ADDR" + i, "NOTE" + i);
+			insertAll("陈伟航 Cwh wh" + i, "ADDR" + i, "NOTE" + i);
 
 		}
 
@@ -62,13 +63,22 @@ public class MainTableUtils {
 
 	//insert
 	public long insertAll(String name, String address, String notes) {
-
+		StringBuilder lPinyinBuilder = new StringBuilder(), sPinyinBuilder = new StringBuilder();
 		String lPinYin = "", sPinYin = "";
 		if (StringUtils.containChinese(name)) {
-			lPinYin = PinyinUtils.testPurePinYinBlankLy(name);
-			//Log.d("PINYIN", lPinYin);
-			sPinYin = PinyinUtils.testPureSPinYinBlankLy(name);
-			//Log.d("PINYIN", sPinYin);
+			lPinyinBuilder.append(PinyinUtils.testPurePinYinBlankLy(name));
+			lPinYin = lPinyinBuilder.toString();
+			lPinyinBuilder.append(" ");
+			lPinyinBuilder.append(lPinYin.replace(" ", ""));
+			lPinYin = lPinyinBuilder.toString();
+			Log.d("PINYIN", lPinYin);
+			sPinyinBuilder.append(PinyinUtils.testPureSPinYinBlankLy(name));
+			sPinYin = sPinyinBuilder.toString();
+			sPinyinBuilder.append(" ");
+			sPinyinBuilder.append(sPinYin.replace(" ", ""));
+			sPinYin = sPinyinBuilder.toString();
+
+			Log.d("PINYIN", sPinYin);
 		}
 		name = StringUtils.splitChineseSingly(name);
 		address = StringUtils.splitChineseSingly(address);
