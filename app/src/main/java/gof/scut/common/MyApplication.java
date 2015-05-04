@@ -8,6 +8,8 @@ import com.android.volley.toolbox.Volley;
 import com.baidu.frontia.FrontiaApplication;
 import com.google.gson.Gson;
 
+import gof.scut.common.push.BaiduPush;
+
 /**
  *
  * Created by zm on 2015/4/20.
@@ -20,6 +22,7 @@ public class MyApplication extends FrontiaApplication {
 	private static MyApplication myApplication;
 	public static RequestQueue requestQueue;
 	private static Gson mGson;
+    private BaiduPush mBaiduPushServer;
 
 	@Override
 	public void onCreate() {
@@ -52,6 +55,10 @@ public class MyApplication extends FrontiaApplication {
 
 		myApplication = this;
 		requestQueue = Volley.newRequestQueue(this);
+
+        mBaiduPushServer = new BaiduPush(BaiduPush.HTTP_METHOD_POST,
+                SECRIT_KEY, API_KEY);
+        BaiduPush.PushInit(getApplicationContext());
 	}
 
 	public synchronized static MyApplication getInstance() {
@@ -64,6 +71,14 @@ public class MyApplication extends FrontiaApplication {
 		}
 		return mGson;
 	}
+
+    public synchronized BaiduPush getBaiduPush() {
+        if (mBaiduPushServer == null)
+            mBaiduPushServer = new BaiduPush(BaiduPush.HTTP_METHOD_POST,
+                    SECRIT_KEY, API_KEY);
+        return mBaiduPushServer;
+
+    }
 
 	@Override
 	public void onConfigurationChanged(Configuration newConfig) {
