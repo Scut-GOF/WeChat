@@ -43,6 +43,8 @@ public class TestData {
                                             "你才是备注，你全家才是备注。你才是备注，你全家才是备注。你才是备注，你全家才是备注。你才是备注，你全家才是备注。你才是备注，你全家才是备注。你才是备注，你全家才是备注。" +
                                             "你才是备注，你全家才是备注。你才是备注，你全家才是备注。你才是备注，你全家才是备注。你才是备注，你全家才是备注。你才是备注，你全家才是备注。" +
                                             "你才是备注，你全家才是备注。你才是备注，你全家才是备注。"};
+    static String[] allLabels = {"傻逼=。=","家人","华南理工大学","网友","My Friendsヾ(=^▽^=)ノ","汕头金山中学","二次元","Hello World","好标签名都被狗起了","万星人"
+                                    ,"不包含家长的分组","MONKEY·D·Luffy's 粉丝","爽身粉爱好者","大牛","百家争鸣","草帽海贼团","oo编程","apple bitch","程序猿鼓励师","FE 工程师"};
 	public static List<IdObj> makeContacts() {
 
         int shortAddress = 0;
@@ -154,25 +156,7 @@ public class TestData {
 		//TODO 只需要标签名
 		//TODO 标签有20个，标签名可以是中文，英文，特殊字符
         for (int i = 0; i < 20; i++) {
-            String label = "";
-            int randLabel = (int)(Math.random()*100);
-            if (randLabel % 3 == 0) {
-                label += getRandomChar(4) + " " + getRandomChar(6);
-            }
-            else if (randLabel % 7 == 0) {
-                label += getRandomChar(4) + "·" + getRandomChar(6);
-            }
-            else if (randLabel % 5 == 0) {
-                label += getRandomJianHan(3);
-            }
-            else {
-                label += getRandomJianHan(3);
-                label += getRandomChar(4);
-            }
-            //添加颜文字
-            if ((int)(Math.random()*100) % 3 == 0) {
-                label += faceText[(int)(Math.random()*18)];
-            }
+            String label = allLabels[i];
 
             labels.add(label);
         }
@@ -241,28 +225,58 @@ public class TestData {
             if ((int)(Math.random() * 100) < 40) {
                 String id = "" + i;
                 String label;
+                int[] tmpRandLabel = new int[20];
 
-                int rankLabel = (int)(Math.random() * 19);
-                label = labels.get(rankLabel);
-                IdLabelObj myIdLabelObj = new IdLabelObj(id, label);
-                idLabels.add(myIdLabelObj);
-
-                if ((int)(Math.random() * 10) % 5 == 0) {
-                    label = labels.get(rankLabel);
-                    myIdLabelObj.setLabel(label);
-                    idLabels.add(myIdLabelObj);
+                int tmp = (int)(Math.random() * 10);
+                if (tmp % 2 == 0) {
+                    label = labels.get((int)(Math.random() * 19));
+                    IdLabelObj myIdLabelObj1 = new IdLabelObj(id, label);
+                    idLabels.add(myIdLabelObj1);
                 }
-                if ((int)(Math.random() * 10) % 3 == 0) {
-                    label = labels.get(rankLabel);
-                    myIdLabelObj.setLabel(label);
-                    idLabels.add(myIdLabelObj);
+                else if (tmp % 3 == 0) {
+//                    label = labels.get((int)(Math.random() * 19));
+                    for (int j = 0; j < 2; j++) {
+                        tmpRandLabel[j] = (int)(Math.random() * 19);
+                        for (int k = j - 1; k >= 0; k--) {
+                            if (tmpRandLabel[j] == tmpRandLabel[k]) {
+                                tmpRandLabel[j] = -1;
+                            }
+                        }
+                        if (tmpRandLabel[j] != -1) {
+                            label = labels.get(tmpRandLabel[j]);
+                            IdLabelObj myIdLabelObj2 = new IdLabelObj(id, label);
+                            idLabels.add(myIdLabelObj2);
+                        }
+                    }
                 }
-                if ((int)(Math.random() * 10) % 10 == 0) {
-                    int temp = (int)(Math.random() * 16 + 4);
-                    for (int j =0; j < temp; j++) {
-                        label = labels.get(rankLabel);
-                        myIdLabelObj.setLabel(label);
-                        idLabels.add(myIdLabelObj);
+                else if (tmp % 5 == 0) {
+                    for (int j = 0; j < 2; j++) {
+                        tmpRandLabel[j] = (int)(Math.random() * 19);
+                        for (int k = j - 1; k >= 0; k--) {
+                            if (tmpRandLabel[j] == tmpRandLabel[k]) {
+                                tmpRandLabel[j] = -1;
+                            }
+                        }
+                        if (tmpRandLabel[j] != -1) {
+                            label = labels.get(tmpRandLabel[j]);
+                            IdLabelObj myIdLabelObj2 = new IdLabelObj(id, label);
+                            idLabels.add(myIdLabelObj2);
+                        }
+                    }
+                }
+                else if (tmp % 10 == 0) {
+                    for (int j = 0; j < (int)(Math.random() * 16); j++) {
+                        tmpRandLabel[j] = (int)(Math.random() * 19);
+                        for (int k = j - 1; k >= 0; k--) {
+                            if (tmpRandLabel[j] == tmpRandLabel[k]) {
+                                tmpRandLabel[j] = -1;
+                            }
+                        }
+                        if (tmpRandLabel[j] != -1) {
+                            label = labels.get(tmpRandLabel[j]);
+                            IdLabelObj myIdLabelObj2 = new IdLabelObj(id, label);
+                            idLabels.add(myIdLabelObj2);
+                        }
                     }
                 }
             }
@@ -321,7 +335,7 @@ public class TestData {
             System.out.println(labels.get(i));
         }
         for (int i = 0; i < idLabel.size(); i++)  {
-            System.out.println(idLabel.get(i).getId());
+            System.out.println(idLabel.get(i).getId() + " " + idLabel.get(i).getLabel());
         }
     }
 }
