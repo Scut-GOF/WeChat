@@ -9,7 +9,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textSize="22sp"
-        android:text="Name"
+        android:text=""
         android:textColor="@color/black"
         android:id="@+id/name"/>
 
@@ -17,9 +17,9 @@
     <TextView
         style="@style/black_detail"
         android:layout_width="match_parent"
-        android:layout_weight="1"
+        android:singleLine="true"
         android:layout_height="wrap_content"
-        android:text="something"
+        android:text=""
         android:layout_margin="5dp"
         android:id="@+id/searched_detail"/>
 

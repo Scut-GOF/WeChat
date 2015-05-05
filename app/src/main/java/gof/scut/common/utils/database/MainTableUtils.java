@@ -8,7 +8,6 @@ import android.database.sqlite.SQLiteDatabase;
 import java.util.ArrayList;
 import java.util.List;
 
-import gof.scut.common.utils.Log;
 import gof.scut.common.utils.PinyinUtils;
 import gof.scut.common.utils.StringUtils;
 import gof.scut.cwh.models.object.IdObj;
@@ -22,13 +21,13 @@ public class MainTableUtils {
 
 	public MainTableUtils(Context context) {
 		dataBaseHelper = new DataBaseHelper(context);
-		//TODO insert several data
-		for (int i = 0; i < 10; i++) {
-			insertAll("Barry Allen" + i, "ADDR" + i, "NOTE" + i);
-			insertAll("陈伟航" + i, "ADDR" + i, "NOTE" + i);
-			insertAll("陈伟航 Cwh wh" + i, "ADDR" + i, "NOTE" + i);
 
-		}
+//		for (int i = 0; i < 10; i++) {
+//			insertAll("Barry Allen" + i, "ADDR" + i, "NOTE" + i);
+//			insertAll("陈伟航" + i, "ADDR" + i, "NOTE" + i);
+//			insertAll("陈伟航 Cwh wh" + i, "ADDR" + i, "NOTE" + i);
+//
+//		}
 
 	}
 
@@ -71,18 +70,19 @@ public class MainTableUtils {
 			lPinyinBuilder.append(" ");
 			lPinyinBuilder.append(lPinYin.replace(" ", ""));
 			lPinYin = lPinyinBuilder.toString();
-			Log.d("PINYIN", lPinYin);
+//			Log.d("PINYIN", lPinYin);
 			sPinyinBuilder.append(PinyinUtils.testPureSPinYinBlankLy(name));
 			sPinYin = sPinyinBuilder.toString();
 			sPinyinBuilder.append(" ");
 			sPinyinBuilder.append(sPinYin.replace(" ", ""));
 			sPinYin = sPinyinBuilder.toString();
 
-			Log.d("PINYIN", sPinYin);
+//			Log.d("PINYIN", sPinYin);
 		}
 		name = StringUtils.splitChineseSingly(name);
-		address = StringUtils.splitChineseSingly(address);
-		notes = StringUtils.splitChineseSingly(notes);
+		if (address != null && !address.equals(""))
+			address = StringUtils.splitChineseSingly(address);
+		if (notes != null && !notes.equals("")) notes = StringUtils.splitChineseSingly(notes);
 
 
 		closeDataBase();
@@ -90,8 +90,8 @@ public class MainTableUtils {
 		value.put(TBMainConstants.NAME, name);
 		value.put(TBMainConstants.L_PINYIN, lPinYin);
 		value.put(TBMainConstants.S_PINYIN, sPinYin);
-		value.put(TBMainConstants.ADDRESS, address);
-		value.put(TBMainConstants.NOTES, notes);
+		if (address != null) value.put(TBMainConstants.ADDRESS, address);
+		if (notes != null) value.put(TBMainConstants.NOTES, notes);
 		db = dataBaseHelper.getWritableDatabase();
 		long status;
 		try {
@@ -263,7 +263,7 @@ public class MainTableUtils {
 						cursorResult.getString(cursorResult.getColumnIndex(TBMainConstants.S_PINYIN)),
 						StringUtils.recoverWordFromDB(cursorResult.getString(cursorResult.getColumnIndex(TBMainConstants.ADDRESS))),
 						StringUtils.recoverWordFromDB(cursorResult.getString(cursorResult.getColumnIndex(TBMainConstants.NOTES))),
-						cursorResult.getString(cursorResult.getColumnIndex(TBLabelConstants.LABEL)),
+						StringUtils.recoverWordFromDB(cursorResult.getString(cursorResult.getColumnIndex(TBLabelConstants.LABEL))),
 						cursorResult.getString(cursorResult.getColumnIndex(TBTelConstants.TEL))
 				));
 			}
@@ -352,7 +352,7 @@ public class MainTableUtils {
 						cursorResult.getString(cursorResult.getColumnIndex(TBMainConstants.S_PINYIN)),
 						StringUtils.recoverWordFromDB(cursorResult.getString(cursorResult.getColumnIndex(TBMainConstants.ADDRESS))),
 						StringUtils.recoverWordFromDB(cursorResult.getString(cursorResult.getColumnIndex(TBMainConstants.NOTES))),
-						cursorResult.getString(cursorResult.getColumnIndex(TBLabelConstants.LABEL)),
+						StringUtils.recoverWordFromDB(cursorResult.getString(cursorResult.getColumnIndex(TBLabelConstants.LABEL))),
 						cursorResult.getString(cursorResult.getColumnIndex(TBTelConstants.TEL))
 				));
 			}

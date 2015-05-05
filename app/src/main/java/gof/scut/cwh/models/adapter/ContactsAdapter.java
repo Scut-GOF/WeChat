@@ -103,9 +103,8 @@ public class ContactsAdapter extends BaseAdapter {
 			@Override
 			public void onClick(View v) {
 				TelTableUtils telTableUtil = new TelTableUtils(context);
-				//TODO TEST insert several data
-				telTableUtil.insertAll("" + id, "10086");
-				telTableUtil.insertAll("" + id, "10086" + id);
+//				telTableUtil.insertAll("" + id, "10086");
+//				telTableUtil.insertAll("" + id, "10086" + id);
 
 				Cursor cTel = telTableUtil.selectTelWithID(id);
 				//close when dismiss
@@ -126,9 +125,9 @@ public class ContactsAdapter extends BaseAdapter {
 			@Override
 			public void onClick(View v) {
 				TelTableUtils telTableUtil = new TelTableUtils(context);
-				//TODO TEST insert several data
-				telTableUtil.insertAll("" + id, "10086");
-				telTableUtil.insertAll("" + id, "10086" + id);
+
+//				telTableUtil.insertAll("" + id, "10086");
+//				telTableUtil.insertAll("" + id, "10086" + id);
 
 				Cursor cTel = telTableUtil.selectTelWithID(id);
 				//close when dismiss
