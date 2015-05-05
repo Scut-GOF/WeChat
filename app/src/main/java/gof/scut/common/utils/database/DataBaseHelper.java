@@ -7,7 +7,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 
 public class DataBaseHelper extends SQLiteOpenHelper {
 	public final static int DBVersion = 3;
-
+	public static boolean importData = false;
 	private final static String DATABASE_NAME = "gofContacts";
 	private final static String SQL_MAIN_TABLE_CREATE = "CREATE TABLE IF NOT EXISTS "
 			+ TBMainConstants.TABLE_NAME + " ("
@@ -258,6 +258,7 @@ public class DataBaseHelper extends SQLiteOpenHelper {
 				db.execSQL("DROP TRIGGER IF EXISTS " + TriggerConstants.UPDATE_FTS_IL);
 				db.execSQL("DROP TRIGGER IF EXISTS " + TriggerConstants.UPDATE_FTS_TEL);
 				break;
+
 		}
 
 //        db.execSQL("DROP VIRTUAL TABLE IF EXISTS " + TBMainConstants.FTS_TABLE_NAME);

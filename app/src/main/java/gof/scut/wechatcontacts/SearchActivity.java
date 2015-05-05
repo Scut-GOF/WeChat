@@ -96,7 +96,7 @@ public class SearchActivity extends Activity implements View.OnClickListener {
 			@Override
 			public void afterTextChanged(Editable s) {
 
-				final String keyword = s.toString();
+				final String keyword = s.toString().replace("龘", " ");
 				new Thread() {
 					public void run() {
 						fullTextSearch(keyword);

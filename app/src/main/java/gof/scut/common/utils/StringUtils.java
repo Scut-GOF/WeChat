@@ -84,6 +84,7 @@ public class StringUtils {
 
 		return str.getBytes().length != str.length();
 	}
+
 	public static String splitChineseSingly(String str) {
 		StringBuilder sb = new StringBuilder();
 		str = str.replace(" ", "龘");
@@ -120,6 +121,7 @@ public class StringUtils {
 	}
 
 	public static String recoverWordFromDB(String str) {
+		if (str == null) return "";
 		str = str.replace(" ", "");
 		str = str.replace("龘", " ");
 		return str;
@@ -146,6 +148,7 @@ public class StringUtils {
 	}
 
 	public static Spanned simpleHighLightByPinyin(String keyword, String str, String highColor, String generalColor) {
+		//if (keyword == null)
 		StringBuilder result = new StringBuilder();
 		//keyword should be lower case
 		int kwLength = keyword.length();
@@ -168,7 +171,15 @@ public class StringUtils {
 			} else {
 				if (StringUtils.isChinese(str.charAt(i))) {
 					String pinyin = new PinyinUtils().getCharacterPinYin(str.charAt(i));
-					if (pinyin.contains(keyword) || keyword.contains(pinyin)
+					if (pinyin == null) {
+//						Log.d("NULLPINYIN",str.charAt(i)+"");
+//						Log.d("NULLPINYIN",str);
+						result.append("<font color=\"#");
+						result.append(generalColor);
+						result.append("\">");
+						result.append(str.charAt(i));
+						result.append("</font>");
+					} else if (pinyin.contains(keyword) || keyword.contains(pinyin)
 							|| keyword.contains(pinyin.charAt(0) + "")) {
 						result.append("<font color=\"#");
 						result.append(highColor);
@@ -193,6 +204,7 @@ public class StringUtils {
 		}
 		return Html.fromHtml(result.toString());
 	}
+
 	public static Spanned simpleHighLight(String keyword, String str, String highColor, String generalColor) {
 		StringBuilder result = new StringBuilder();
 		//keyword should be lower case
@@ -224,6 +236,7 @@ public class StringUtils {
 		}
 		return Html.fromHtml(result.toString());
 	}
+
 	public static String getStringPinYin(String str) {
 		PinyinUtils pinyin = new PinyinUtils();
 		return pinyin.getStringPinYin(str);
