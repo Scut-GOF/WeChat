@@ -27,7 +27,6 @@ import java.util.Hashtable;
 import java.util.List;
 
 import gof.scut.common.MyApplication;
-import gof.scut.common.utils.Log;
 import gof.scut.cwh.models.object.UserInfo;
 import roboguice.activity.RoboActivity;
 import roboguice.inject.InjectView;
@@ -59,6 +58,7 @@ public class MyInfoActivity extends RoboActivity {
     private EditText addition;
 
     //values
+    private Gson gson;
     private UserInfo userInfo;
     private ArrayList<String> phoneList;
     private MyAdapter phoneAdapter;
@@ -72,21 +72,22 @@ public class MyInfoActivity extends RoboActivity {
 	}
 
     private void init(){
-        Gson gson = MyApplication.getGson();
+        gson = MyApplication.getGson();
+        phoneList = new ArrayList<>();
 
         userInfo = UserInfo.getInstance();
 
-        name.setText(userInfo.getName());
-        address.setText(userInfo.getAddress());
-        addition.setText(userInfo.getNotes());
-        phoneList = userInfo.getTels();
-
+        if(TextUtils.isEmpty(userInfo.getName()) || userInfo.getTels().isEmpty()){
+            Toast.makeText(mContext,"请完善个人信息！",Toast.LENGTH_SHORT).show();
+        }else{
+            name.setText(userInfo.getName());
+            address.setText(userInfo.getAddress());
+            addition.setText(userInfo.getNotes());
+            phoneList = userInfo.getTels();
+            createQRImage( gson.toJson(userInfo, UserInfo.class) );
+        }
         phoneAdapter = new MyAdapter(this,phoneList);
         phoneListView.setAdapter(phoneAdapter);
-
-        createQRImage( gson.toJson(userInfo, UserInfo.class) );
-
-        Log.d(null, gson.toJson(userInfo, UserInfo.class));
     }
 
     private void eventHandler() {
@@ -106,12 +107,23 @@ public class MyInfoActivity extends RoboActivity {
         save.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //TODO 判断
-                userInfo.setName(name.getText().toString());
-                userInfo.setTels(phoneList);
-                userInfo.setAddress(address.getText().toString());
-                userInfo.setNotes(addition.getText().toString());
-                Toast.makeText(mContext,"已保存",Toast.LENGTH_SHORT).show();
+                if(TextUtils.isEmpty(name.getText())){
+
+                    Toast.makeText(mContext,"未输入姓名！",Toast.LENGTH_SHORT).show();
+                }else if(phoneList.isEmpty()){
+
+                    Toast.makeText(mContext,"未输入号码！",Toast.LENGTH_SHORT).show();
+                }else if(TextUtils.isEmpty(address.getText())){
+
+                    Toast.makeText(mContext,"未输入地址！",Toast.LENGTH_SHORT).show();
+                }else{
+                    userInfo.setName(name.getText().toString());
+                    userInfo.setTels(phoneList);
+                    userInfo.setAddress(address.getText().toString());
+                    userInfo.setNotes(addition.getText().toString());
+                    Toast.makeText(mContext,"已保存",Toast.LENGTH_SHORT).show();
+                    createQRImage( gson.toJson(userInfo, UserInfo.class) );
+                }
             }
         });
 

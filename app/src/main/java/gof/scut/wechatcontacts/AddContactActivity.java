@@ -24,7 +24,6 @@ import java.util.List;
 
 import gof.scut.common.MyApplication;
 import gof.scut.common.utils.BundleNames;
-import gof.scut.common.utils.Log;
 import gof.scut.common.utils.database.MainTableUtils;
 import gof.scut.cwh.models.object.ActivityConstants;
 import gof.scut.cwh.models.object.LabelListObj;
@@ -79,9 +78,6 @@ public class AddContactActivity extends RoboActivity {
 		setContentView(R.layout.activity_add_contact);
 		init();
 
-        MyTask task = new MyTask(UserInfo.getInstance().getUserId());
-        task.execute();
-
 		initView();
     }
 
@@ -99,19 +95,6 @@ public class AddContactActivity extends RoboActivity {
 	}
 
 	private void initView() {
-
-		//点击按钮跳转到二维码扫描界面，这里用的是startActivityForResult跳转
-		//扫描完了之后调到该界面
-		findViewById(R.id.scan_layout).setOnClickListener(new View.OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				Intent intent = new Intent();
-				intent.setClass(mContext, gof.scut.common.zixng.codescan.MipcaActivityCapture.class);
-				intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-				startActivityForResult(intent, REQUEST_CODE_SCAN);
-			}
-		});
-
 		cancel.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
@@ -123,14 +106,37 @@ public class AddContactActivity extends RoboActivity {
 		save.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
-                //TODO 判断
-				mainTableUtils.insertAll(
-						name.getText().toString(),
-						address.getText().toString(),
-						addition.getText().toString()
-				);
+                if(TextUtils.isEmpty(name.getText())){
+
+                    Toast.makeText(mContext,"未输入姓名！",Toast.LENGTH_SHORT).show();
+                }else if(phoneList.isEmpty()){
+
+                    Toast.makeText(mContext,"未输入号码！",Toast.LENGTH_SHORT).show();
+                }else if(TextUtils.isEmpty(address.getText())){
+
+                    Toast.makeText(mContext,"未输入地址！",Toast.LENGTH_SHORT).show();
+                }else{
+                    //TODO 保存数据库
+                    mainTableUtils.insertAll(
+                            name.getText().toString(),
+                            address.getText().toString(),
+                            addition.getText().toString()
+                    );
+                }
 			}
 		});
+
+        //点击按钮跳转到二维码扫描界面，这里用的是startActivityForResult跳转
+        //扫描完了之后调到该界面
+        findViewById(R.id.scan_layout).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent();
+                intent.setClass(mContext, gof.scut.common.zixng.codescan.MipcaActivityCapture.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                startActivityForResult(intent, REQUEST_CODE_SCAN);
+            }
+        });
 
 		//add phone number
 		addPhone.setOnClickListener(new View.OnClickListener() {
