@@ -8,7 +8,6 @@ import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.EditText;
@@ -20,12 +19,12 @@ import android.widget.Toast;
 import com.google.gson.Gson;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
-
-import javax.inject.Inject;
 
 import gof.scut.common.MyApplication;
 import gof.scut.common.utils.BundleNames;
+import gof.scut.common.utils.Log;
 import gof.scut.common.utils.database.MainTableUtils;
 import gof.scut.cwh.models.object.ActivityConstants;
 import gof.scut.cwh.models.object.LabelListObj;
@@ -37,14 +36,13 @@ import roboguice.inject.InjectView;
 public class AddContactActivity extends RoboActivity {
 
 	//constant
+    private final static String TAG = AddContactActivity.class.getSimpleName();
 	private final Context mContext = AddContactActivity.this;
 	private final static int REQUEST_CODE_SCAN = 1;
 	private final static int REQUEST_CODE_LABEL = 2;
 
 	private MainTableUtils mainTableUtils;
 	private Gson gson;
-	@Inject
-	InputMethodManager imm;
 
 	//views
 	@InjectView(R.id.cancel)
@@ -79,8 +77,10 @@ public class AddContactActivity extends RoboActivity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_add_contact);
-
 		init();
+
+        MyTask task = new MyTask(UserInfo.getInstance().getUserId());
+        task.execute();
 
 		initView();
     }
@@ -99,6 +99,7 @@ public class AddContactActivity extends RoboActivity {
 	}
 
 	private void initView() {
+
 		//点击按钮跳转到二维码扫描界面，这里用的是startActivityForResult跳转
 		//扫描完了之后调到该界面
 		findViewById(R.id.scan_layout).setOnClickListener(new View.OnClickListener() {
@@ -181,8 +182,9 @@ public class AddContactActivity extends RoboActivity {
         name.setText( intent.getStringExtra("name") );
         address.setText(intent.getStringExtra("address"));
         addition.setText(intent.getStringExtra("addition"));
-//        phoneList.addAll(friend.getTels());
-//        phoneAdapter.notifyDataSetChanged();
+        String phones = intent.getStringExtra("phone");
+        Collections.addAll(phoneList, phones.substring(1,phones.length()-1).split(", "));
+        phoneAdapter.notifyDataSetChanged();
     }
 
 	@Override
@@ -231,6 +233,7 @@ public class AddContactActivity extends RoboActivity {
         @Override
         protected Object doInBackground(Object[] objects) {
             UserInfo userInfo = UserInfo.getInstance();
+
             return MyApplication.getInstance().getBaiduPush().
                    PushNotify(
                            "添加好友",
@@ -238,8 +241,8 @@ public class AddContactActivity extends RoboActivity {
                            userId,
                            userInfo.getName(),
                            userInfo.getAddress(),
-                           userInfo.getNotes()
-//                           gson.toJson(userInfo, UserInfo.class)
+                           userInfo.getNotes(),
+                           userInfo.getTels().toString()
                     );
         }
     }

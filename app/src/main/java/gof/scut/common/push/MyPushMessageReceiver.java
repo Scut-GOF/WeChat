@@ -227,6 +227,7 @@ public class MyPushMessageReceiver extends FrontiaPushMessageReceiver {
             intent.putExtra("name",content.getString("name"));
             intent.putExtra("address",content.getString("address"));
             intent.putExtra("addition",content.getString("addition"));
+            intent.putExtra("phone",content.getString("phone"));
         } catch (JSONException e) {
             e.printStackTrace();
         }
