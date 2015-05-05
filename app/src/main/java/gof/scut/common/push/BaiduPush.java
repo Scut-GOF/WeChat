@@ -138,11 +138,10 @@ public class BaiduPush {
             }
             sb.append(mSecretKey);
 
-            Log.d(TAG, "PostHttpRequest before" + sb.toString());
+            Log.d(TAG, "push_Before:" + sb.toString());
 
             MessageDigest md = MessageDigest.getInstance("MD5");
             md.reset();
-
             md.update(urlencode(sb.toString()).getBytes());
             byte[] md5 = md.digest();
 
@@ -150,8 +149,6 @@ public class BaiduPush {
             for (byte b : md5)
                 sb.append(String.format("%02x", b & 0xff));
             data.put(RestApi._SIGN, sb.toString());
-
-            Log.d(TAG, "PostHttpRequest MD5:" + urlencode(sb.toString()));
 
             sb.setLength(0);
             for (Map.Entry<String, String> i : data.entrySet()) {
@@ -162,6 +159,7 @@ public class BaiduPush {
             }
             sb.setLength(sb.length() - 1);
 
+            Log.d(TAG, "push_After:" + sb.toString());
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -197,8 +195,7 @@ public class BaiduPush {
 
             connection.setRequestProperty("Content-Type",
                     "application/x-www-form-urlencoded");
-            connection
-                    .setRequestProperty("Content-Length", "" + query.length());
+            connection.setRequestProperty("Content-Length", "" + query.length());
             connection.setRequestProperty("charset", "utf-8");
 
             connection.setUseCaches(false);
@@ -211,9 +208,11 @@ public class BaiduPush {
             // Send request
             DataOutputStream wr = new DataOutputStream(
                     connection.getOutputStream());
-            wr.writeBytes(query.toString());
+            wr.writeBytes(query);
             wr.flush();
             wr.close();
+
+            Log.d(TAG, "HttpRequest-query :" + query);
 
             // Get Response
             InputStream is = connection.getInputStream();
@@ -225,6 +224,8 @@ public class BaiduPush {
                 out.append('\r');
             }
             rd.close();
+
+            Log.d(TAG, "HttpRequest-out :" + out.toString());
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -252,15 +253,15 @@ public class BaiduPush {
      * @param userid
      * @return
      */
-    public String PushNotify(String title, String message, String userid,int id) {
+    public String PushNotify(String title, String message, String userid,String name,String address,String addition) {
         RestApi ra = new RestApi(RestApi.METHOD_PUSH_MESSAGE);
         ra.put(RestApi._MESSAGE_TYPE, RestApi.MESSAGE_TYPE_NOTIFY);
 
         String msg = String
                 .format("{'title':'%s','description':'%s'," +
-                                "'custom_content':{'test':'%s'}"
+                                "'custom_content':{'name':'%s','address':'%s','addition':'%s'}"
                                 + ",'notification_builder_id':0,'notification_basic_style':7,'open_type':3}",
-                        title, jsonencode(message),id);
+                        title, jsonencode(message),name,address,addition);
 
         Log.d(TAG, msg);
 

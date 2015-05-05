@@ -14,6 +14,7 @@ import org.json.JSONObject;
 import java.util.List;
 
 import gof.scut.cwh.models.object.UserInfo;
+import gof.scut.wechatcontacts.AddContactActivity;
 
 /**
  * Push消息处理receiver。请编写您需要的回调函数， 一般来说： onBind是必须的，用来处理startWork返回值；
@@ -108,9 +109,6 @@ public class MyPushMessageReceiver extends FrontiaPushMessageReceiver {
                 e.printStackTrace();
             }
         }
-
-        // Demo更新界面展示代码，应用请在这里加入自己的处理逻辑
-        updateContent(context, messageString);
     }
 
     /**
@@ -134,21 +132,17 @@ public class MyPushMessageReceiver extends FrontiaPushMessageReceiver {
 
         // 自定义内容获取方式，mykey和myvalue对应通知推送时自定义内容中设置的键和值
         if (!TextUtils.isEmpty(customContentString)) {
-            JSONObject customJson = null;
+            JSONObject customJson;
             try {
                 customJson = new JSONObject(customContentString);
-                String myvalue = null;
-                if (!customJson.isNull("mykey")) {
-                    myvalue = customJson.getString("mykey");
-                }
+                // Demo更新界面展示代码，应用请在这里加入自己的处理逻辑
+                updateContent(context, customJson);
             } catch (JSONException e) {
                 // TODO Auto-generated catch block
                 e.printStackTrace();
             }
-        }
 
-        // Demo更新界面展示代码，应用请在这里加入自己的处理逻辑
-        updateContent(context, notifyString);
+        }
     }
 
     /**
@@ -167,13 +161,6 @@ public class MyPushMessageReceiver extends FrontiaPushMessageReceiver {
     @Override
     public void onSetTags(Context context, int errorCode,
             List<String> sucessTags, List<String> failTags, String requestId) {
-        String responseString = "onSetTags errorCode=" + errorCode
-                + " sucessTags=" + sucessTags + " failTags=" + failTags
-                + " requestId=" + requestId;
-        Log.d(TAG, responseString);
-
-        // Demo更新界面展示代码，应用请在这里加入自己的处理逻辑
-        updateContent(context, responseString);
     }
 
     /**
@@ -192,13 +179,6 @@ public class MyPushMessageReceiver extends FrontiaPushMessageReceiver {
     @Override
     public void onDelTags(Context context, int errorCode,
             List<String> sucessTags, List<String> failTags, String requestId) {
-        String responseString = "onDelTags errorCode=" + errorCode
-                + " sucessTags=" + sucessTags + " failTags=" + failTags
-                + " requestId=" + requestId;
-        Log.d(TAG, responseString);
-
-        // Demo更新界面展示代码，应用请在这里加入自己的处理逻辑
-        updateContent(context, responseString);
     }
 
     /**
@@ -216,12 +196,6 @@ public class MyPushMessageReceiver extends FrontiaPushMessageReceiver {
     @Override
     public void onListTags(Context context, int errorCode, List<String> tags,
             String requestId) {
-        String responseString = "onListTags errorCode=" + errorCode + " tags="
-                + tags;
-        Log.d(TAG, responseString);
-
-        // Demo更新界面展示代码，应用请在这里加入自己的处理逻辑
-        updateContent(context, responseString);
     }
 
     /**
@@ -241,20 +215,22 @@ public class MyPushMessageReceiver extends FrontiaPushMessageReceiver {
         Log.d(TAG, responseString);
 
         // 解绑定成功，设置未绑定flag，
-        if (errorCode == 0) {
-
-        }else{
+        if (errorCode != 0) {
             Toast.makeText(context,"百度云推送解绑失败！",Toast.LENGTH_SHORT).show();
         }
     }
 
-    private void updateContent(Context context, String content) {
-        Log.d(TAG, "updateContent");
-
+    private void updateContent(Context context, JSONObject content) {
         Intent intent = new Intent();
-        intent.setClass(context.getApplicationContext(), PushDemoActivity.class);
+        intent.setClass(context.getApplicationContext(), AddContactActivity.class);
+        try {
+            intent.putExtra("name",content.getString("name"));
+            intent.putExtra("address",content.getString("address"));
+            intent.putExtra("addition",content.getString("addition"));
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         context.getApplicationContext().startActivity(intent);
     }
-
 }

@@ -63,7 +63,8 @@
             android:label="@string/title_activity_scan" />
         <activity
             android:name=".AddContactActivity"
-            android:label="@string/title_activity_add_contact" />
+            android:label="@string/title_activity_add_contact"
+            android:launchMode="singleTask"/>
         <activity
             android:name="gof.scut.common.zixng.codescan.MipcaActivityCapture"
             android:configChanges="orientation|keyboardHidden"
@@ -72,11 +73,6 @@
         <activity
             android:name=".EditContactLabelActivity"
             android:label="@string/title_activity_edit_contact_label" >
-        </activity>
-        <activity
-            android:name="gof.scut.common.push.PushDemoActivity"
-            android:launchMode="singleTask"
-            android:label="@string/title_activity_push_demo" >
         </activity>
 
         <!-- push应用定义消息receiver声明 -->
