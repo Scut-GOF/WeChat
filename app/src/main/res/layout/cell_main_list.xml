@@ -11,13 +11,13 @@
         android:layout_margin="5dp">
 
         <TextView
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_weight="1"
             android:layout_height="wrap_content"
             android:layout_marginLeft="5dp"
             android:layout_marginStart="5dp"
             android:textSize="22sp"
-            android:text="Name"
+            android:text=""
             android:textStyle="bold"
             android:textColor="@color/black"
             android:layout_gravity="center_vertical"

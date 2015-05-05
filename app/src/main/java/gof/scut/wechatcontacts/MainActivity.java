@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import java.util.List;
 
@@ -15,6 +16,7 @@ import gof.scut.cwh.models.adapter.ContactsAdapter;
 import gof.scut.cwh.models.object.ActivityConstants;
 import gof.scut.cwh.models.object.LightIdObj;
 import gof.scut.cwh.models.object.Signal;
+import gof.scut.fental.models.test.TestData;
 
 
 public class MainActivity extends Activity implements View.OnClickListener {
@@ -38,8 +40,9 @@ public class MainActivity extends Activity implements View.OnClickListener {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-        BaiduPush.StartWork(this);
+		BaiduPush.StartWork(this);
 		setContentView(R.layout.activity_main);
+
 		init();
 	}
 
@@ -49,12 +52,12 @@ public class MainActivity extends Activity implements View.OnClickListener {
 		//init Views
 		findViews();
 		//init handlers //init button listeners, list
-		eventHandler();
+		setListener();
 	}
 
 	private void initDatabase() {
 		mainTableUtils = new MainTableUtils(this);
-
+		//TestData.insertData(this);
 	}
 
 	private void findViews() {
@@ -67,12 +70,12 @@ public class MainActivity extends Activity implements View.OnClickListener {
 		btMe = (Button) findViewById(R.id.bt_me);
 	}
 
-	private void eventHandler() {
+	private void setListener() {
 		btSearch.setOnClickListener(this);
 		btAdd.setOnClickListener(this);
 		btGroup.setOnClickListener(this);
 		btMe.setOnClickListener(this);
-
+		findViewById(R.id.title).setOnClickListener(this);
 	}
 
 	private void initList() {
@@ -105,6 +108,11 @@ public class MainActivity extends Activity implements View.OnClickListener {
 			case R.id.bt_me:
 				//TO SELF ACTIVITY
 				ActivityUtils.ActivitySkip(this, MyInfoActivity.class);
+				break;
+			case R.id.title:
+				TestData.insertData(this);
+				v.setClickable(false);
+				Toast.makeText(this, "import data success", Toast.LENGTH_LONG).show();
 				break;
 		}
 	}
