@@ -2,6 +2,7 @@ package gof.scut.wechatcontacts;
 
 import android.content.Context;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
@@ -25,12 +26,11 @@ import javax.inject.Inject;
 
 import gof.scut.common.MyApplication;
 import gof.scut.common.utils.BundleNames;
-import gof.scut.common.utils.Log;
 import gof.scut.common.utils.database.MainTableUtils;
 import gof.scut.cwh.models.object.ActivityConstants;
-import gof.scut.cwh.models.object.IdObj;
 import gof.scut.cwh.models.object.LabelListObj;
 import gof.scut.cwh.models.object.Signal;
+import gof.scut.cwh.models.object.UserInfo;
 import roboguice.activity.RoboActivity;
 import roboguice.inject.InjectView;
 
@@ -83,7 +83,7 @@ public class AddContactActivity extends RoboActivity {
 		init();
 
 		initView();
-	}
+    }
 
 	private void init() {
 		mainTableUtils = new MainTableUtils(mContext);
@@ -105,7 +105,7 @@ public class AddContactActivity extends RoboActivity {
 			@Override
 			public void onClick(View v) {
 				Intent intent = new Intent();
-				intent.setClass(AddContactActivity.this, gof.scut.common.zixng.codescan.MipcaActivityCapture.class);
+				intent.setClass(mContext, gof.scut.common.zixng.codescan.MipcaActivityCapture.class);
 				intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 				startActivityForResult(intent, REQUEST_CODE_SCAN);
 			}
@@ -122,6 +122,7 @@ public class AddContactActivity extends RoboActivity {
 		save.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
+                //TODO 判断
 				mainTableUtils.insertAll(
 						name.getText().toString(),
 						address.getText().toString(),
@@ -146,18 +147,13 @@ public class AddContactActivity extends RoboActivity {
 		addLable.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
-//                Intent intent = new Intent();
-//                intent.setClass(mContext, LabelsActivity.class);
-//                startActivityForResult(intent, REQUEST_CODE_LABEL);
 				Intent intent = new Intent();
 				intent.setClass(mContext, EditContactLabelActivity.class);
 				Bundle bundle = new Bundle();
 				Signal signal = new Signal(ActivityConstants.ADD_CONTACTS_ACTIVITY, ActivityConstants.EditContactLabelActivity);
 				bundle.putSerializable(Signal.NAME, signal);
-				//bundle.putSerializable(BundleNames.ID_OBJ, new IdObj(0));
 				intent.putExtras(bundle);
 				startActivityForResult(intent, REQUEST_CODE_LABEL);
-
 			}
 		});
 	}
@@ -177,6 +173,18 @@ public class AddContactActivity extends RoboActivity {
 		return true;
 	}
 
+    @Override
+    protected void onNewIntent(Intent intent) {
+
+        Toast.makeText(mContext,"应该弹出选择框",Toast.LENGTH_SHORT).show();
+
+        name.setText( intent.getStringExtra("name") );
+        address.setText(intent.getStringExtra("address"));
+        addition.setText(intent.getStringExtra("addition"));
+//        phoneList.addAll(friend.getTels());
+//        phoneAdapter.notifyDataSetChanged();
+    }
+
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 		super.onActivityResult(requestCode, resultCode, data);
@@ -184,38 +192,57 @@ public class AddContactActivity extends RoboActivity {
 		switch (requestCode) {
 			case REQUEST_CODE_SCAN:
 				if (resultCode == RESULT_OK) {
-					Bundle bundle = data.getExtras();
-					String resultString = bundle.getString("result");
-					IdObj object = gson.fromJson(resultString, IdObj.class);
-					Log.d(null, object.toString());
+					String resultString = data.getStringExtra("result");
+                    UserInfo friend = gson.fromJson(resultString, UserInfo.class);
 
-					name.setText(object.getName());
-					address.setText(object.getAddress());
-					addition.setText(object.getNotes());
-					phoneList.addAll(object.getTels());
+					name.setText(friend.getName());
+					address.setText(friend.getAddress());
+					addition.setText(friend.getNotes());
+					phoneList.addAll(friend.getTels());
+
+                    MyTask task = new MyTask(friend.getUserId());
+                    task.execute();
+
 					phoneAdapter.notifyDataSetChanged();
 				}
 				break;
 			case REQUEST_CODE_LABEL:
-
 				Bundle bundle = data.getExtras();
 				LabelListObj labelListObj = (LabelListObj) bundle.getSerializable(BundleNames.LABEL_LIST);
-
-				// do nothing if no label chose
-				//on edit contacts, change database in editlabel activity,
-				//so when back to edit contact activity, refresh database isn't needed;
-				// but on new contacts, only change string list in editlabel activity
-				// so when back to add contact activity, refresh database is needed;
 				if (labelListObj.getLabels().size() != 0) {
 					Toast.makeText(this, labelListObj.toString(), Toast.LENGTH_LONG).show();
-					//TODO REFRESH LABEL LIST, and finally insert id_label records into database
+                    labelList.addAll(labelListObj.getLabels());
+                    labelAdapter.notifyDataSetChanged();
 				}
-
 				break;
 			default:
 				break;
 		}
 	}
+
+    private class MyTask extends AsyncTask {
+        String userId;
+
+        public MyTask(String userId) {
+            super();
+            this.userId = userId;
+        }
+
+        @Override
+        protected Object doInBackground(Object[] objects) {
+            UserInfo userInfo = UserInfo.getInstance();
+            return MyApplication.getInstance().getBaiduPush().
+                   PushNotify(
+                           "添加好友",
+                           userInfo.getName(),
+                           userId,
+                           userInfo.getName(),
+                           userInfo.getAddress(),
+                           userInfo.getNotes()
+//                           gson.toJson(userInfo, UserInfo.class)
+                    );
+        }
+    }
 
 	private class MyAdapter extends BaseAdapter {
 
