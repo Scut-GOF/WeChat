@@ -21,6 +21,7 @@ import java.util.List;
 import gof.scut.common.MyApplication;
 import gof.scut.common.utils.ActivityUtils;
 import gof.scut.common.utils.BundleNames;
+import gof.scut.common.utils.Utils;
 import gof.scut.common.utils.database.MainTableUtils;
 import gof.scut.common.utils.popup.PopConfirmUtils;
 import gof.scut.common.utils.popup.TodoOnResult;
@@ -71,6 +72,7 @@ public class AddContactActivity extends RoboActivity {
 	private List<String> labelList;
 	private PhoneListAdapter phoneAdapter;
 	private PhoneListAdapter labelAdapter;
+    private PopConfirmUtils popConfirmUtils;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -86,12 +88,17 @@ public class AddContactActivity extends RoboActivity {
 		gson = MyApplication.getGson();
 
 		phoneList = new ArrayList<>();
-		phoneAdapter = new PhoneListAdapter(mContext , phoneList);
+		phoneAdapter = new PhoneListAdapter(mContext,phoneList,phoneListView);
 		phoneListView.setAdapter(phoneAdapter);
 
 		labelList = new ArrayList<>();
-		labelAdapter = new PhoneListAdapter(mContext , labelList);
+		labelAdapter = new PhoneListAdapter(mContext,labelList,labelListView);
 		labelListView.setAdapter(labelAdapter);
+
+        popConfirmUtils = new PopConfirmUtils();
+        popConfirmUtils.prepare(mContext, R.layout.pop_confirm);
+        popConfirmUtils.initPopupWindow();
+        popConfirmUtils.setTitle(getString(R.string.whether_add_friend));
 	}
 
 	private void initView() {
@@ -112,11 +119,7 @@ public class AddContactActivity extends RoboActivity {
 				} else if (phoneList.isEmpty()) {
 
 					Toast.makeText(mContext, R.string.no_phone, Toast.LENGTH_SHORT).show();
-				} else if (TextUtils.isEmpty(address.getText())) {
-
-					Toast.makeText(mContext, R.string.no_address, Toast.LENGTH_SHORT).show();
 				} else {
-					//TODO 一些细节判断
 					mainTableUtils.insertAll(
 							name.getText().toString(),
 							address.getText().toString(),
@@ -145,8 +148,9 @@ public class AddContactActivity extends RoboActivity {
 			@Override
 			public void onClick(View v) {
 				String phoneNumber = phone.getText().toString();
-				if (checkPhone(phoneNumber)) {
+				if (Utils.checkPhone(mContext,phoneNumber)) {
 					phoneList.add(phoneNumber);
+                    Utils.setListViewHeightBasedOnChildren(phoneListView);
 					phoneAdapter.notifyDataSetChanged();
 					phone.setText("");
 				}
@@ -167,35 +171,18 @@ public class AddContactActivity extends RoboActivity {
 		});
 	}
 
-	//检查手机号码格式
-	private boolean checkPhone(String phoneNumber) {
-		String telRegex = "[1]\\d{10}";//第一位是1，后10位为0-9任意数字，共计11位；
-
-		if (TextUtils.isEmpty(phoneNumber))
-			return false;
-
-		if (!phoneNumber.matches(telRegex)) {
-			Toast.makeText(mContext, R.string.error_phone_format, Toast.LENGTH_SHORT).show();
-			return false;
-		}
-
-		return true;
-	}
-
     @Override
     protected void onNewIntent(final Intent intent) {
-        PopConfirmUtils popConfirmUtils = new PopConfirmUtils();
-        popConfirmUtils.prepare(mContext, R.layout.pop_confirm);
-        popConfirmUtils.initPopupWindow();
-        popConfirmUtils.setTitle(getString(R.string.whether_add_friend));
         popConfirmUtils.initTodo(new TodoOnResult() {
             @Override
             public void doOnPosResult(String[] params) {
+
                 name.setText(intent.getStringExtra("name"));
                 address.setText(intent.getStringExtra("address"));
                 addition.setText(intent.getStringExtra("addition"));
                 String phones = intent.getStringExtra("phone");
                 Collections.addAll(phoneList, phones.substring(1, phones.length() - 1).split(", "));
+                Utils.setListViewHeightBasedOnChildren(phoneListView);
                 phoneAdapter.notifyDataSetChanged();
             }
 
@@ -207,23 +194,36 @@ public class AddContactActivity extends RoboActivity {
     }
 
 	@Override
-	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+	protected void onActivityResult(int requestCode, int resultCode, final Intent data) {
 		super.onActivityResult(requestCode, resultCode, data);
 
 		switch (requestCode) {
 			case REQUEST_CODE_SCAN:
 				if (resultCode == RESULT_OK) {
-					String resultString = data.getStringExtra("result");
-                    UserInfo friend = gson.fromJson(resultString, UserInfo.class);
 
-					name.setText(friend.getName());
-					address.setText(friend.getAddress());
-					addition.setText(friend.getNotes());
-					phoneList.addAll(friend.getTels());
-                    phoneAdapter.notifyDataSetChanged();
+                    popConfirmUtils.initTodo(new TodoOnResult() {
+                        @Override
+                        public void doOnPosResult(String[] params) {
 
-                    PushTask task = new PushTask(friend.getUserId());
-                    task.execute(1000);
+                            String resultString = data.getStringExtra("result");
+                            UserInfo friend = gson.fromJson(resultString, UserInfo.class);
+                            name.setText(friend.getName());
+                            address.setText(friend.getAddress());
+                            addition.setText(friend.getNotes());
+                            phoneList.addAll(friend.getTels());
+                            Utils.setListViewHeightBasedOnChildren(phoneListView);
+                            phoneAdapter.notifyDataSetChanged();
+
+                            if(! TextUtils.isEmpty(friend.getUserId())){
+                                PushTask task = new PushTask(friend.getUserId());
+                                task.execute(1000);
+                            }
+                        }
+                        @Override
+                        public void doOnNegResult(String[] params) {
+                        }
+                    });
+                    popConfirmUtils.popWindowAtCenter(R.id.phone, R.id.confirm_title);
 				}
 				break;
 			case REQUEST_CODE_LABEL:
@@ -232,6 +232,7 @@ public class AddContactActivity extends RoboActivity {
 				if (labelListObj.getLabels().size() != 0) {
 					Toast.makeText(this, labelListObj.toString(), Toast.LENGTH_LONG).show();
                     labelList.addAll(labelListObj.getLabels());
+                    Utils.setListViewHeightBasedOnChildren(labelListView);
                     labelAdapter.notifyDataSetChanged();
 				}
 				break;
