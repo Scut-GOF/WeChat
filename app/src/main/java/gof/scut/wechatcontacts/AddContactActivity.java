@@ -19,12 +19,14 @@ import java.util.Collections;
 import java.util.List;
 
 import gof.scut.common.MyApplication;
+import gof.scut.common.utils.ActivityUtils;
 import gof.scut.common.utils.BundleNames;
 import gof.scut.common.utils.database.MainTableUtils;
 import gof.scut.common.utils.popup.PopConfirmUtils;
 import gof.scut.common.utils.popup.TodoOnResult;
 import gof.scut.cwh.models.adapter.PhoneListAdapter;
 import gof.scut.cwh.models.object.ActivityConstants;
+import gof.scut.cwh.models.object.IdObj;
 import gof.scut.cwh.models.object.LabelListObj;
 import gof.scut.cwh.models.object.Signal;
 import gof.scut.cwh.models.object.UserInfo;
@@ -104,35 +106,38 @@ public class AddContactActivity extends RoboActivity {
 		save.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
-                if(TextUtils.isEmpty(name.getText())){
+				if (TextUtils.isEmpty(name.getText())) {
 
-                    Toast.makeText(mContext,R.string.no_name,Toast.LENGTH_SHORT).show();
-                }else if(phoneList.isEmpty()){
+					Toast.makeText(mContext, R.string.no_name, Toast.LENGTH_SHORT).show();
+				} else if (phoneList.isEmpty()) {
 
-                    Toast.makeText(mContext,R.string.no_phone,Toast.LENGTH_SHORT).show();
-                }else if(TextUtils.isEmpty(address.getText())){
+					Toast.makeText(mContext, R.string.no_phone, Toast.LENGTH_SHORT).show();
+				} else if (TextUtils.isEmpty(address.getText())) {
 
-                    Toast.makeText(mContext,R.string.no_address,Toast.LENGTH_SHORT).show();
-                }else{
-                    //TODO 保存数据库
-                    mainTableUtils.insertAll(
-                            name.getText().toString(),
-                            address.getText().toString(),
-                            addition.getText().toString()
-                    );
-                }
+					Toast.makeText(mContext, R.string.no_address, Toast.LENGTH_SHORT).show();
+				} else {
+					//TODO 一些细节判断
+					mainTableUtils.insertAll(
+							name.getText().toString(),
+							address.getText().toString(),
+							addition.getText().toString()
+					);
+					int id = mainTableUtils.getMaxId();
+					IdObj obj = new IdObj(id);
+					ActivityUtils.ActivitySkipWithObject(mContext, ContactInfoActivity.class, BundleNames.ID_OBJ, obj);
+				}
 			}
 		});
 
         //点击按钮跳转到二维码扫描界面，这里用的是startActivityForResult跳转
         findViewById(R.id.scan_layout).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent();
-                intent.setClass(mContext, gof.scut.common.zixng.codescan.MipcaActivityCapture.class);
-                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                startActivityForResult(intent, REQUEST_CODE_SCAN);
-            }
+	        @Override
+	        public void onClick(View v) {
+		        Intent intent = new Intent();
+		        intent.setClass(mContext, gof.scut.common.zixng.codescan.MipcaActivityCapture.class);
+		        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+		        startActivityForResult(intent, REQUEST_CODE_SCAN);
+	        }
         });
 
 		//add phone number
