@@ -7,9 +7,10 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.TextView;
-
+import android.widget.*;
 import java.util.List;
 
+import gof.scut.common.utils.Utils;
 import gof.scut.wechatcontacts.R;
 
 /**
@@ -20,10 +21,12 @@ import gof.scut.wechatcontacts.R;
 public class PhoneListAdapter extends BaseAdapter {
     private Context mContext;
     private List<String> data;
+    private ListView listView;
 
-    public PhoneListAdapter(Context context , List<String> datas) {
+    public PhoneListAdapter(Context context , List<String> datas ,ListView listView) {
         this.mContext = context;
         data = datas;
+        this.listView = listView;
     }
 
     @Override
@@ -67,6 +70,7 @@ public class PhoneListAdapter extends BaseAdapter {
             @Override
             public void onClick(View v) {
                 data.remove(position);
+                Utils.setListViewHeightBasedOnChildren(listView);
                 PhoneListAdapter.this.notifyDataSetChanged();
             }
         });
