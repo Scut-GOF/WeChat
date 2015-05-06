@@ -85,6 +85,7 @@ public class LabelTableUtils {
 		value.put(TBLabelConstants.LABEL, labelObj.getLabelName());
 		value.put(TBLabelConstants.LABEL_ICON, labelObj.getIconPath());
 		value.put(TBLabelConstants.MEMBER_COUNT, labelObj.getMemCount());
+		labelObj.setLabelName(StringUtils.recoverWordFromDB(labelObj.getLabelName()));
 		long status;
 		try {
 			status = db.update(TBLabelConstants.TABLE_NAME, value,

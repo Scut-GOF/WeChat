@@ -121,25 +121,25 @@ public class SearchResultAdapter extends BaseAdapter {
 					matchInfo = "Tel:" + matchInfo;
 					return StringUtils.simpleHighLight(keyword, matchInfo, "A4005B", "636362");
 				}
-		} else {
-			matchInfo = result.getLabel();
-			if (matchInfo != null) {
-				if (matchInfo.toLowerCase().contains(keyword)) {
-					matchInfo = "Label:" + matchInfo;
-					return StringUtils.simpleHighLight(keyword, matchInfo, "A4005B", "636362");
-				}
-			}
-			matchInfo = result.getAddress();
+		}
+		matchInfo = result.getLabel();
+		if (matchInfo != null) {
 			if (matchInfo.toLowerCase().contains(keyword)) {
-				matchInfo = "Address:" + matchInfo;
-				return StringUtils.simpleHighLight(keyword, matchInfo, "A4005B", "636362");
-			}
-			matchInfo = result.getNote();
-			if (matchInfo.toLowerCase().contains(keyword)) {
-				matchInfo = "Notes:" + matchInfo;
+				matchInfo = "Label:" + matchInfo;
 				return StringUtils.simpleHighLight(keyword, matchInfo, "A4005B", "636362");
 			}
 		}
+		matchInfo = result.getAddress();
+		if (matchInfo.toLowerCase().contains(keyword)) {
+			matchInfo = "Address:" + matchInfo;
+			return StringUtils.simpleHighLight(keyword, matchInfo, "A4005B", "636362");
+		}
+		matchInfo = result.getNote();
+		if (matchInfo.toLowerCase().contains(keyword)) {
+			matchInfo = "Notes:" + matchInfo;
+			return StringUtils.simpleHighLight(keyword, matchInfo, "A4005B", "636362");
+		}
+
 		return Html.fromHtml("");
 	}
 }
