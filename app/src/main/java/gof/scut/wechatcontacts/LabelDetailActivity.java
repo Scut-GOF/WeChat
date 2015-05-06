@@ -112,14 +112,18 @@ public class LabelDetailActivity extends Activity implements View.OnClickListene
 			@Override
 			public void doOnPosResult(String[] params) {
 				//add label id
-				labelObj.setLabelName(params[0]);
-				labelObj.setIconPath(params[1]);
+				if (!params[0].equals("")) {
+					labelObj.setLabelName(params[0]);
+					labelObj.setIconPath(params[1]);
 
-				long state = labelTableUtils.updateAllWithLabel(labelObj, labelName.getText().toString());
-				if (state < 0) Log.e("LabelsActivity", "update label failed");
-				labelIcon.setImageBitmap(BitmapUtils.decodeBitmapFromPath(labelObj.getIconPath()));
-				labelName.setText(labelObj.getLabelName());
-				popEditLabelUtils.dismissWindow();
+					long state = labelTableUtils.updateAllWithLabel(labelObj, labelName.getText().toString());
+					if (state < 0) Log.e("LabelsActivity", "update label failed");
+					labelIcon.setImageBitmap(BitmapUtils.decodeBitmapFromPath(labelObj.getIconPath()));
+					labelName.setText(labelObj.getLabelName());
+					popEditLabelUtils.dismissWindow();
+				} else {
+					Toast.makeText(LabelDetailActivity.this, "标签名不能为空", Toast.LENGTH_LONG).show();
+				}
 			}
 
 			@Override

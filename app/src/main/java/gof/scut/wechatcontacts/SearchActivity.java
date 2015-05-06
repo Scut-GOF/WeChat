@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.view.KeyEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -142,22 +143,21 @@ public class SearchActivity extends Activity implements View.OnClickListener {
 
 	}
 
-	//	@Override
+//	@Override
 //	protected void onPause() {
 //		super.onPause();
-//		CursorUtils.closeExistsCursor(cursorResult);
-//		mainTableUtils.closeDataBase();
+//		returnEmptyObj();
 //	}
 //
 //	protected void onStop() {
 //		super.onStop();
-//		CursorUtils.closeExistsCursor(cursorResult);
-//		mainTableUtils.closeDataBase();
+//		returnEmptyObj();
 //	}
-//
+
 	@Override
 	protected void onDestroy() {
 		super.onDestroy();
+//		returnEmptyObj();
 		semaphore.release();
 	}
 
@@ -165,13 +165,31 @@ public class SearchActivity extends Activity implements View.OnClickListener {
 	public void onClick(View v) {
 		switch (v.getId()) {
 			case R.id.cancel:
-				if (getFromActivity() == ActivityConstants.LABEL_DETAIL_ACTIVITY) {
-					ActivityUtils.setActivityResult(
-							this, ActivityConstants.RESULT_ADD_MEMBER, BundleNames.ID_OBJ,
-							new IdObj(0));
-				}
+				returnEmptyObj();
 				finish();
 				break;
 		}
 	}
+
+	private void returnEmptyObj() {
+		if (getFromActivity() == ActivityConstants.LABEL_DETAIL_ACTIVITY) {
+			ActivityUtils.setActivityResult(
+					this, ActivityConstants.RESULT_ADD_MEMBER, BundleNames.ID_OBJ,
+					new IdObj(0));
+		}
+		semaphore.release();
+
+	}
+
+	public boolean onKeyDown(int keyCode, KeyEvent event) {
+
+		if (keyCode == KeyEvent.KEYCODE_BACK
+				&& event.getRepeatCount() == 0) {
+			returnEmptyObj();
+			finish();
+			return true;
+		}
+		return super.onKeyDown(keyCode, event);
+	}
+
 }

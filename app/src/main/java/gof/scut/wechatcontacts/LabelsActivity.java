@@ -121,20 +121,23 @@ public class LabelsActivity extends Activity implements View.OnClickListener {
 				final String addLabelName, addLabelIcon;
 				addLabelName = labelName.getText().toString();
 				addLabelIcon = pathSelectedToAdd;
+				if (!addLabelName.equals("")) {
+					//check if label exists
+					int labelCount = labelTableUtils.selectMemCount(addLabelName);
+					if (labelCount >= 0) {
+						Toast.makeText(LabelsActivity.this, "标签已存在，请指定其他标签名", Toast.LENGTH_LONG).show();
+						return;
+					}
 
-				//check if label exists
-				int labelCount = labelTableUtils.selectMemCount(addLabelName);
-				if (labelCount >= 0) {
-					Toast.makeText(LabelsActivity.this, "标签已存在，请指定其他标签名", Toast.LENGTH_LONG).show();
-					return;
+
+					long state = labelTableUtils.insertAll(addLabelName, addLabelIcon);
+					if (state < 0) Log.e("LabelsActivity", "add label failed");
+					addLabelWindow.dismiss();
+					//initGrids();
+					initList();
+				} else {
+					Toast.makeText(LabelsActivity.this, "标签名不能为空", Toast.LENGTH_LONG).show();
 				}
-
-
-				long state = labelTableUtils.insertAll(addLabelName, addLabelIcon);
-				if (state < 0) Log.e("LabelsActivity", "add label failed");
-				addLabelWindow.dismiss();
-				//initGrids();
-				initList();
 			}
 		});
 		addLabelView.setFocusable(true);
