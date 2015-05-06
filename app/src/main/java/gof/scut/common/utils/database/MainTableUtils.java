@@ -246,7 +246,7 @@ public class MainTableUtils {
 						+ " union "
 						+ "select " + TBMainConstants.FTS_TABLE_NAME + ".*," + TBIDLabelConstants.LABEL + ",'' " + TBTelConstants.TEL
 						+ " from (select " + TBIDLabelConstants.ID + " lid," + TBIDLabelConstants.LABEL + " from "
-						+ TBIDLabelConstants.FTS_TABLE_NAME + " where " + TBIDLabelConstants.FTS_TABLE_NAME + " match ?) "
+						+ TBIDLabelConstants.FTS_TABLE_NAME + " where " + TBIDLabelConstants.LABEL + " match ?) "
 						+ "left join " + TBMainConstants.FTS_TABLE_NAME
 						+ " on " + TBMainConstants.FTS_TABLE_NAME + "." + TBMainConstants.ID + "= lid group by lid"
 						+ " )group by " + TBMainConstants.ID,
@@ -328,14 +328,14 @@ public class MainTableUtils {
 				+ " union "
 				+ "select " + TBMainConstants.FTS_TABLE_NAME + ".*," + TBIDLabelConstants.LABEL + ",'' " + TBTelConstants.TEL
 				+ " from (select " + TBIDLabelConstants.ID + " lid, " + TBIDLabelConstants.LABEL + " from "
-				+ TBIDLabelConstants.FTS_TABLE_NAME + " where " + TBIDLabelConstants.FTS_TABLE_NAME + " match ?) "
+				+ TBIDLabelConstants.FTS_TABLE_NAME + " where " + TBIDLabelConstants.LABEL + " match ?) "
 				+ "left join " + TBMainConstants.FTS_TABLE_NAME
 				+ " on " + TBMainConstants.FTS_TABLE_NAME + "." + TBMainConstants.ID + "= lid"
 				+ " group by lid"
 				+ " union "
 				+ "select " + TBMainConstants.FTS_TABLE_NAME + ".*,'' " + TBIDLabelConstants.LABEL + ", " + TBTelConstants.TEL
 				+ " from (select " + TBTelConstants.ID + " tid," + TBTelConstants.TEL + " from "
-				+ TBTelConstants.FTS_TABLE_NAME + " where " + TBTelConstants.FTS_TABLE_NAME + " match ?) "
+				+ TBTelConstants.FTS_TABLE_NAME + " where " + TBTelConstants.TEL + " match ?) "
 				+ "left join " + TBMainConstants.FTS_TABLE_NAME
 				+ " on " + TBMainConstants.FTS_TABLE_NAME + "." + TBMainConstants.ID + "= tid"
 				+ " group by tid)"

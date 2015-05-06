@@ -153,7 +153,7 @@ public class StringUtils {
 		//keyword should be lower case
 		int kwLength = keyword.length();
 		if (kwLength == 0)
-			return Html.fromHtml("<font color=\"#" + generalColor + "\">" + str + "</font>");
+			return Html.fromHtml(str);
 		for (int i = 0; i < str.length(); i++) {
 			if ((str.charAt(i) == keyword.charAt(0) || str.charAt(i) == (keyword.charAt(0) - 32)) && (StringCmp(str.toLowerCase(), keyword, i))) {
 
@@ -174,11 +174,11 @@ public class StringUtils {
 					if (pinyin == null) {
 //						Log.d("NULLPINYIN",str.charAt(i)+"");
 //						Log.d("NULLPINYIN",str);
-						result.append("<font color=\"#");
-						result.append(generalColor);
-						result.append("\">");
+//						result.append("<font color=\"#");
+//						result.append(generalColor);
+//						result.append("\">");
 						result.append(str.charAt(i));
-						result.append("</font>");
+//						result.append("</font>");
 					} else if (pinyin.contains(keyword) || keyword.contains(pinyin)
 							|| keyword.contains(pinyin.charAt(0) + "")) {
 						result.append("<font color=\"#");
@@ -187,18 +187,18 @@ public class StringUtils {
 						result.append(str.charAt(i));
 						result.append("</font>");
 					} else {
-						result.append("<font color=\"#");
-						result.append(generalColor);
-						result.append("\">");
+//						result.append("<font color=\"#");
+//						result.append(generalColor);
+//						result.append("\">");
 						result.append(str.charAt(i));
-						result.append("</font>");
+//						result.append("</font>");
 					}
 				} else {
-					result.append("<font color=\"#");
-					result.append(generalColor);
-					result.append("\">");
+//					result.append("<font color=\"#");
+//					result.append(generalColor);
+//					result.append("\">");
 					result.append(str.charAt(i));
-					result.append("</font>");
+//					result.append("</font>");
 				}
 			}
 		}
@@ -210,7 +210,7 @@ public class StringUtils {
 		//keyword should be lower case
 		int kwLength = keyword.length();
 		if (kwLength == 0)
-			return Html.fromHtml("<font color=\"#" + generalColor + "\">" + str + "</font>");
+			return Html.fromHtml(str);
 		for (int i = 0; i < str.length(); i++) {
 			if ((str.charAt(i) == keyword.charAt(0) || str.charAt(i) == (keyword.charAt(0) - 32)) && (StringCmp(str.toLowerCase(), keyword, i))) {
 
@@ -226,11 +226,11 @@ public class StringUtils {
 
 
 			} else {
-				result.append("<font color=\"#");
-				result.append(generalColor);
-				result.append("\">");
+//				result.append("<font color=\"#");
+//				result.append(generalColor);
+//				result.append("\">");
 				result.append(str.charAt(i));
-				result.append("</font>");
+//				result.append("</font>");
 
 			}
 		}

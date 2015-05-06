@@ -68,6 +68,7 @@ public class MainActivity extends Activity implements View.OnClickListener {
 		btAdd = (Button) findViewById(R.id.bt_add);
 		btGroup = (Button) findViewById(R.id.bt_group);
 		btMe = (Button) findViewById(R.id.bt_me);
+
 	}
 
 	private void setListener() {
