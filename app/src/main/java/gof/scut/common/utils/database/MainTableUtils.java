@@ -389,6 +389,18 @@ public class MainTableUtils {
 		return results;
 	}
 
+	public int getMaxId() {
+		closeDataBase();
+		db = dataBaseHelper.getReadableDatabase();
+		Cursor cursor;
+		cursor = db.rawQuery("select max(rowid) from " + TBMainConstants.FTS_TABLE_NAME, null);
+		cursor.moveToPosition(0);
+		int id = cursor.getInt(0);
+		cursor.close();
+		closeDataBase();
+		return id;
+	}
+
 	public void closeDataBase() {
 		if (db == null) return;
 		if (db.isOpen()) db.close();
