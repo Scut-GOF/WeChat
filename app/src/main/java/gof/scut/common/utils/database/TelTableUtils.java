@@ -5,6 +5,11 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import gof.scut.common.utils.StringUtils;
+
 
 public class TelTableUtils {
 	private static DataBaseHelper dataBaseHelper;
@@ -119,18 +124,40 @@ public class TelTableUtils {
 		return status;
 	}
 
+    //query
+    public Cursor selectTelWithID(String ID) {
+        closeDataBase();
+        db = dataBaseHelper.getReadableDatabase();
+        Cursor c;
+        c = db.rawQuery("select " + TBTelConstants.TEL + " from "
+                        + TBTelConstants.FTS_TABLE_NAME + " where " + TBTelConstants.ID + " match ?",
+                new String[]{"'" + ID + "'"});
+//		c = db.query(TBTelConstants.TABLE_NAME, new String[]{TBTelConstants.TEL},
+//				TBTelConstants.ID + " = ?", new String[]{ID}, null, null, null);
+        //db.close();
+        return c;
+    }
+
 	//query
-	public Cursor selectTelWithID(String ID) {
+	public List<String> selectTelListWithID(String ID) {
 		closeDataBase();
 		db = dataBaseHelper.getReadableDatabase();
 		Cursor c;
 		c = db.rawQuery("select " + TBTelConstants.TEL + " from "
 						+ TBTelConstants.FTS_TABLE_NAME + " where " + TBTelConstants.ID + " match ?",
 				new String[]{"'" + ID + "'"});
-//		c = db.query(TBTelConstants.TABLE_NAME, new String[]{TBTelConstants.TEL},
-//				TBTelConstants.ID + " = ?", new String[]{ID}, null, null, null);
-		//db.close();
-		return c;
+
+        List<String> phones = new ArrayList<>();
+        for (int i = 0; i < c.getCount(); i++) {
+            c.moveToPosition(i);
+            phones.add(StringUtils.recoverWordFromDB(
+                            c.getString(c.getColumnIndex(TBTelConstants.TEL))
+                    )
+            );
+        }
+        c.close();
+        closeDataBase();
+        return phones;
 	}
 
 //	public Cursor selectIDWithTel(String tel) {
