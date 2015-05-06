@@ -106,7 +106,7 @@
                     android:layout_below="@id/Phone_text"
                     android:id="@+id/phoneList"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_height="80dp"
                     android:scrollbars="none"
                     android:divider="@null"
                     android:dividerHeight="1dp">

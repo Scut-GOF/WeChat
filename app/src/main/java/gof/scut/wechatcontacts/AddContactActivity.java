@@ -71,6 +71,7 @@ public class AddContactActivity extends RoboActivity {
 	private List<String> labelList;
 	private PhoneListAdapter phoneAdapter;
 	private PhoneListAdapter labelAdapter;
+    private PopConfirmUtils popConfirmUtils;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -92,6 +93,11 @@ public class AddContactActivity extends RoboActivity {
 		labelList = new ArrayList<>();
 		labelAdapter = new PhoneListAdapter(mContext , labelList);
 		labelListView.setAdapter(labelAdapter);
+
+        popConfirmUtils = new PopConfirmUtils();
+        popConfirmUtils.prepare(mContext, R.layout.pop_confirm);
+        popConfirmUtils.initPopupWindow();
+        popConfirmUtils.setTitle(getString(R.string.whether_add_friend));
 	}
 
 	private void initView() {
@@ -116,7 +122,6 @@ public class AddContactActivity extends RoboActivity {
 
 					Toast.makeText(mContext, R.string.no_address, Toast.LENGTH_SHORT).show();
 				} else {
-					//TODO 一些细节判断
 					mainTableUtils.insertAll(
 							name.getText().toString(),
 							address.getText().toString(),
@@ -184,10 +189,6 @@ public class AddContactActivity extends RoboActivity {
 
     @Override
     protected void onNewIntent(final Intent intent) {
-        PopConfirmUtils popConfirmUtils = new PopConfirmUtils();
-        popConfirmUtils.prepare(mContext, R.layout.pop_confirm);
-        popConfirmUtils.initPopupWindow();
-        popConfirmUtils.setTitle(getString(R.string.whether_add_friend));
         popConfirmUtils.initTodo(new TodoOnResult() {
             @Override
             public void doOnPosResult(String[] params) {
@@ -207,23 +208,35 @@ public class AddContactActivity extends RoboActivity {
     }
 
 	@Override
-	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+	protected void onActivityResult(int requestCode, int resultCode, final Intent data) {
 		super.onActivityResult(requestCode, resultCode, data);
 
 		switch (requestCode) {
 			case REQUEST_CODE_SCAN:
 				if (resultCode == RESULT_OK) {
-					String resultString = data.getStringExtra("result");
-                    UserInfo friend = gson.fromJson(resultString, UserInfo.class);
 
-					name.setText(friend.getName());
-					address.setText(friend.getAddress());
-					addition.setText(friend.getNotes());
-					phoneList.addAll(friend.getTels());
-                    phoneAdapter.notifyDataSetChanged();
+                    popConfirmUtils.initTodo(new TodoOnResult() {
+                        @Override
+                        public void doOnPosResult(String[] params) {
 
-                    PushTask task = new PushTask(friend.getUserId());
-                    task.execute(1000);
+                            String resultString = data.getStringExtra("result");
+                            UserInfo friend = gson.fromJson(resultString, UserInfo.class);
+                            name.setText(friend.getName());
+                            address.setText(friend.getAddress());
+                            addition.setText(friend.getNotes());
+                            phoneList.addAll(friend.getTels());
+                            phoneAdapter.notifyDataSetChanged();
+
+                            if(! TextUtils.isEmpty(friend.getUserId())){
+                                PushTask task = new PushTask(friend.getUserId());
+                                task.execute(1000);
+                            }
+                        }
+                        @Override
+                        public void doOnNegResult(String[] params) {
+                        }
+                    });
+                    popConfirmUtils.popWindowAtCenter(R.id.phone, R.id.confirm_title);
 				}
 				break;
 			case REQUEST_CODE_LABEL:
