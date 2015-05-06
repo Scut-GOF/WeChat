@@ -5,12 +5,7 @@ import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.text.TextUtils;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
-import android.view.inputmethod.InputMethodManager;
-import android.widget.BaseAdapter;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
@@ -20,13 +15,15 @@ import android.widget.Toast;
 import com.google.gson.Gson;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
-
-import javax.inject.Inject;
 
 import gof.scut.common.MyApplication;
 import gof.scut.common.utils.BundleNames;
 import gof.scut.common.utils.database.MainTableUtils;
+import gof.scut.common.utils.popup.PopConfirmUtils;
+import gof.scut.common.utils.popup.TodoOnResult;
+import gof.scut.cwh.models.adapter.PhoneListAdapter;
 import gof.scut.cwh.models.object.ActivityConstants;
 import gof.scut.cwh.models.object.LabelListObj;
 import gof.scut.cwh.models.object.Signal;
@@ -37,14 +34,13 @@ import roboguice.inject.InjectView;
 public class AddContactActivity extends RoboActivity {
 
 	//constant
+    private final static String TAG = AddContactActivity.class.getSimpleName();
 	private final Context mContext = AddContactActivity.this;
 	private final static int REQUEST_CODE_SCAN = 1;
 	private final static int REQUEST_CODE_LABEL = 2;
 
 	private MainTableUtils mainTableUtils;
 	private Gson gson;
-	@Inject
-	InputMethodManager imm;
 
 	//views
 	@InjectView(R.id.cancel)
@@ -71,15 +67,13 @@ public class AddContactActivity extends RoboActivity {
 	//values
 	private List<String> phoneList;
 	private List<String> labelList;
-	private MyAdapter phoneAdapter;
-	private MyAdapter labelAdapter;
-
+	private PhoneListAdapter phoneAdapter;
+	private PhoneListAdapter labelAdapter;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_add_contact);
-
 		init();
 
 		initView();
@@ -90,27 +84,15 @@ public class AddContactActivity extends RoboActivity {
 		gson = MyApplication.getGson();
 
 		phoneList = new ArrayList<>();
-		phoneAdapter = new MyAdapter(phoneList);
+		phoneAdapter = new PhoneListAdapter(mContext , phoneList);
 		phoneListView.setAdapter(phoneAdapter);
 
 		labelList = new ArrayList<>();
-		labelAdapter = new MyAdapter(labelList);
+		labelAdapter = new PhoneListAdapter(mContext , labelList);
 		labelListView.setAdapter(labelAdapter);
 	}
 
 	private void initView() {
-		//点击按钮跳转到二维码扫描界面，这里用的是startActivityForResult跳转
-		//扫描完了之后调到该界面
-		findViewById(R.id.scan_layout).setOnClickListener(new View.OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				Intent intent = new Intent();
-				intent.setClass(mContext, gof.scut.common.zixng.codescan.MipcaActivityCapture.class);
-				intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-				startActivityForResult(intent, REQUEST_CODE_SCAN);
-			}
-		});
-
 		cancel.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
@@ -122,14 +104,36 @@ public class AddContactActivity extends RoboActivity {
 		save.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
-                //TODO 判断
-				mainTableUtils.insertAll(
-						name.getText().toString(),
-						address.getText().toString(),
-						addition.getText().toString()
-				);
+                if(TextUtils.isEmpty(name.getText())){
+
+                    Toast.makeText(mContext,R.string.no_name,Toast.LENGTH_SHORT).show();
+                }else if(phoneList.isEmpty()){
+
+                    Toast.makeText(mContext,R.string.no_phone,Toast.LENGTH_SHORT).show();
+                }else if(TextUtils.isEmpty(address.getText())){
+
+                    Toast.makeText(mContext,R.string.no_address,Toast.LENGTH_SHORT).show();
+                }else{
+                    //TODO 保存数据库
+                    mainTableUtils.insertAll(
+                            name.getText().toString(),
+                            address.getText().toString(),
+                            addition.getText().toString()
+                    );
+                }
 			}
 		});
+
+        //点击按钮跳转到二维码扫描界面，这里用的是startActivityForResult跳转
+        findViewById(R.id.scan_layout).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent();
+                intent.setClass(mContext, gof.scut.common.zixng.codescan.MipcaActivityCapture.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                startActivityForResult(intent, REQUEST_CODE_SCAN);
+            }
+        });
 
 		//add phone number
 		addPhone.setOnClickListener(new View.OnClickListener() {
@@ -166,7 +170,7 @@ public class AddContactActivity extends RoboActivity {
 			return false;
 
 		if (!phoneNumber.matches(telRegex)) {
-			Toast.makeText(mContext, "手机号码格式错误!", Toast.LENGTH_SHORT).show();
+			Toast.makeText(mContext, R.string.error_phone_format, Toast.LENGTH_SHORT).show();
 			return false;
 		}
 
@@ -174,15 +178,27 @@ public class AddContactActivity extends RoboActivity {
 	}
 
     @Override
-    protected void onNewIntent(Intent intent) {
+    protected void onNewIntent(final Intent intent) {
+        PopConfirmUtils popConfirmUtils = new PopConfirmUtils();
+        popConfirmUtils.prepare(mContext, R.layout.pop_confirm);
+        popConfirmUtils.initPopupWindow();
+        popConfirmUtils.setTitle(getString(R.string.whether_add_friend));
+        popConfirmUtils.initTodo(new TodoOnResult() {
+            @Override
+            public void doOnPosResult(String[] params) {
+                name.setText(intent.getStringExtra("name"));
+                address.setText(intent.getStringExtra("address"));
+                addition.setText(intent.getStringExtra("addition"));
+                String phones = intent.getStringExtra("phone");
+                Collections.addAll(phoneList, phones.substring(1, phones.length() - 1).split(", "));
+                phoneAdapter.notifyDataSetChanged();
+            }
 
-        Toast.makeText(mContext,"应该弹出选择框",Toast.LENGTH_SHORT).show();
-
-        name.setText( intent.getStringExtra("name") );
-        address.setText(intent.getStringExtra("address"));
-        addition.setText(intent.getStringExtra("addition"));
-//        phoneList.addAll(friend.getTels());
-//        phoneAdapter.notifyDataSetChanged();
+            @Override
+            public void doOnNegResult(String[] params) {
+            }
+        });
+        popConfirmUtils.popWindowAtCenter(R.id.phone, R.id.confirm_title);
     }
 
 	@Override
@@ -199,11 +215,10 @@ public class AddContactActivity extends RoboActivity {
 					address.setText(friend.getAddress());
 					addition.setText(friend.getNotes());
 					phoneList.addAll(friend.getTels());
+                    phoneAdapter.notifyDataSetChanged();
 
-                    MyTask task = new MyTask(friend.getUserId());
-                    task.execute();
-
-					phoneAdapter.notifyDataSetChanged();
+                    PushTask task = new PushTask(friend.getUserId());
+                    task.execute(1000);
 				}
 				break;
 			case REQUEST_CODE_LABEL:
@@ -220,10 +235,10 @@ public class AddContactActivity extends RoboActivity {
 		}
 	}
 
-    private class MyTask extends AsyncTask {
+    private class PushTask extends AsyncTask {
         String userId;
 
-        public MyTask(String userId) {
+        public PushTask(String userId) {
             super();
             this.userId = userId;
         }
@@ -231,71 +246,17 @@ public class AddContactActivity extends RoboActivity {
         @Override
         protected Object doInBackground(Object[] objects) {
             UserInfo userInfo = UserInfo.getInstance();
+
             return MyApplication.getInstance().getBaiduPush().
                    PushNotify(
-                           "添加好友",
+                           getResources().getString(R.string.add_friend),
                            userInfo.getName(),
                            userId,
                            userInfo.getName(),
                            userInfo.getAddress(),
-                           userInfo.getNotes()
-//                           gson.toJson(userInfo, UserInfo.class)
+                           userInfo.getNotes(),
+                           userInfo.getTels().toString()
                     );
         }
     }
-
-	private class MyAdapter extends BaseAdapter {
-
-		private List<String> data;
-
-		public MyAdapter(List<String> datas) {
-			data = datas;
-		}
-
-		@Override
-		public int getCount() {
-			return data.size();
-		}
-
-		@Override
-		public Object getItem(int position) {
-			return data.get(position);
-		}
-
-		@Override
-		public long getItemId(int position) {
-			return position;
-		}
-
-		@Override
-		public View getView(final int position, View convertView, ViewGroup parent) {
-			ViewHolder holder;
-			if (convertView == null) {
-				holder = new ViewHolder();
-				convertView = LayoutInflater.from(mContext).inflate(R.layout.cell_edit_member_list, parent, false);
-				holder.name = (TextView) convertView.findViewById(R.id.name);
-				holder.remove = (Button) convertView.findViewById(R.id.remove_member);
-				convertView.setTag(holder);
-			} else {
-				holder = (ViewHolder) convertView.getTag();
-			}
-
-			holder.name.setText(data.get(position));
-			holder.remove.setOnClickListener(new View.OnClickListener() {
-				@Override
-				public void onClick(View v) {
-					data.remove(position);
-					MyAdapter.this.notifyDataSetChanged();
-				}
-			});
-
-			return convertView;
-		}
-	}
-
-	static class ViewHolder {
-		Button remove;
-		TextView name;
-	}
-
 }

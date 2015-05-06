@@ -4,11 +4,7 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.text.TextUtils;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
-import android.widget.BaseAdapter;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
@@ -24,10 +20,9 @@ import com.google.zxing.qrcode.QRCodeWriter;
 
 import java.util.ArrayList;
 import java.util.Hashtable;
-import java.util.List;
 
 import gof.scut.common.MyApplication;
-import gof.scut.common.utils.Log;
+import gof.scut.cwh.models.adapter.PhoneListAdapter;
 import gof.scut.cwh.models.object.UserInfo;
 import roboguice.activity.RoboActivity;
 import roboguice.inject.InjectView;
@@ -59,9 +54,10 @@ public class MyInfoActivity extends RoboActivity {
     private EditText addition;
 
     //values
+    private Gson gson;
     private UserInfo userInfo;
     private ArrayList<String> phoneList;
-    private MyAdapter phoneAdapter;
+    private PhoneListAdapter phoneAdapter;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -72,21 +68,22 @@ public class MyInfoActivity extends RoboActivity {
 	}
 
     private void init(){
-        Gson gson = MyApplication.getGson();
-
+        phoneList = new ArrayList<>();
+        gson = MyApplication.getGson();
         userInfo = UserInfo.getInstance();
 
-        name.setText(userInfo.getName());
-        address.setText(userInfo.getAddress());
-        addition.setText(userInfo.getNotes());
-        phoneList = userInfo.getTels();
+        if(TextUtils.isEmpty(userInfo.getName()) || userInfo.getTels().isEmpty() || TextUtils.isEmpty(userInfo.getAddress())){
+            Toast.makeText(mContext,R.string.information_lost,Toast.LENGTH_SHORT).show();
+        }else{
+            name.setText(userInfo.getName());
+            address.setText(userInfo.getAddress());
+            addition.setText(userInfo.getNotes());
+            phoneList = userInfo.getTels();
 
-        phoneAdapter = new MyAdapter(this,phoneList);
+            createQRImage( gson.toJson(userInfo, UserInfo.class) );
+        }
+        phoneAdapter = new PhoneListAdapter(this,phoneList);
         phoneListView.setAdapter(phoneAdapter);
-
-        createQRImage( gson.toJson(userInfo, UserInfo.class) );
-
-        Log.d(null, gson.toJson(userInfo, UserInfo.class));
     }
 
     private void eventHandler() {
@@ -106,12 +103,24 @@ public class MyInfoActivity extends RoboActivity {
         save.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //TODO 判断
-                userInfo.setName(name.getText().toString());
-                userInfo.setTels(phoneList);
-                userInfo.setAddress(address.getText().toString());
-                userInfo.setNotes(addition.getText().toString());
-                Toast.makeText(mContext,"已保存",Toast.LENGTH_SHORT).show();
+                if(TextUtils.isEmpty(name.getText())){
+
+                    Toast.makeText(mContext, R.string.no_name,Toast.LENGTH_SHORT).show();
+                }else if(phoneList.isEmpty()){
+
+                    Toast.makeText(mContext,R.string.no_phone,Toast.LENGTH_SHORT).show();
+                }else if(TextUtils.isEmpty(address.getText())){
+
+                    Toast.makeText(mContext,R.string.no_address,Toast.LENGTH_SHORT).show();
+                }else{
+                    userInfo.setName(name.getText().toString());
+                    userInfo.setTels(phoneList);
+                    userInfo.setAddress(address.getText().toString());
+                    userInfo.setNotes(addition.getText().toString());
+
+                    Toast.makeText(mContext,R.string.is_save,Toast.LENGTH_SHORT).show();
+                    createQRImage( gson.toJson(userInfo, UserInfo.class) );
+                }
             }
         });
 
@@ -171,62 +180,5 @@ public class MyInfoActivity extends RoboActivity {
         } catch (WriterException e) {
             e.printStackTrace();
         }
-    }
-
-
-    private class MyAdapter extends BaseAdapter {
-
-        private List<String> data;
-        private Context context;
-
-        public MyAdapter(Context mContext,List<String> datas) {
-            this.context = mContext;
-            data = datas;
-        }
-
-        @Override
-        public int getCount() {
-            return data.size();
-        }
-
-        @Override
-        public Object getItem(int position) {
-            return data.get(position);
-        }
-
-        @Override
-        public long getItemId(int position) {
-            return position;
-        }
-
-        @Override
-        public View getView(final int position, View convertView, ViewGroup parent) {
-            ViewHolder holder;
-            if (convertView == null) {
-                holder = new ViewHolder();
-                convertView = LayoutInflater.from(context).inflate(R.layout.cell_edit_member_list, parent, false);
-                holder.name = (TextView) convertView.findViewById(R.id.name);
-                holder.remove = (Button) convertView.findViewById(R.id.remove_member);
-                convertView.setTag(holder);
-            } else {
-                holder = (ViewHolder) convertView.getTag();
-            }
-
-            holder.name.setText(data.get(position));
-            holder.remove.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    data.remove(position);
-                    MyAdapter.this.notifyDataSetChanged();
-                }
-            });
-
-            return convertView;
-        }
-    }
-
-    static class ViewHolder {
-        Button remove;
-        TextView name;
     }
 }

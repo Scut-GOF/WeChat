@@ -253,15 +253,15 @@ public class BaiduPush {
      * @param userid
      * @return
      */
-    public String PushNotify(String title, String message, String userid,String name,String address,String addition) {
+    public String PushNotify(String title, String message, String userid,String name,String address,String addition,String phone) {
         RestApi ra = new RestApi(RestApi.METHOD_PUSH_MESSAGE);
         ra.put(RestApi._MESSAGE_TYPE, RestApi.MESSAGE_TYPE_NOTIFY);
 
         String msg = String
                 .format("{'title':'%s','description':'%s'," +
-                                "'custom_content':{'name':'%s','address':'%s','addition':'%s'}"
+                                "'custom_content':{'name':'%s','address':'%s','addition':'%s','phone':'%s'}"
                                 + ",'notification_builder_id':0,'notification_basic_style':7,'open_type':3}",
-                        title, jsonencode(message),name,address,addition);
+                        title, jsonencode(message),name,address,addition,phone);
 
         Log.d(TAG, msg);
 
