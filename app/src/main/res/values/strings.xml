@@ -36,6 +36,20 @@
     <string name="all_label"><![CDATA[<All Label]]></string>
     <string name="title_activity_edit_contact_label">EditContactLabelActivity</string>
     <string name="sure">Sure</string>
-    <string name="title_activity_push_demo">PushDemoActivity</string>
+
+
+
+    <!-- -->
+    <string name="add_friend">添加好友</string>
+    <string name="whether_add_friend">是否添加到好友列表？</string>
+    <string name="information_lost">请完善个人信息！</string>
+    <string name="no_name">未输入姓名！</string>
+    <string name="no_phone">未输入号码！</string>
+    <string name="no_address">未输入地址！</string>
+    <string name="is_save">已保存</string>
+
+    <!-- error -->
+    <string name="error_phone_format">手机格式错误</string>
+
 
 </resources>
