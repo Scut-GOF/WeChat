@@ -138,8 +138,8 @@ public class IDLabelTableUtils {
 
 		Cursor cursorLabels;
 		cursorLabels = db.rawQuery("select " + TBIDLabelConstants.LABEL + " from "
-						+ TBIDLabelConstants.FTS_TABLE_NAME + " where " + TBIDLabelConstants.ID + " match ?",
-				new String[]{"'" + ID + "'"});
+						+ TBIDLabelConstants.FTS_TABLE_NAME + " where " + TBIDLabelConstants.ID + " = ?",
+				new String[]{ID});
 		List<String> labelNames = new ArrayList<>();
 		for (int i = 0; i < cursorLabels.getCount(); i++) {
 			cursorLabels.moveToPosition(i);

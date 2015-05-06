@@ -6,13 +6,13 @@ import android.database.sqlite.SQLiteOpenHelper;
 
 
 public class DataBaseHelper extends SQLiteOpenHelper {
-	public final static int DBVersion = 3;
+	public final static int DBVersion = 4;
 	public static boolean importData = false;
 	private final static String DATABASE_NAME = "gofContacts";
 	private final static String SQL_MAIN_TABLE_CREATE = "CREATE TABLE IF NOT EXISTS "
 			+ TBMainConstants.TABLE_NAME + " ("
-			+ TBMainConstants.ID
-			+ " INTEGER PRIMARY KEY AUTOINCREMENT, "
+//			+ TBMainConstants.ID
+//			+ " INTEGER PRIMARY KEY AUTOINCREMENT, "
 			+ TBMainConstants.NAME + " VARCHAR(8) NOT NULL,"
 			+ TBMainConstants.L_PINYIN + " VARCHAR(24),"
 			+ TBMainConstants.S_PINYIN + " VARCHAR(12),"
@@ -90,7 +90,8 @@ public class DataBaseHelper extends SQLiteOpenHelper {
 	//label表很小，没必要建virtual table
 	private final static String SQL_CREATE_FTS_CONTACTS = "create virtual table "
 			+ TBMainConstants.FTS_TABLE_NAME + " using fts4("
-			+ TBMainConstants.ID + "," + TBMainConstants.NAME + "," + TBMainConstants.L_PINYIN + ","
+//			+ TBMainConstants.ID + ","
+			+ TBMainConstants.NAME + "," + TBMainConstants.L_PINYIN + ","
 			+ TBMainConstants.S_PINYIN + "," + TBMainConstants.ADDRESS + "," + TBMainConstants.NOTES + ")";
 	//create trigger insert_fts_contacts after insert on contacts begin insert into fts_contacts
 	// values (new._id,new.name,new.l_pinyin,new.s_pinyin,new.address,new.notes);end;
@@ -101,7 +102,9 @@ public class DataBaseHelper extends SQLiteOpenHelper {
 					" after insert on " + TBMainConstants.TABLE_NAME
 					+ " begin " +
 					"insert into " + TBMainConstants.FTS_TABLE_NAME
-					+ " values (new." + TBMainConstants.ID + ",new." + TBMainConstants.NAME
+					+ " values (" +
+//					"new." + TBMainConstants.ID + "," +
+					"new." + TBMainConstants.NAME
 					+ ",new." + TBMainConstants.L_PINYIN + ",new." + TBMainConstants.S_PINYIN
 					+ ",new." + TBMainConstants.ADDRESS + ",new." + TBMainConstants.NOTES + ");"
 					+ "end;";
@@ -117,7 +120,7 @@ public class DataBaseHelper extends SQLiteOpenHelper {
 					TriggerConstants.UPDATE_FTS_CONTACTS +
 					" after update on " + TBMainConstants.TABLE_NAME
 					+ " begin update " + TBMainConstants.FTS_TABLE_NAME + " set "
-					+ TBMainConstants.ID + " = new." + TBMainConstants.ID + ","
+//					+ TBMainConstants.ID + " = new." + TBMainConstants.ID + ","
 					+ TBMainConstants.NAME + " = new." + TBMainConstants.NAME + ","
 					+ TBMainConstants.L_PINYIN + " = new." + TBMainConstants.L_PINYIN + ","
 					+ TBMainConstants.S_PINYIN + " = new." + TBMainConstants.S_PINYIN + ","
@@ -258,7 +261,24 @@ public class DataBaseHelper extends SQLiteOpenHelper {
 				db.execSQL("DROP TRIGGER IF EXISTS " + TriggerConstants.UPDATE_FTS_IL);
 				db.execSQL("DROP TRIGGER IF EXISTS " + TriggerConstants.UPDATE_FTS_TEL);
 				break;
+			case 4:
+				db.execSQL("DROP TABLE IF EXISTS " + TBMainConstants.TABLE_NAME);
+				db.execSQL("DROP TABLE IF EXISTS " + TBMainConstants.FTS_TABLE_NAME);
+				db.execSQL("DROP TABLE IF EXISTS " + TBIDLabelConstants.TABLE_NAME);
+				db.execSQL("DROP TABLE IF EXISTS " + TBIDLabelConstants.FTS_TABLE_NAME);
+				db.execSQL("DROP TABLE IF EXISTS " + TBTelConstants.TABLE_NAME);
+				db.execSQL("DROP TABLE IF EXISTS " + TBTelConstants.FTS_TABLE_NAME);
+				db.execSQL("DROP TABLE IF EXISTS " + TBLabelConstants.TABLE_NAME);
 
+				db.execSQL("DROP TRIGGER IF EXISTS " + TriggerConstants.DELETE_FTS_CONTACTS);
+				db.execSQL("DROP TRIGGER IF EXISTS " + TriggerConstants.DELETE_FTS_IL);
+				db.execSQL("DROP TRIGGER IF EXISTS " + TriggerConstants.DELETE_FTS_TEL);
+				db.execSQL("DROP TRIGGER IF EXISTS " + TriggerConstants.INSERT_FTS_CONSTANTS);
+				db.execSQL("DROP TRIGGER IF EXISTS " + TriggerConstants.INSERT_FTS_IL);
+				db.execSQL("DROP TRIGGER IF EXISTS " + TriggerConstants.INSERT_FTS_TEL);
+				db.execSQL("DROP TRIGGER IF EXISTS " + TriggerConstants.UPDATE_FTS_CONTACTS);
+				db.execSQL("DROP TRIGGER IF EXISTS " + TriggerConstants.UPDATE_FTS_IL);
+				db.execSQL("DROP TRIGGER IF EXISTS " + TriggerConstants.UPDATE_FTS_TEL);
 		}
 
 //        db.execSQL("DROP VIRTUAL TABLE IF EXISTS " + TBMainConstants.FTS_TABLE_NAME);

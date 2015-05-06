@@ -187,9 +187,12 @@ public class MainTableUtils {
 		closeDataBase();
 		db = dataBaseHelper.getReadableDatabase();
 		Cursor cursor;
-		cursor = db.rawQuery("select * from " + TBMainConstants.FTS_TABLE_NAME + " where "
-						+ TBMainConstants.ID + " match ?",
-				new String[]{"'" + id + "'"});//  SHOULDN'T BE PUT IN SINGE COBRA
+//		cursor = db.rawQuery("select "+TBMainConstants.ID+",* from " + TBMainConstants.FTS_TABLE_NAME + " where "
+//						+ TBMainConstants.ID + " = '"+id+"'",
+//				null);//  SHOULDN'T BE PUT IN SINGE COBRA
+		cursor = db.rawQuery("select " + TBMainConstants.ID + ",* from " + TBMainConstants.FTS_TABLE_NAME + " where "
+						+ TBMainConstants.ID + " = ?",
+				new String[]{id});//  SHOULDN'T BE PUT IN SINGE COBRA
 		if (cursor.getCount() == 0) {
 			return new IdObj(-1);
 		}
@@ -239,12 +242,14 @@ public class MainTableUtils {
 //		on fts_contacts._id = lid)group by lid
 //		) group by _id;
 		cursorResult = db.rawQuery("select * from ( "
-						+ "select *,'' " + TBIDLabelConstants.LABEL + ",'' " + TBTelConstants.TEL
+						+ "select " + TBMainConstants.ID + ",*,'' " + TBIDLabelConstants.LABEL + ",'' " + TBTelConstants.TEL
 						+ " from " + TBMainConstants.FTS_TABLE_NAME
 						+ " where " + TBMainConstants.FTS_TABLE_NAME
 						+ " match ? group by " + TBMainConstants.ID
 						+ " union "
-						+ "select " + TBMainConstants.FTS_TABLE_NAME + ".*," + TBIDLabelConstants.LABEL + ",'' " + TBTelConstants.TEL
+						+ "select "
+						+ TBMainConstants.FTS_TABLE_NAME + "." + TBMainConstants.ID + "," + TBMainConstants.FTS_TABLE_NAME + ".*,"
+						+ TBIDLabelConstants.LABEL + ",'' " + TBTelConstants.TEL
 						+ " from (select " + TBIDLabelConstants.ID + " lid," + TBIDLabelConstants.LABEL + " from "
 						+ TBIDLabelConstants.FTS_TABLE_NAME + " where " + TBIDLabelConstants.LABEL + " match ?) "
 						+ "left join " + TBMainConstants.FTS_TABLE_NAME
@@ -321,19 +326,24 @@ public class MainTableUtils {
 //		c=db.rawQuery("select * from idlabel",null);
 //		c=db.rawQuery("select * from tel",null);
 		cursorResult = db.rawQuery("select * from ( "
-				+ "select *,'' " + TBIDLabelConstants.LABEL + ",'' " + TBTelConstants.TEL
+				+ "select " + TBMainConstants.ID + ",*,'' "
+				+ TBIDLabelConstants.LABEL + ",'' " + TBTelConstants.TEL
 				+ " from " + TBMainConstants.FTS_TABLE_NAME
 				+ " where " + TBMainConstants.FTS_TABLE_NAME
 				+ " match ? group by " + TBMainConstants.ID
 				+ " union "
-				+ "select " + TBMainConstants.FTS_TABLE_NAME + ".*," + TBIDLabelConstants.LABEL + ",'' " + TBTelConstants.TEL
+				+ "select "
+				+ TBMainConstants.FTS_TABLE_NAME + "." + TBMainConstants.ID + "," + TBMainConstants.FTS_TABLE_NAME + ".*,"
+				+ TBIDLabelConstants.LABEL + ",'' " + TBTelConstants.TEL
 				+ " from (select " + TBIDLabelConstants.ID + " lid, " + TBIDLabelConstants.LABEL + " from "
 				+ TBIDLabelConstants.FTS_TABLE_NAME + " where " + TBIDLabelConstants.LABEL + " match ?) "
 				+ "left join " + TBMainConstants.FTS_TABLE_NAME
 				+ " on " + TBMainConstants.FTS_TABLE_NAME + "." + TBMainConstants.ID + "= lid"
 				+ " group by lid"
 				+ " union "
-				+ "select " + TBMainConstants.FTS_TABLE_NAME + ".*,'' " + TBIDLabelConstants.LABEL + ", " + TBTelConstants.TEL
+				+ "select "
+				+ TBMainConstants.FTS_TABLE_NAME + "." + TBMainConstants.ID + "," + TBMainConstants.FTS_TABLE_NAME + ".*,'' "
+				+ TBIDLabelConstants.LABEL + ", " + TBTelConstants.TEL
 				+ " from (select " + TBTelConstants.ID + " tid," + TBTelConstants.TEL + " from "
 				+ TBTelConstants.FTS_TABLE_NAME + " where " + TBTelConstants.TEL + " match ?) "
 				+ "left join " + TBMainConstants.FTS_TABLE_NAME
