@@ -50,6 +50,7 @@
 
     <!-- error -->
     <string name="error_phone_format">手机格式错误</string>
+    <string name="error_no_person">联系人不存在！</string>
 
 
 </resources>

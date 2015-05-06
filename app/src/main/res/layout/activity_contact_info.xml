@@ -1,10 +1,9 @@
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              xmlns:tools="http://schemas.android.com/tools"
-              android:layout_width="match_parent"
-              android:layout_height="match_parent"
-              android:background="@color/white"
-              android:orientation="vertical"
-              tools:context="gof.scut.wechatcontacts.ContactInfoActivity">
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    android:orientation="vertical"
+    android:id="@+id/label_layout">
 
     <RelativeLayout
         android:id="@+id/title"
@@ -13,95 +12,231 @@
         android:background="@color/my_blue">
 
         <TextView
-            android:id="@+id/bt_back"
+            android:id="@+id/cancel"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/all_contact"
             style="@style/simple_back_button"
-            android:clickable="true"
-            android:layout_marginLeft="@dimen/vertical_margin"/>
+            android:clickable="true"/>
 
         <TextView
-            android:id="@+id/bt_modify"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentRight="true"
-
-            android:layout_centerVertical="true"
-            android:text="@string/edit"
-            android:textSize="22sp"
-            android:textColor="@color/white"
+            android:textStyle="bold"
+            android:text="@string/save"
             android:clickable="true"
-            android:layout_marginRight="@dimen/vertical_margin"/>
+            android:textSize="22sp"
+            android:padding="10dp"
+            android:textColor="@color/white"
+            android:background="@color/transparent"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true"
+            android:layout_marginEnd="10dp"
+            android:layout_marginRight="10dp"
+            android:id="@+id/save"
+            android:focusable="true"
+            android:focusableInTouchMode="true"/>
     </RelativeLayout>
 
-    <LinearLayout
-        android:orientation="vertical"
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
-        android:layout_marginLeft="@dimen/vertical_margin"
-        android:layout_marginRight="@dimen/vertical_margin"
-        android:weightSum="1">
+    <ScrollView
+        android:layout_below="@id/title"
+        android:id="@+id/scrollView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textAppearance="?android:attr/textAppearanceLarge"
-            android:layout_marginTop="10dp"
-            android:text="Name"
-            android:textStyle="bold"
-            android:id="@+id/tv_name"
-            android:textSize="22sp"/>
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
 
-        <GridView
-            android:layout_weight="0.7"
-            android:id="@+id/tv_label"
-            android:layout_below="@+id/tv_name"
-            android:layout_height="wrap_content"
-            android:layout_width="fill_parent"
-            android:verticalSpacing="5dp"
-            android:horizontalSpacing="10dp"
-            android:columnWidth="50dp"
-            android:numColumns="auto_fit"/>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:orientation="vertical"
+                >
 
-        <TextView style="@style/bar"/>
+                <EditText
+                    android:id="@+id/name"
+                    style="@style/un_written"
+                    android:singleLine="true"
+                    android:hint="name"
+                    android:background="@null"
+                    />
 
-        <ListView
-            android:layout_weight="0.3"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/lv_tels"
-            android:layout_gravity="center_horizontal"/>
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:padding="2dp"
+                    android:textSize="22sp"
+                    android:background="@color/my_dark_grey"/>
 
-        <TextView style="@style/bar"/>
+            </LinearLayout>
 
-        <TextView
-            style="@style/purple_title"
-            android:text="Address"
-            android:id="@+id/textview"/>
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
 
-        <TextView
-            style="@style/black_detail"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+                <TextView
+                    android:id="@+id/Phone_text"
+                    style="@style/purple_title"
+                    android:text="Phone"/>
 
-            android:text="Medium Text"
-            android:id="@+id/tv_address"/>
+                <ListView
+                    android:layout_below="@id/Phone_text"
+                    android:id="@+id/phoneList"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:scrollbars="none"
+                    android:divider="@null"
+                    android:dividerHeight="1dp">
 
-        <TextView style="@style/bar"/>
+                </ListView>
 
-        <TextView
-            style="@style/purple_title"
-            android:text="Additional"/>
+                <ImageView
+                    android:layout_below="@id/phoneList"
+                    android:id="@+id/add_phone_button"
+                    android:layout_marginTop="10dp"
+                    android:layout_width="35dp"
+                    android:layout_height="35dp"
+                    android:layout_marginLeft="10dp"
+                    android:background="@drawable/add_detail50"/>
 
-        <TextView
-            style="@style/black_detail"
+                <EditText
+                    android:id="@+id/phone"
+                    android:layout_below="@id/phoneList"
+                    android:layout_toRightOf="@+id/add_phone_button"
+                    style="@style/un_written"
+                    android:padding="10dp"
+                    android:hint="new phone"
+                    android:inputType="phone"
+                    android:background="@null"/>
 
-            android:text="Medium Text"
-            android:id="@+id/tv_notes"/>
+                <TextView
+                    android:layout_below="@id/phone"
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:padding="2dp"
+                    android:background="@color/my_dark_grey"/>
 
-    </LinearLayout>
-</LinearLayout>
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:id="@+id/Label_text"
+                    style="@style/purple_title"
+                    android:text="Label"/>
+
+                <ListView
+                    android:layout_below="@id/Label_text"
+                    android:id="@+id/labelList"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:scrollbars="none"
+                    android:divider="@null"
+                    android:dividerHeight="1dp">
+
+                </ListView>
+
+                <ImageView
+                    android:layout_below="@id/labelList"
+                    android:id="@+id/add_label_button"
+                    android:layout_marginTop="10dp"
+                    android:layout_width="35dp"
+                    android:layout_height="35dp"
+                    android:layout_marginLeft="10dp"
+                    android:background="@drawable/add_detail50"/>
+
+                <TextView
+                    android:id="@+id/label"
+                    android:layout_below="@id/labelList"
+                    android:layout_toRightOf="@+id/add_label_button"
+                    style="@style/un_written"
+                    android:text="New Label>"
+                    android:padding="10dp"
+                    android:textColor="@color/black"/>
 
 
+                <TextView
+                    android:layout_below="@id/label"
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:padding="2dp"
+                    android:background="@color/my_dark_grey"/>
 
+            </RelativeLayout>
+
+            <LinearLayout
+                android:id="@+id/address_layout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <TextView
+                    style="@style/purple_title"
+                    android:text="Address"
+                    />
+
+                <EditText
+                    android:id="@+id/address"
+                    style="@style/un_written"
+                    android:hint="add address"
+                    android:background="@null"/>
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:padding="2dp"
+                    android:textSize="22sp"
+                    android:background="@color/my_dark_grey"/>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <TextView
+                    style="@style/purple_title"
+                    android:text="Addition"/>
+
+                <EditText
+                    android:id="@+id/addition"
+                    style="@style/un_written"
+                    android:hint="add addition"
+                    android:background="@null"/>
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:padding="2dp"
+                    android:textSize="22sp"
+                    android:background="@color/my_dark_grey"/>
+
+            </LinearLayout>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <ImageView
+                    android:id="@+id/binary_code"
+                    android:layout_marginTop="40dp"
+                    android:layout_width="200dp"
+                    android:layout_height="200dp"
+                    android:layout_centerHorizontal="true"
+                    android:background="@color/gray"
+                    />
+
+            </RelativeLayout>
+
+        </LinearLayout>
+
+    </ScrollView>
+
+</RelativeLayout>
