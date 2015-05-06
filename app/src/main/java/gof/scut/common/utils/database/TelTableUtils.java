@@ -133,18 +133,18 @@ public class TelTableUtils {
 		return c;
 	}
 
-	public Cursor selectIDWithTel(String tel) {
-		closeDataBase();
-		db = dataBaseHelper.getReadableDatabase();
-		Cursor c;
-		c = db.rawQuery("select " + TBTelConstants.ID + " from "
-						+ TBTelConstants.FTS_TABLE_NAME + " where " + TBTelConstants.TEL + " match ?",
-				new String[]{"'" + tel + "'"});
-//		c = db.query(TBTelConstants.TABLE_NAME, new String[]{TBTelConstants.ID},
-//				TBTelConstants.TEL + " = ?", new String[]{tel}, null, null, null);
-		//db.close();
-		return c;
-	}
+//	public Cursor selectIDWithTel(String tel) {
+//		closeDataBase();
+//		db = dataBaseHelper.getReadableDatabase();
+//		Cursor c;
+//		c = db.rawQuery("select " + TBTelConstants.ID + " from "
+//						+ TBTelConstants.FTS_TABLE_NAME + " where " + TBTelConstants.TEL + " match ?",
+//				new String[]{"'" + tel + "'"});
+////		c = db.query(TBTelConstants.TABLE_NAME, new String[]{TBTelConstants.ID},
+////				TBTelConstants.TEL + " = ?", new String[]{tel}, null, null, null);
+//		//db.close();
+//		return c;
+//	}
 
 	public void closeDataBase() {
 		if (db == null) return;

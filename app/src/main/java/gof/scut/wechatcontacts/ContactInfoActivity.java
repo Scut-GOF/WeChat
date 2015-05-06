@@ -41,6 +41,7 @@ public class ContactInfoActivity extends Activity {
 		IdObj contact = mainTableUtils.selectAllWithID("" + id);
 		if (contact.getId() < 0) {
 			Toast.makeText(ContactInfoActivity.this, "联系人不存在！", Toast.LENGTH_LONG).show();
+			finish();
 			return;
 		}
 		String name = contact.getName();

@@ -81,6 +81,8 @@ public class SearchResultAdapter extends BaseAdapter {
 		} else {
 			if (!StringUtils.isNumber(keyword))
 				holder.tvName.setText(StringUtils.simpleHighLightByPinyin(keyword, recoverName, "A4005B", "636362"));
+			else
+				holder.tvName.setText(StringUtils.simpleHighLight(keyword.replace(" ", ""), recoverName, "A4005B", "636362"));
 		}
 		holder.searchDetail.setText(getFirstMatchInfo(position, keyword.replace(" ", "")));
 		//holder.searchDetail.setMovementMethod(ScrollingMovementMethod.getInstance());

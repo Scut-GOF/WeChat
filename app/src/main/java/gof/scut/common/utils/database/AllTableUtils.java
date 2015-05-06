@@ -51,8 +51,8 @@ public class AllTableUtils {
 		//SELECT  _id,name FROM contacts WHERE _id IN ( SELECT _id FROM idLabel WHERE label = '" + labelName + "')"
 		Cursor cursorEdit = db.rawQuery("SELECT " + TBMainConstants.ID + "," + TBMainConstants.NAME
 				+ " FROM " + TBMainConstants.FTS_TABLE_NAME + " WHERE " + TBMainConstants.ID
-				+ " IN ( SELECT " + TBMainConstants.ID + " FROM " + TBIDLabelConstants.FTS_TABLE_NAME
-				+ " WHERE " + TBIDLabelConstants.LABEL + " match ? )", new String[]{"'" + labelName + "'"});
+				+ " IN ( SELECT " + TBIDLabelConstants.ID + " FROM " + TBIDLabelConstants.FTS_TABLE_NAME
+				+ " WHERE " + TBIDLabelConstants.LABEL + " = ? )", new String[]{labelName});
 		List<LightIdObj> members = new ArrayList<>();
 		for (int i = 0; i < cursorEdit.getCount(); i++) {
 			cursorEdit.moveToPosition(i);
@@ -74,8 +74,8 @@ public class AllTableUtils {
 		//select *from label where label in (select label from fts_idlabel where id match id);
 		Cursor cursorLabel = db.rawQuery("select * from " + TBLabelConstants.TABLE_NAME
 				+ " where " + TBLabelConstants.LABEL + " in ( select " + TBIDLabelConstants.LABEL + " from "
-				+ TBIDLabelConstants.FTS_TABLE_NAME + " where " + TBIDLabelConstants.ID + " match ?)"
-				, new String[]{"'" + id + "'"});
+				+ TBIDLabelConstants.FTS_TABLE_NAME + " where " + TBIDLabelConstants.ID + " = ?)"
+				, new String[]{id});
 		List<LabelObj> labels = new ArrayList<>();
 		for (int i = 0; i < cursorLabel.getCount(); i++) {
 			cursorLabel.moveToPosition(i);
