@@ -128,6 +128,8 @@ public class AddContactActivity extends RoboActivity {
 					int id = mainTableUtils.getMaxId();
 					IdObj obj = new IdObj(id);
 					ActivityUtils.ActivitySkipWithObject(mContext, ContactInfoActivity.class, BundleNames.ID_OBJ, obj);
+
+					finish();
 				}
 			}
 		});
