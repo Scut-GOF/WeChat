@@ -19,15 +19,15 @@ import java.util.Collections;
 import java.util.List;
 
 import gof.scut.common.MyApplication;
-import gof.scut.common.utils.ActivityUtils;
 import gof.scut.common.utils.BundleNames;
 import gof.scut.common.utils.Utils;
+import gof.scut.common.utils.database.IDLabelTableUtils;
 import gof.scut.common.utils.database.MainTableUtils;
+import gof.scut.common.utils.database.TelTableUtils;
 import gof.scut.common.utils.popup.PopConfirmUtils;
 import gof.scut.common.utils.popup.TodoOnResult;
 import gof.scut.cwh.models.adapter.PhoneListAdapter;
 import gof.scut.cwh.models.object.ActivityConstants;
-import gof.scut.cwh.models.object.IdObj;
 import gof.scut.cwh.models.object.LabelListObj;
 import gof.scut.cwh.models.object.Signal;
 import gof.scut.cwh.models.object.UserInfo;
@@ -126,10 +126,21 @@ public class AddContactActivity extends RoboActivity {
 							addition.getText().toString()
 					);
 					int id = mainTableUtils.getMaxId();
-					IdObj obj = new IdObj(id);
-					ActivityUtils.ActivitySkipWithObject(mContext, ContactInfoActivity.class, BundleNames.ID_OBJ, obj);
 
-					finish();
+                    TelTableUtils telTableUtils = new TelTableUtils(mContext);
+                    for(String phone:phoneList){
+                        telTableUtils.insertAll(String.valueOf(id),phone);
+                    }
+
+                    IDLabelTableUtils idLabelTableUtils = new IDLabelTableUtils(mContext);
+                    for(String label:labelList){
+                        idLabelTableUtils.insertAll(String.valueOf(id),label);
+                    }
+
+                    Toast.makeText(mContext,R.string.is_save,Toast.LENGTH_SHORT).show();
+
+                    telTableUtils.closeDataBase();
+                    idLabelTableUtils.closeDataBase();
 				}
 			}
 		});
@@ -232,7 +243,7 @@ public class AddContactActivity extends RoboActivity {
 				Bundle bundle = data.getExtras();
 				LabelListObj labelListObj = (LabelListObj) bundle.getSerializable(BundleNames.LABEL_LIST);
 				if (labelListObj.getLabels().size() != 0) {
-					Toast.makeText(this, labelListObj.toString(), Toast.LENGTH_LONG).show();
+					Toast.makeText(this, labelListObj.toString(), Toast.LENGTH_SHORT).show();
                     labelList.addAll(labelListObj.getLabels());
                     Utils.setListViewHeightBasedOnChildren(labelListView);
                     labelAdapter.notifyDataSetChanged();

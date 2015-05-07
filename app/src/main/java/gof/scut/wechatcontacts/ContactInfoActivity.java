@@ -61,8 +61,11 @@ public class ContactInfoActivity extends RoboActivity {
     private EditText addition;
 
     //values
+    private int id;
     private Gson gson;
     private MainTableUtils mainTableUtils;
+    private IDLabelTableUtils labelTableUtils;
+    private TelTableUtils telTableUtils;
     private IdObj contact;
     private List<String> phoneList;
     private PhoneListAdapter phoneAdapter;
@@ -81,7 +84,7 @@ public class ContactInfoActivity extends RoboActivity {
 
     private void init(){
         Bundle bundle = getIntent().getExtras();
-        int id = ((IdObj) bundle.getSerializable("IdObj")).getId();
+        id = ((IdObj) bundle.getSerializable("IdObj")).getId();
 
         mainTableUtils = new MainTableUtils(mContext);
         contact = mainTableUtils.selectAllWithID(String.valueOf(id));
@@ -92,15 +95,15 @@ public class ContactInfoActivity extends RoboActivity {
 
         gson = MyApplication.getGson();
 
-        TelTableUtils telTableUtils = new TelTableUtils(mContext);
-        phoneList = telTableUtils.selectTelListWithID(String.valueOf(id));
+        telTableUtils = new TelTableUtils(mContext);
+        phoneList = new ArrayList<>();
         phoneAdapter = new PhoneListAdapter(mContext,phoneList,phoneListView);
-        telTableUtils.closeDataBase();
+        phoneListView.setAdapter(phoneAdapter);
 
-        IDLabelTableUtils labelTableUtils = new IDLabelTableUtils(mContext);
-        labelList = labelTableUtils.selectLabelWithID(String.valueOf(id));
+        labelTableUtils = new IDLabelTableUtils(mContext);
+        labelList = new ArrayList<>();
         labelAdapter = new PhoneListAdapter(mContext,labelList,labelListView);
-        labelTableUtils.closeDataBase();
+        labelListView.setAdapter(labelAdapter);
 
         contact.setTels((ArrayList<String>) phoneList);
     }
@@ -110,11 +113,13 @@ public class ContactInfoActivity extends RoboActivity {
         address.setText(contact.getAddress());
         addition.setText(contact.getNotes());
 
+        phoneList.addAll(telTableUtils.selectTelListWithID(String.valueOf(id)));
         Utils.setListViewHeightBasedOnChildren(phoneListView);
-        phoneListView.setAdapter(phoneAdapter);
+        phoneAdapter.notifyDataSetChanged();
 
+        labelList.addAll(labelTableUtils.selectLabelWithID(String.valueOf(id)));
         Utils.setListViewHeightBasedOnChildren(labelListView);
-        labelListView.setAdapter(labelAdapter);
+        labelAdapter.notifyDataSetChanged();
 
         Utils.createQRImage(binary_code , gson.toJson(contact, IdObj.class));
 	}
@@ -138,11 +143,22 @@ public class ContactInfoActivity extends RoboActivity {
 
                     Toast.makeText(mContext,R.string.no_phone,Toast.LENGTH_SHORT).show();
                 }else{
-                    mainTableUtils.insertAll(
-                            name.getText().toString(),
+                    mainTableUtils.updateAllWithID(name.getText().toString(),
+                            "",
+                            "",
                             address.getText().toString(),
-                            addition.getText().toString()
-                    );
+                            addition.getText().toString(),
+                            String.valueOf(id));
+
+                    telTableUtils.deleteWithID(String.valueOf(id));
+                    for(String phone:phoneList){
+                        telTableUtils.insertAll(String.valueOf(id), phone);
+                    }
+
+                    labelTableUtils.deleteWithID(String.valueOf(id));
+                    for(String label:labelList){
+                        labelTableUtils.insertAll(String.valueOf(id), label);
+                    }
 
                     contact.setName(name.getText().toString());
                     contact.setAddress(address.getText().toString());
@@ -190,8 +206,7 @@ public class ContactInfoActivity extends RoboActivity {
         Bundle bundle = data.getExtras();
         LabelListObj labelListObj = (LabelListObj) bundle.getSerializable(BundleNames.LABEL_LIST);
         if (labelListObj.getLabels().size() != 0) {
-            //TODO 保存数据库
-            Toast.makeText(this, labelListObj.toString(), Toast.LENGTH_LONG).show();
+            Toast.makeText(this, labelListObj.toString(), Toast.LENGTH_SHORT).show();
             labelList.addAll(labelListObj.getLabels());
             Utils.setListViewHeightBasedOnChildren(labelListView);
             labelAdapter.notifyDataSetChanged();
@@ -202,5 +217,7 @@ public class ContactInfoActivity extends RoboActivity {
     protected void onDestroy() {
         super.onDestroy();
         mainTableUtils.closeDataBase();
+        telTableUtils.closeDataBase();
+        labelTableUtils.closeDataBase();
     }
 }
