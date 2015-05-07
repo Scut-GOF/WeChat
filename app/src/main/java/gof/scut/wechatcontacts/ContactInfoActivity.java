@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
@@ -22,6 +23,8 @@ import gof.scut.common.utils.Utils;
 import gof.scut.common.utils.database.IDLabelTableUtils;
 import gof.scut.common.utils.database.MainTableUtils;
 import gof.scut.common.utils.database.TelTableUtils;
+import gof.scut.common.utils.popup.PopConfirmUtils;
+import gof.scut.common.utils.popup.TodoOnResult;
 import gof.scut.cwh.models.adapter.PhoneListAdapter;
 import gof.scut.cwh.models.object.ActivityConstants;
 import gof.scut.cwh.models.object.IdObj;
@@ -59,6 +62,8 @@ public class ContactInfoActivity extends RoboActivity {
     private EditText address;
     @InjectView(R.id.addition)
     private EditText addition;
+	@InjectView(R.id.delete_contact)
+	private Button deleteContact;
 
     //values
     private int id;
@@ -132,7 +137,28 @@ public class ContactInfoActivity extends RoboActivity {
                 finish();
             }
         });
+	    deleteContact.setOnClickListener(new View.OnClickListener() {
+		    @Override
+		    public void onClick(View v) {
+			    PopConfirmUtils popConfirmUtils = new PopConfirmUtils();
+			    popConfirmUtils.prepare(mContext, R.layout.pop_confirm);
+			    popConfirmUtils.initPopupWindow();
+			    popConfirmUtils.setTitle("Sure to delete?");
+			    popConfirmUtils.initTodo(new TodoOnResult() {
+				    @Override
+				    public void doOnPosResult(String[] params) {
+					    mainTableUtils.deleteWithID(id + "");
+					    finish();
+				    }
 
+				    @Override
+				    public void doOnNegResult(String[] params) {
+
+				    }
+			    });
+			    popConfirmUtils.popWindowAtCenter(R.id.phone, R.id.confirm_title);
+		    }
+	    });
         save.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
