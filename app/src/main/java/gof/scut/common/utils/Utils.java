@@ -53,11 +53,12 @@ public class Utils {
     //检查手机号码格式
     public static boolean checkPhone(Context mContext,String phoneNumber) {
        String telRegex = "[1]\\d{10}";//第一位是1，后10位为0-9任意数字，共计11位；
+       String shortTelRegex = "^[0-9]{1,6}$";//短号匹配，6位以内任意数字；
 
        if (TextUtils.isEmpty(phoneNumber))
            return false;
 
-       if (!phoneNumber.matches(telRegex)) {
+       if(!  (phoneNumber.matches(telRegex) || phoneNumber.matches(shortTelRegex)) ){
             Toast.makeText(mContext, R.string.error_phone_format, Toast.LENGTH_SHORT).show();
             return false;
        }
