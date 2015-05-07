@@ -257,17 +257,24 @@ public class MainTableUtils {
 						+ " )group by " + TBMainConstants.ID,
 				new String[]{"'" + word + "*'", "'" + word + "*'"});
 		List<SearchObj> results = new ArrayList<>();
+		String address = "", notes = "";
 		try {
 
 			for (int i = 0; i < cursorResult.getCount(); i++) {
 				cursorResult.moveToPosition(i);
+				address = StringUtils.recoverWordFromDB(cursorResult.getString(cursorResult.getColumnIndex(TBMainConstants.ADDRESS)));
+				if (address.length() > StringUtils.SHOW_LENGTH)
+					address = StringUtils.cutString(address, word.toLowerCase(), StringUtils.SHOW_LENGTH);
+				notes = StringUtils.recoverWordFromDB(cursorResult.getString(cursorResult.getColumnIndex(TBMainConstants.NOTES)));
+				if (notes.length() > StringUtils.SHOW_LENGTH)
+					notes = StringUtils.cutString(notes, word.toLowerCase(), StringUtils.SHOW_LENGTH);
 				results.add(new SearchObj(
 						cursorResult.getString(cursorResult.getColumnIndex(TBMainConstants.ID)),
 						cursorResult.getString(cursorResult.getColumnIndex(TBMainConstants.NAME)),
 						cursorResult.getString(cursorResult.getColumnIndex(TBMainConstants.L_PINYIN)),
 						cursorResult.getString(cursorResult.getColumnIndex(TBMainConstants.S_PINYIN)),
-						StringUtils.recoverWordFromDB(cursorResult.getString(cursorResult.getColumnIndex(TBMainConstants.ADDRESS))),
-						StringUtils.recoverWordFromDB(cursorResult.getString(cursorResult.getColumnIndex(TBMainConstants.NOTES))),
+						address,
+						notes,
 						StringUtils.recoverWordFromDB(cursorResult.getString(cursorResult.getColumnIndex(TBLabelConstants.LABEL))),
 						cursorResult.getString(cursorResult.getColumnIndex(TBTelConstants.TEL))
 				));
