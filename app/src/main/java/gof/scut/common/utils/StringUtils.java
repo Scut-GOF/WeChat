@@ -21,6 +21,7 @@ public class StringUtils {
 		return "(" + rawString + ")";
 	}
 
+	public static int SHOW_LENGTH = 50;
 	public static ArrayList<String> splitWithWord(String str, String word) {
 		ArrayList<String> splits = new ArrayList<>();
 		if (!str.contains(word)) {
@@ -85,7 +86,35 @@ public class StringUtils {
 		return str.getBytes().length != str.length();
 	}
 
+	public static String cutString(String rawStr, String keyword, int showLength) {
+		String startStr = rawStr.substring(0, keyword.length()).toLowerCase();
+		//keyword in start
+		if (keyword.length() > showLength || rawStr.length() < showLength) return keyword;
+		if (startStr.equals(keyword)) {
+			return rawStr.substring(0, showLength);
+		}
+		int otherLength = showLength - keyword.length();
+
+
+		int indexTag = 0;
+		for (int i = 0; i < rawStr.length() - keyword.length() + 1; i++) {
+			if (rawStr.substring(i, keyword.length() + i).toLowerCase().equals(keyword)) {
+				indexTag = i;
+				break;
+			}
+		}
+		int startIndex = 0;
+		if (indexTag - otherLength > -1) startIndex = indexTag - otherLength;
+		int endIndex = rawStr.length();
+		if (indexTag + otherLength < rawStr.length()) endIndex = indexTag + otherLength;
+		String resultString = rawStr.substring(startIndex, endIndex + 1);
+		if (startIndex != 0) resultString = "..." + resultString;
+		return resultString;
+	}
+
 	public static String splitChineseSingly(String str) {
+		if (str == null) return "";
+		if (str.equals("")) return str;
 		StringBuilder sb = new StringBuilder();
 		str = str.replace(" ", "龘");
 		//avoid check chinese every time

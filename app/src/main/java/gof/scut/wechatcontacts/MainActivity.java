@@ -42,7 +42,6 @@ public class MainActivity extends Activity implements View.OnClickListener {
 		super.onCreate(savedInstanceState);
 		BaiduPush.StartWork(this);
 		setContentView(R.layout.activity_main);
-
 		init();
 	}
 

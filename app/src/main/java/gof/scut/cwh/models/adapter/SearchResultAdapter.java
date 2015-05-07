@@ -131,11 +131,15 @@ public class SearchResultAdapter extends BaseAdapter {
 		}
 		matchInfo = result.getAddress();
 		if (matchInfo.toLowerCase().contains(keyword)) {
+//			if (matchInfo.length()>StringUtils.SHOW_LENGTH)
+//				matchInfo = StringUtils.cutString(matchInfo,keyword,StringUtils.SHOW_LENGTH);
 			matchInfo = "Address:" + matchInfo;
 			return StringUtils.simpleHighLight(keyword, matchInfo, "A4005B", "636362");
 		}
 		matchInfo = result.getNote();
 		if (matchInfo.toLowerCase().contains(keyword)) {
+//			if (matchInfo.length()>StringUtils.SHOW_LENGTH)
+//				matchInfo = StringUtils.cutString(matchInfo,keyword,StringUtils.SHOW_LENGTH);
 			matchInfo = "Notes:" + matchInfo;
 			return StringUtils.simpleHighLight(keyword, matchInfo, "A4005B", "636362");
 		}

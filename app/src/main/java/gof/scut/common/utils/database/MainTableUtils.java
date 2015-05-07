@@ -131,13 +131,31 @@ public class MainTableUtils {
 	}
 
 	//update ALL
-	public long updateAllWithID(String name, String lPinYin, String sPinYin,
+	public long updateAllWithID(String name,
 	                            String address, String notes,
 	                            String byID) {
 
+		StringBuilder lPinyinBuilder = new StringBuilder(), sPinyinBuilder = new StringBuilder();
+		String lPinYin = "", sPinYin = "";
+		if (StringUtils.containChinese(name)) {
+			lPinyinBuilder.append(PinyinUtils.testPurePinYinBlankLy(name));
+			lPinYin = lPinyinBuilder.toString();
+			lPinyinBuilder.append(" ");
+			lPinyinBuilder.append(lPinYin.replace(" ", ""));
+			lPinYin = lPinyinBuilder.toString();
+//			Log.d("PINYIN", lPinYin);
+			sPinyinBuilder.append(PinyinUtils.testPureSPinYinBlankLy(name));
+			sPinYin = sPinyinBuilder.toString();
+			sPinyinBuilder.append(" ");
+			sPinyinBuilder.append(sPinYin.replace(" ", ""));
+			sPinYin = sPinyinBuilder.toString();
+
+//			Log.d("PINYIN", sPinYin);
+		}
 		name = StringUtils.splitChineseSingly(name);
-		address = StringUtils.splitChineseSingly(address);
-		notes = StringUtils.splitChineseSingly(notes);
+		if (address != null && !address.equals(""))
+			address = StringUtils.splitChineseSingly(address);
+		if (notes != null && !notes.equals("")) notes = StringUtils.splitChineseSingly(notes);
 
 		closeDataBase();
 		db = dataBaseHelper.getWritableDatabase();
@@ -257,17 +275,24 @@ public class MainTableUtils {
 						+ " )group by " + TBMainConstants.ID,
 				new String[]{"'" + word + "*'", "'" + word + "*'"});
 		List<SearchObj> results = new ArrayList<>();
+		String address = "", notes = "";
 		try {
 
 			for (int i = 0; i < cursorResult.getCount(); i++) {
 				cursorResult.moveToPosition(i);
+				address = StringUtils.recoverWordFromDB(cursorResult.getString(cursorResult.getColumnIndex(TBMainConstants.ADDRESS)));
+				if (address.length() > StringUtils.SHOW_LENGTH)
+					address = StringUtils.cutString(address, word.toLowerCase(), StringUtils.SHOW_LENGTH);
+				notes = StringUtils.recoverWordFromDB(cursorResult.getString(cursorResult.getColumnIndex(TBMainConstants.NOTES)));
+				if (notes.length() > StringUtils.SHOW_LENGTH)
+					notes = StringUtils.cutString(notes, word.toLowerCase(), StringUtils.SHOW_LENGTH);
 				results.add(new SearchObj(
 						cursorResult.getString(cursorResult.getColumnIndex(TBMainConstants.ID)),
 						cursorResult.getString(cursorResult.getColumnIndex(TBMainConstants.NAME)),
 						cursorResult.getString(cursorResult.getColumnIndex(TBMainConstants.L_PINYIN)),
 						cursorResult.getString(cursorResult.getColumnIndex(TBMainConstants.S_PINYIN)),
-						StringUtils.recoverWordFromDB(cursorResult.getString(cursorResult.getColumnIndex(TBMainConstants.ADDRESS))),
-						StringUtils.recoverWordFromDB(cursorResult.getString(cursorResult.getColumnIndex(TBMainConstants.NOTES))),
+						address,
+						notes,
 						StringUtils.recoverWordFromDB(cursorResult.getString(cursorResult.getColumnIndex(TBLabelConstants.LABEL))),
 						cursorResult.getString(cursorResult.getColumnIndex(TBTelConstants.TEL))
 				));
