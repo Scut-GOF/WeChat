@@ -257,9 +257,7 @@
         <item name="android:layout_height">wrap_content</item>
         <item name="android:textStyle">normal</item>
         <item name="android:gravity">center_vertical</item>
-        <item name="android:textColor">@color/my_light_grey</item>
-
-        //label下的小tittle
+        <item name="android:textColor">@color/cwh_alp_grey</item>
     </style>
 
     <style name="little_text">
