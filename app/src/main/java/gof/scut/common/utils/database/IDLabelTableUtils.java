@@ -137,10 +137,10 @@ public class IDLabelTableUtils {
 		db = dataBaseHelper.getReadableDatabase();
 
 		Cursor cursorLabels;
-		cursorLabels = db.rawQuery("select * from " + TBIDLabelConstants.FTS_TABLE_NAME, null);
-		cursorLabels.moveToPosition(0);
-
-//		cursorLabels =  db.rawQuery("select " + TBIDLabelConstants.LABEL + " from "
+//		cursorLabels = db.rawQuery("select * from " + TBIDLabelConstants.FTS_TABLE_NAME, null);
+//		cursorLabels.moveToPosition(0);
+//
+////		cursorLabels =  db.rawQuery("select " + TBIDLabelConstants.LABEL + " from "
 //				+ TBIDLabelConstants.FTS_TABLE_NAME + " where " + TBIDLabelConstants.ID + " = 7",null);
 
 		cursorLabels = db.rawQuery("select " + TBIDLabelConstants.LABEL + " from "
