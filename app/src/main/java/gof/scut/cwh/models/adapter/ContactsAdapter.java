@@ -24,8 +24,11 @@ import gof.scut.common.utils.ActivityUtils;
 import gof.scut.common.utils.BundleNames;
 import gof.scut.common.utils.UseSystemUtils;
 import gof.scut.common.utils.database.CursorUtils;
+import gof.scut.common.utils.database.MainTableUtils;
 import gof.scut.common.utils.database.TBTelConstants;
 import gof.scut.common.utils.database.TelTableUtils;
+import gof.scut.common.utils.popup.PopConfirmUtils;
+import gof.scut.common.utils.popup.TodoOnResult;
 import gof.scut.cwh.models.object.IdObj;
 import gof.scut.cwh.models.object.LightIdObj;
 import gof.scut.wechatcontacts.ContactInfoActivity;
@@ -149,6 +152,31 @@ public class ContactsAdapter extends BaseAdapter {
 			@Override
 			public void onClick(View v) {
 				onItemClick(Integer.parseInt(id));
+			}
+		});
+		holder.name.setOnLongClickListener(new View.OnLongClickListener() {
+			@Override
+			public boolean onLongClick(View v) {
+				PopConfirmUtils popConfirmUtils = new PopConfirmUtils();
+				popConfirmUtils.prepare(context, R.layout.pop_confirm);
+				popConfirmUtils.initPopupWindow();
+				popConfirmUtils.setTitle("Delete this contact?");
+				popConfirmUtils.initTodo(new TodoOnResult() {
+					@Override
+					public void doOnPosResult(String[] params) {
+						MainTableUtils mainTableUtils = new MainTableUtils(context);
+						mainTableUtils.deleteWithID(id + "");
+						contacts = mainTableUtils.selectAllIDName();
+						notifyDataSetChanged();
+					}
+
+					@Override
+					public void doOnNegResult(String[] params) {
+
+					}
+				});
+				popConfirmUtils.popWindowAtCenter(R.id.name, R.id.confirm_title);
+				return false;
 			}
 		});
 		return convertView;

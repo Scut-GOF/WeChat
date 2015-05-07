@@ -1,4 +1,4 @@
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/white"
@@ -44,7 +44,8 @@
         android:layout_below="@id/title"
         android:id="@+id/scrollView"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_weight="1"
+        android:layout_height="0dp">
 
         <LinearLayout
             android:orientation="vertical"
@@ -110,7 +111,7 @@
                     android:layout_toRightOf="@+id/add_phone_button"
                     style="@style/un_written"
                     android:padding="10dp"
-                    android:hint="new phone"
+                    android:hint="@string/add_new_tel"
                     android:inputType="phone"
                     android:background="@null"/>
 
@@ -157,7 +158,7 @@
                     android:layout_below="@id/labelList"
                     android:layout_toRightOf="@+id/add_label_button"
                     style="@style/un_written"
-                    android:text="New Label>"
+                    android:text="@string/add_new_label"
                     android:padding="10dp"
                     android:textColor="@color/black"/>
 
@@ -234,10 +235,23 @@
                     android:background="@color/gray"
                     />
 
+
             </RelativeLayout>
 
         </LinearLayout>
 
     </ScrollView>
 
-</RelativeLayout>
+    <Button
+        android:id="@+id/delete_contact"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="3dp"
+        android:padding="5dp"
+        android:textSize="21sp"
+        android:background="@drawable/cwh_green_button_selector"
+        android:textColor="@drawable/cwh_blue_button_text_selector"
+        android:text="@string/delete"
+        />
+
+</LinearLayout>
