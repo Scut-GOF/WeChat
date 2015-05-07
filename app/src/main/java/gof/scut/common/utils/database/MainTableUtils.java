@@ -131,13 +131,31 @@ public class MainTableUtils {
 	}
 
 	//update ALL
-	public long updateAllWithID(String name, String lPinYin, String sPinYin,
+	public long updateAllWithID(String name,
 	                            String address, String notes,
 	                            String byID) {
 
+		StringBuilder lPinyinBuilder = new StringBuilder(), sPinyinBuilder = new StringBuilder();
+		String lPinYin = "", sPinYin = "";
+		if (StringUtils.containChinese(name)) {
+			lPinyinBuilder.append(PinyinUtils.testPurePinYinBlankLy(name));
+			lPinYin = lPinyinBuilder.toString();
+			lPinyinBuilder.append(" ");
+			lPinyinBuilder.append(lPinYin.replace(" ", ""));
+			lPinYin = lPinyinBuilder.toString();
+//			Log.d("PINYIN", lPinYin);
+			sPinyinBuilder.append(PinyinUtils.testPureSPinYinBlankLy(name));
+			sPinYin = sPinyinBuilder.toString();
+			sPinyinBuilder.append(" ");
+			sPinyinBuilder.append(sPinYin.replace(" ", ""));
+			sPinYin = sPinyinBuilder.toString();
+
+//			Log.d("PINYIN", sPinYin);
+		}
 		name = StringUtils.splitChineseSingly(name);
-		address = StringUtils.splitChineseSingly(address);
-		notes = StringUtils.splitChineseSingly(notes);
+		if (address != null && !address.equals(""))
+			address = StringUtils.splitChineseSingly(address);
+		if (notes != null && !notes.equals("")) notes = StringUtils.splitChineseSingly(notes);
 
 		closeDataBase();
 		db = dataBaseHelper.getWritableDatabase();

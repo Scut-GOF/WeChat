@@ -144,11 +144,10 @@ public class ContactInfoActivity extends RoboActivity {
                     Toast.makeText(mContext,R.string.no_phone,Toast.LENGTH_SHORT).show();
                 }else{
                     mainTableUtils.updateAllWithID(name.getText().toString(),
-                            "",
-                            "",
-                            address.getText().toString(),
-                            addition.getText().toString(),
-                            String.valueOf(id));
+
+		                    address.getText().toString(),
+		                    addition.getText().toString(),
+		                    String.valueOf(id));
 
                     telTableUtils.deleteWithID(String.valueOf(id));
                     for(String phone:phoneList){

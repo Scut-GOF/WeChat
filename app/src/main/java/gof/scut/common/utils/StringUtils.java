@@ -113,6 +113,8 @@ public class StringUtils {
 	}
 
 	public static String splitChineseSingly(String str) {
+		if (str == null) return "";
+		if (str.equals("")) return str;
 		StringBuilder sb = new StringBuilder();
 		str = str.replace(" ", "龘");
 		//avoid check chinese every time
