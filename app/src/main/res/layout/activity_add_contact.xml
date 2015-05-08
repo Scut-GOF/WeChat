@@ -74,6 +74,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
                 android:orientation="vertical"
+
                 >
 
                 <EditText
@@ -113,22 +114,13 @@
 
                 </ListView>
 
-                <ImageView
-                    android:layout_below="@id/phoneList"
-                    android:id="@+id/add_phone_button"
-                    android:layout_marginTop="10dp"
-                    android:layout_width="35dp"
-                    android:layout_height="35dp"
-                    android:layout_marginLeft="10dp"
-                    android:background="@drawable/add_detail50"/>
-
                 <EditText
                     android:id="@+id/phone"
                     android:layout_below="@id/phoneList"
-                    android:layout_toRightOf="@+id/add_phone_button"
                     style="@style/un_written"
+                    android:layout_width="188dp"
                     android:padding="10dp"
-                    android:hint="new phone"
+                    android:hint="@string/add_new_tel"
                     android:inputType="phone"
                     android:background="@null"/>
 
@@ -137,13 +129,26 @@
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
                     android:padding="2dp"
-                    android:background="@color/my_dark_grey"/>
+                    android:background="@color/my_dark_grey"
+                    android:id="@+id/textView"/>
+
+                <ImageView
+                    android:id="@+id/add_phone_button"
+                    android:layout_width="35dp"
+                    android:layout_height="35dp"
+                    android:background="@drawable/add_detail50"
+                    android:layout_above="@+id/textView"
+                    android:layout_alignParentRight="true"
+                    android:layout_alignParentEnd="true"
+                    android:layout_marginRight="120dp"
+                    android:layout_marginEnd="120dp"/>
 
             </RelativeLayout>
 
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+
                 android:orientation="vertical">
 
                 <TextView
@@ -161,21 +166,11 @@
                     android:dividerHeight="1dp">
                 </ListView>
 
-                <ImageView
-                    android:layout_below="@id/labelList"
-                    android:id="@+id/new_label_button"
-                    android:layout_marginTop="10dp"
-                    android:layout_width="35dp"
-                    android:layout_height="35dp"
-                    android:layout_marginLeft="10dp"
-                    android:background="@drawable/add_detail50"/>
-
                 <TextView
                     android:id="@+id/label"
                     android:layout_below="@id/labelList"
-                    android:layout_toRightOf="@+id/new_label_button"
                     style="@style/un_written"
-                    android:text="New Label>"
+                    android:text="@string/add_new_label"
                     android:padding="10dp"
                     android:textColor="@color/black"/>
 
@@ -185,7 +180,19 @@
                     android:layout_height="1dp"
                     android:padding="2dp"
                     android:textSize="22sp"
-                    android:background="@color/my_dark_grey"/>
+                    android:background="@color/my_dark_grey"
+                    android:id="@+id/textView2"/>
+
+                <ImageView
+                    android:id="@+id/new_label_button"
+                    android:layout_width="35dp"
+                    android:layout_height="35dp"
+                    android:background="@drawable/add_detail50"
+                    android:layout_alignParentBottom="true"
+                    android:layout_alignParentRight="true"
+                    android:layout_alignParentEnd="true"
+                    android:layout_marginRight="120dp"
+                    android:layout_marginEnd="120dp"/>
 
             </RelativeLayout>
 

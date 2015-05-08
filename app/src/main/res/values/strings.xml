@@ -50,8 +50,8 @@
     <!-- error -->
     <string name="error_phone_format">手机格式错误</string>
     <string name="error_no_person">联系人不存在！</string>
-    <string name="add_new_tel"><![CDATA[< new phone]]></string>
-    <string name="add_new_label"><![CDATA[< Select New Label]]></string>
+    <string name="add_new_tel">new phone</string>
+    <string name="add_new_label">Select New Label</string>
 
 
 </resources>
