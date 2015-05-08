@@ -78,9 +78,23 @@ public class AddContactActivity extends RoboActivity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_add_contact);
-		init();
-
+        init();
+        getPush();
 		initView();
+    }
+
+    private void getPush(){
+        final Intent intent = getIntent();
+        if (TextUtils.isEmpty(intent.getStringExtra("name"))) {
+            return;
+        }
+        name.setText(intent.getStringExtra("name"));
+        address.setText(intent.getStringExtra("address"));
+        addition.setText(intent.getStringExtra("addition"));
+        String phones = intent.getStringExtra("phone");
+        Collections.addAll(phoneList, phones.substring(1, phones.length() - 1).split(", "));
+        Utils.setListViewHeightBasedOnChildren(phoneListView);
+        phoneAdapter.notifyDataSetChanged();
     }
 
 	private void init() {
