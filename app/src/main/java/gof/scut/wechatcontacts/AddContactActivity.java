@@ -19,6 +19,7 @@ import java.util.Collections;
 import java.util.List;
 
 import gof.scut.common.MyApplication;
+import gof.scut.common.utils.ActivityUtils;
 import gof.scut.common.utils.BundleNames;
 import gof.scut.common.utils.Utils;
 import gof.scut.common.utils.database.IDLabelTableUtils;
@@ -28,6 +29,7 @@ import gof.scut.common.utils.popup.PopConfirmUtils;
 import gof.scut.common.utils.popup.TodoOnResult;
 import gof.scut.cwh.models.adapter.PhoneListAdapter;
 import gof.scut.cwh.models.object.ActivityConstants;
+import gof.scut.cwh.models.object.IdObj;
 import gof.scut.cwh.models.object.LabelListObj;
 import gof.scut.cwh.models.object.Signal;
 import gof.scut.cwh.models.object.UserInfo;
@@ -155,6 +157,8 @@ public class AddContactActivity extends RoboActivity {
 
                     telTableUtils.closeDataBase();
                     idLabelTableUtils.closeDataBase();
+					ActivityUtils.ActivitySkipWithObject(mContext, ContactInfoActivity.class, BundleNames.ID_OBJ, new IdObj(id));
+					finish();
 				}
 			}
 		});
@@ -257,8 +261,8 @@ public class AddContactActivity extends RoboActivity {
 				Bundle bundle = data.getExtras();
 				LabelListObj labelListObj = (LabelListObj) bundle.getSerializable(BundleNames.LABEL_LIST);
 				if (labelListObj.getLabels().size() != 0) {
-					Toast.makeText(this, labelListObj.toString(), Toast.LENGTH_SHORT).show();
-                    labelList.addAll(labelListObj.getLabels());
+					//Toast.makeText(this, labelListObj.toString(), Toast.LENGTH_SHORT).show();
+					labelList.addAll(labelListObj.getLabels());
                     Utils.setListViewHeightBasedOnChildren(labelListView);
                     labelAdapter.notifyDataSetChanged();
 				}
