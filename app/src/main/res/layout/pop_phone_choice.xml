@@ -11,7 +11,7 @@
         android:id="@+id/phone_choices"
         android:layout_width="200dp"
         android:layout_height="wrap_content"
-        android:background="@drawable/layout_stroke"
+        android:background="@color/white"
         android:gravity="center"
         android:orientation="vertical">
 
