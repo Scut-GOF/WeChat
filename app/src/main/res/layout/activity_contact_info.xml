@@ -118,11 +118,9 @@
                     android:layout_width="35dp"
                     android:layout_height="35dp"
                     android:background="@drawable/add_detail50"
-                    android:layout_alignBottom="@+id/phone"
-                    android:layout_alignParentRight="true"
-                    android:layout_alignParentEnd="true"
-                    android:layout_marginRight="150dp"
-                    android:layout_marginEnd="150dp"/>
+                    android:layout_below="@+id/phoneList"
+                    android:layout_toRightOf="@+id/phone"
+                    android:layout_toEndOf="@+id/phone"/>
 
             </RelativeLayout>
 
@@ -166,14 +164,10 @@
                     android:id="@+id/add_label_button"
                     android:layout_width="35dp"
                     android:layout_height="35dp"
-                    android:layout_alignParentBottom="true"
-                    android:layout_marginBottom="4dp"
                     android:background="@drawable/add_detail50"
                     android:layout_below="@+id/labelList"
-                    android:layout_alignParentRight="true"
-                    android:layout_alignParentEnd="true"
-                    android:layout_marginRight="150dp"
-                    android:layout_marginEnd="150dp"/>
+                    android:layout_toRightOf="@+id/label"
+                    android:layout_toEndOf="@+id/label"/>
 
             </RelativeLayout>
 

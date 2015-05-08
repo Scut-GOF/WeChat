@@ -137,11 +137,9 @@
                     android:layout_width="35dp"
                     android:layout_height="35dp"
                     android:background="@drawable/add_detail50"
-                    android:layout_above="@+id/textView"
-                    android:layout_alignParentRight="true"
-                    android:layout_alignParentEnd="true"
-                    android:layout_marginRight="120dp"
-                    android:layout_marginEnd="120dp"/>
+                    android:layout_alignBottom="@+id/phone"
+                    android:layout_toRightOf="@+id/phone"
+                    android:layout_toEndOf="@+id/phone"/>
 
             </RelativeLayout>
 
@@ -188,11 +186,9 @@
                     android:layout_width="35dp"
                     android:layout_height="35dp"
                     android:background="@drawable/add_detail50"
-                    android:layout_alignParentBottom="true"
-                    android:layout_alignParentRight="true"
-                    android:layout_alignParentEnd="true"
-                    android:layout_marginRight="120dp"
-                    android:layout_marginEnd="120dp"/>
+                    android:layout_below="@+id/labelList"
+                    android:layout_toRightOf="@+id/label"
+                    android:layout_toEndOf="@+id/label"/>
 
             </RelativeLayout>
 
