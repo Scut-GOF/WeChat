@@ -243,8 +243,8 @@ public class AddContactActivity extends RoboActivity {
 				Bundle bundle = data.getExtras();
 				LabelListObj labelListObj = (LabelListObj) bundle.getSerializable(BundleNames.LABEL_LIST);
 				if (labelListObj.getLabels().size() != 0) {
-					Toast.makeText(this, labelListObj.toString(), Toast.LENGTH_SHORT).show();
-                    labelList.addAll(labelListObj.getLabels());
+					//Toast.makeText(this, labelListObj.toString(), Toast.LENGTH_SHORT).show();
+					labelList.addAll(labelListObj.getLabels());
                     Utils.setListViewHeightBasedOnChildren(labelListView);
                     labelAdapter.notifyDataSetChanged();
 				}
