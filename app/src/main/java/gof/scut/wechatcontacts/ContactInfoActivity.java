@@ -192,6 +192,7 @@ public class ContactInfoActivity extends RoboActivity {
 					contact.setTels((ArrayList<String>) phoneList);
 					Toast.makeText(mContext, R.string.is_save, Toast.LENGTH_SHORT).show();
 					Utils.createQRImage(binary_code, gson.toJson(contact, IdObj.class));
+
 				}
 			}
 		});
@@ -233,8 +234,12 @@ public class ContactInfoActivity extends RoboActivity {
 		LabelListObj labelListObj = (LabelListObj) bundle.getSerializable(BundleNames.LABEL_LIST);
 		if (labelListObj.getLabels().size() != 0) {
 			//Toast.makeText(this, labelListObj.toString(), Toast.LENGTH_SHORT).show();
-			labelList.clear();//我现在加的
-			labelList.addAll(labelListObj.getLabels());
+			for (int i = 0; i < labelListObj.getLabels().size(); i++) {
+				if (!labelList.contains(labelListObj.getLabels().get(i)))
+					labelList.add(labelListObj.getLabels().get(i));
+			}
+//
+//			labelList.addAll(labelListObj.getLabels());
 			Utils.setListViewHeightBasedOnChildren(labelListView);
 			labelAdapter.notifyDataSetChanged();
 		}
