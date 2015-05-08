@@ -5,7 +5,6 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ListView;
-import android.widget.Toast;
 
 import java.util.List;
 
@@ -112,7 +111,8 @@ public class MainActivity extends Activity implements View.OnClickListener {
 			case R.id.title:
 				TestData.insertData(this);
 				v.setClickable(false);
-				Toast.makeText(this, "import data success", Toast.LENGTH_LONG).show();
+				//Toast.makeText(this, "import data success", Toast.LENGTH_LONG).show();
+				initList();
 				break;
 		}
 	}
