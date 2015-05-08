@@ -66,8 +66,8 @@ public class MyInfoActivity extends RoboActivity {
         gson = MyApplication.getGson();
         userInfo = UserInfo.getInstance();
 
-        if(TextUtils.isEmpty(userInfo.getName()) || userInfo.getTels().isEmpty() || TextUtils.isEmpty(userInfo.getAddress())){
-            Toast.makeText(mContext,R.string.information_lost,Toast.LENGTH_SHORT).show();
+	    if (TextUtils.isEmpty(userInfo.getName()) || userInfo.getTels().isEmpty()) {
+		    Toast.makeText(mContext,R.string.information_lost,Toast.LENGTH_SHORT).show();
         }else{
             name.setText(userInfo.getName());
             address.setText(userInfo.getAddress());
